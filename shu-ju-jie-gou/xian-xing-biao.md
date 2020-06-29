@@ -20,5 +20,21 @@ description: 这部分主要考察线性表的操作，包括数组、单链表�
 
 ### 基础题型
 
+#### [remove-duplicates-from-sorted-list](https://leetcode-cn.com/problems/remove-duplicates-from-sorted-list/)
 
+
+
+```cpp
+ListNode* deleteDuplicates(ListNode* head) {
+    ListNode *ptr = head;
+    while(ptr && ptr->next){
+        if(ptr->next->val == ptr->val){
+            ptr->next = ptr->next->next;
+        }else{
+            ptr = ptr->next;
+        }
+    }
+    return head;
+}
+```
 
