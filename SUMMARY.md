@@ -21,4 +21,5 @@
 ## 算法基础
 
 * [排序算法](suan-fa-ji-chu/pai-xu-suan-fa.md)
+* [二分查找](suan-fa-ji-chu/er-fen-cha-zhao.md)
 
