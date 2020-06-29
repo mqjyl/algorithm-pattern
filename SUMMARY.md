@@ -22,4 +22,13 @@
 
 * [排序算法](suan-fa-ji-chu/pai-xu-suan-fa.md)
 * [查找算法](suan-fa-ji-chu/er-fen-cha-zhao.md)
+* [表达式求值](suan-fa-ji-chu/biao-da-shi-qiu-zhi.md)
+
+## 算法设计思想
+
+* [递归算法](suan-fa-she-ji-si-xiang/di-gui-suan-fa.md)
+* [回溯法](suan-fa-she-ji-si-xiang/hui-su-fa.md)
+* [贪心算法](suan-fa-she-ji-si-xiang/tan-xin-suan-fa.md)
+* [分治法](suan-fa-she-ji-si-xiang/fen-zhi-fa.md)
+* [动态规划](suan-fa-she-ji-si-xiang/dong-tai-gui-hua.md)
 
