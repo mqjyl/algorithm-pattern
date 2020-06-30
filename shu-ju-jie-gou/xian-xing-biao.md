@@ -82,6 +82,20 @@ ListNode* deleteDuplicates(ListNode* head) {
 > 反转一个链表
 
 ```cpp
-
+ListNode* reverseList(ListNode* head) {
+    if(!(head && head->next))
+        return head;
+    ListNode *tmpHead = head->next;
+    ListNode *newHead = head;
+    newHead->next = NULL;
+    while(tmpHead){
+        ListNode *ptr = tmpHead;
+        tmpHead = tmpHead->next;
+        ptr->next = newHead;
+        newHead = ptr;
+    }
+    head = newHead;
+    return head;
+}
 ```
 
