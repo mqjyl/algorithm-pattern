@@ -17,6 +17,7 @@
 * [平衡二叉树](shu-ju-jie-gou/ping-heng-er-cha-shu.md)
 * [堆和优先队列](shu-ju-jie-gou/dui-he-you-xian-dui-lie.md)
 * [图](shu-ju-jie-gou/tu.md)
+* [二进制](shu-ju-jie-gou/er-jin-zhi.md)
 
 ## 算法基础
 
