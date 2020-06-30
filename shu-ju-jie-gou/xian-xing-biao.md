@@ -97,5 +97,26 @@ ListNode* reverseList(ListNode* head) {
     head = newHead;
     return head;
 }
+// 递归实现
+/*
+ListNode* reverseList(ListNode* head) {
+    if(!(head && head->next))
+        return head;
+    ListNode *ptr = head;
+    ListNode *nextPtr = head->next;
+    ListNode *subHead = reverseList(nextPtr);
+    ptr->next = NULL;
+    nextPtr->next = ptr;
+    return subHead;
+}
+*/
+```
+
+#### [reverse-linked-list-ii](https://leetcode-cn.com/problems/reverse-linked-list-ii/)
+
+> 反转从位置 _m_ 到 _n_ 的链表。请使用一趟扫描完成反转。
+
+```cpp
+
 ```
 

@@ -88,6 +88,25 @@ TreeNode* buildTree(vector<int>& inorder, vector<int>& postorder) {
 #### \*\*\*\*[**二叉树的前序遍历**](https://leetcode-cn.com/problems/binary-tree-preorder-traversal/)\*\*\*\*
 
 ```cpp
-
+// 递归遍历
+/*
+vector<int> preorderTraversal(TreeNode* root) {
+    vector<int> result;
+    if(!root)
+        return result;
+    result.push_back(root->val);
+    if(root->left){
+        vector<int> result_left = preorderTraversal(root->left);
+        result.insert(result.end(), result_left.begin(), result_left.end());
+    } 
+    if(root->right){
+        vector<int> result_right = preorderTraversal(root->right);
+        result.insert(result.end(), result_right.begin(), result_right.end());
+    } 
+    return result;
+}
+*/    
 ```
+
+
 
