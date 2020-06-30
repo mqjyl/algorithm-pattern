@@ -24,3 +24,44 @@ description: 总结常用的十大内部排序算法，并提供代码实现。
 
 ![&#x5341;&#x5927;&#x5185;&#x90E8;&#x6392;&#x5E8F;&#x7B97;&#x6CD5;&#x6BD4;&#x8F83;](../.gitbook/assets/sort_algorithm.jpg)
 
+#### 3、算法实现（升序）
+
+#### **冒泡排序**
+
+> 比较相邻的元素，如果第一个比第二个大，就交换它们两个；对每一对相邻元素作同样的工作，从开始第一对到结尾的最后一对，这样走一轮至少保证在最后的元素应该会是最大的数；针对所有的元素重复以上的步骤，除了最后一个；重复上述过程，直到排序完成。
+
+![&#x5192;&#x6CE1;&#x6392;&#x5E8F;&#x8FC7;&#x7A0B;&#x52A8;&#x6001;&#x56FE;](../.gitbook/assets/bubblesort.gif)
+
+```cpp
+vector<int> bubbleSort(vector<int>& nums) {
+    int len = nums.size();
+    while(len > 1){
+        for(int i = 0;i < len - 1;i ++){
+            if(nums[i] > nums[i+1]){
+                int tmp = nums[i];
+                nums[i] = nums[i + 1];
+                nums[i + 1] = tmp;
+            }
+        }
+        len--;
+    }
+    return nums;
+}
+```
+
+#### [快速排序](https://leetcode-cn.com/problems/sort-an-array/)
+
+> 快速排序的基本思想：通过一趟排序将待排记录分隔成独立的两部分，其中一部分记录的关键字均比另一部分的关键字小，则可分别对这两部分记录继续进行排序，以达到整个序列有序。
+
+> 快速排序使用分治法来把一个串（list）分为两个子串（sub-lists）。具体算法描述如下：
+
+> * 从数列中挑出一个元素，称为 “基准”（pivot）；
+> * 重新排序数列，所有元素比基准值小的摆放在基准前面，所有元素比基准值大的摆在基准的后面（相同的数可以到任一边）。在这个分区退出之后，该基准就处于数列的中间位置。这个称为分区（partition）操作；
+> * 递归地（recursive）把小于基准值元素的子数列和大于基准值元素的子数列排序。
+
+![&#x5FEB;&#x901F;&#x6392;&#x5E8F;&#x8FC7;&#x7A0B;&#x52A8;&#x6001;&#x56FE;](../.gitbook/assets/quicksort.gif)
+
+```cpp
+
+```
+
