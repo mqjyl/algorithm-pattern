@@ -84,12 +84,12 @@ TreeNode* buildTree(vector<int>& inorder, vector<int>& postorder) {
 >
 > * 以根访问顺序决定是什么遍历
 > * 左子树都是优先右子树
+>
+> 由于二叉树的定义本身就是递归的，因此关于二叉树的很多问题都可以用递归的方法的解决。中序、前序和后序遍历用递归的方法很容易解决，这里主要采用迭代的实现方式。
 
-#### \*\*\*\*[**二叉树的前序遍历**](https://leetcode-cn.com/problems/binary-tree-preorder-traversal/)\*\*\*\*
+#### \*\*\*\*[**前序遍历：递归实现**](https://leetcode-cn.com/problems/binary-tree-preorder-traversal/)\*\*\*\*
 
 ```cpp
-// 递归遍历
-/*
 vector<int> preorderTraversal(TreeNode* root) {
     vector<int> result;
     if(!root)
@@ -104,9 +104,69 @@ vector<int> preorderTraversal(TreeNode* root) {
         result.insert(result.end(), result_right.begin(), result_right.end());
     } 
     return result;
-}
-*/    
+}   
 ```
 
+#### [前序遍历](https://leetcode-cn.com/problems/binary-tree-preorder-traversal/)
 
+> 借助一个栈（栈几乎是递归算法转迭代算法必须的一个踏板），首先要明确地是树中的任何一个结点都要经过一次入栈和出栈的过程。对于二叉树中的**任何一个子树**来说（本身可以看成一个子树），其访问顺序是左子链，然后沿着左子链的反向（即出栈的方向）访问它们的右子树，这里要强调的是右子树不是右结点，因为右子树等同于“**任何一个子树**”。
+
+```cpp
+vector<int> preorderTraversal(TreeNode* root) {
+    vector<int> preorder;
+    stack<TreeNode *> istack;
+    TreeNode *ptr = root;
+    while(ptr){
+        preorder.push_back(ptr->val);
+        istack.push(ptr);
+        ptr = ptr->left;
+    }
+    while(!istack.empty()){
+        TreeNode *curr_ptr = istack.top();
+        istack.pop();
+        ptr = curr_ptr->right;
+        while(ptr){
+            preorder.push_back(ptr->val);
+            istack.push(ptr);
+            ptr = ptr->left;
+        }
+    }
+    return preorder;
+}
+```
+
+#### [中序遍历](https://leetcode-cn.com/problems/binary-tree-inorder-traversal/)
+
+> 中序遍历和前序遍历唯一的区别就是：针对树中的任何一个结点，前序是在压栈前访问，而中序是在压栈后访问。
+
+```cpp
+vector<int> inorderTraversal(TreeNode* root) {
+    vector<int> inorder;
+    stack<TreeNode *> istack;
+    TreeNode *ptr = root;
+    while(ptr){
+        istack.push(ptr);
+        ptr = ptr->left;
+    }
+    while(!istack.empty()){
+        TreeNode *curr_ptr = istack.top();
+        inorder.push_back(curr_ptr->val);
+        istack.pop();
+        ptr = curr_ptr->right;
+        while(ptr){
+            istack.push(ptr);
+            ptr = ptr->left;
+        }
+    }
+    return inorder;
+}
+```
+
+#### [后序遍历](https://leetcode-cn.com/problems/binary-tree-postorder-traversal/)
+
+```cpp
+
+```
+
+#### [层次遍历](https://leetcode-cn.com/problems/binary-tree-level-order-traversal/)
 
