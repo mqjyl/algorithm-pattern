@@ -8,6 +8,7 @@
 * [C++高级特性](c++/advanced-c++.md)
 * [STL基础](c++/stl-basics/README.md)
   * [vector/list](c++/stl-basics/vector-and-list.md)
+  * [deque/stack/queue](c++/stl-basics/deque-stack-queue.md)
 
 ## 数据结构 <a id="data-structure"></a>
 
