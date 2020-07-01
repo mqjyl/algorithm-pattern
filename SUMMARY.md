@@ -5,7 +5,9 @@
 ## C++基础 <a id="c++"></a>
 
 * [C++基础语法](c++/c++-syntax.md)
-* [C++高级特性](c++/advanced-c++.md)
+* [C++高级特性](c++/advanced-c++/README.md)
+  * [泛型编程](c++/advanced-c++/generic-programming.md)
+  * [面向对象](c++/advanced-c++/object-oriented-programming.md)
 * [STL基础](c++/stl-basics/README.md)
   * [vector/list](c++/stl-basics/vector-and-list.md)
   * [deque/stack/queue](c++/stl-basics/deque-stack-queue.md)
