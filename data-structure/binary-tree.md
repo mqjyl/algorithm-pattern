@@ -200,3 +200,15 @@ vector<vector<int>> levelOrder(TreeNode* root) {
 }
 ```
 
+### 应用
+
+#### 1、BFS 层次应用
+
+
+
+#### 2、常见示例
+
+
+
+### 二叉搜索树
+
