@@ -170,3 +170,33 @@ vector<int> inorderTraversal(TreeNode* root) {
 
 #### [层次遍历](https://leetcode-cn.com/problems/binary-tree-level-order-traversal/)
 
+```cpp
+vector<vector<int>> levelOrder(TreeNode* root) {
+    vector<vector<int>> result;
+    if(!root)
+        return result;
+    int height = 0;
+    queue<pair<TreeNode *,int>> iqueue;
+    iqueue.push(make_pair(root, 0));
+    pair<TreeNode*, int> tmpPair;
+    vector<int> level_val;
+    while(!iqueue.empty()) {
+        tmpPair = iqueue.front();
+        int tmp = tmpPair.second;
+        if(tmp > height){
+            result.push_back(level_val);
+            level_val.clear();
+            height = tmp;
+        }
+        level_val.push_back(tmpPair.first->val);
+        if(tmpPair.first->left)
+            iqueue.push(std::make_pair(tmpPair.first->left, tmp + 1));
+        if(tmpPair.first->right)
+            iqueue.push(std::make_pair(tmpPair.first->right, tmp + 1));
+        iqueue.pop();
+    }
+    result.push_back(level_val);
+    return result;
+}
+```
+
