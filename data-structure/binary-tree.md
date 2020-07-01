@@ -4,7 +4,7 @@ description: 二叉树相关的算法实现。
 
 # 二叉树
 
-### 知识点
+### 一、知识点
 
 #### 1、二叉树的存储
 
@@ -200,7 +200,7 @@ vector<vector<int>> levelOrder(TreeNode* root) {
 }
 ```
 
-### 应用
+### 二、应用
 
 #### 1、BFS 层次应用
 
@@ -210,5 +210,5 @@ vector<vector<int>> levelOrder(TreeNode* root) {
 
 
 
-### 二叉搜索树
+### 三、线索二叉树
 
