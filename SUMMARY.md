@@ -26,11 +26,11 @@
 * [查找算法](algorithm/search-algorithm.md)
 * [表达式求值](algorithm/expression-evaluation.md)
 
-## 算法设计思想
+## 算法设计思想 <a id="algorithm-thinking"></a>
 
-* [递归算法](suan-fa-she-ji-si-xiang/recursive-algorithm.md)
-* [回溯法](suan-fa-she-ji-si-xiang/backtracking-algorithm.md)
-* [贪心算法](suan-fa-she-ji-si-xiang/greedy-algorithm.md)
-* [分治法](suan-fa-she-ji-si-xiang/divide-and-conquer-algorithm.md)
-* [动态规划](suan-fa-she-ji-si-xiang/dynamic-programming-algorithm.md)
+* [递归算法](algorithm-thinking/recursive-algorithm.md)
+* [回溯法](algorithm-thinking/backtracking-algorithm.md)
+* [贪心算法](algorithm-thinking/greedy-algorithm.md)
+* [分治法](algorithm-thinking/divide-and-conquer-algorithm.md)
+* [动态规划](algorithm-thinking/dynamic-programming-algorithm.md)
 
