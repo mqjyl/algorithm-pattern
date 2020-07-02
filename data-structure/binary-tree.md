@@ -4,14 +4,14 @@ description: 二叉树相关的算法实现。
 
 # 二叉树
 
-### 一、知识点
+## 一、知识点
 
-#### 1、二叉树的存储
+### 1、二叉树的存储
 
 * **顺序存储**：这种情况之适合完全二叉树
 * **链式存储**：二叉链表和三叉链表（一个parent域），在含有 n 个结点的二叉链表中有（n+1）个空链域。
 
-#### 2、二叉树的创建
+### 2、二叉树的创建
 
 > 唯一确定一颗二叉树的方法：中序加前序 或 中序加后序，此时必须假设树中没有重复的元素或者有唯一的结点编号。
 
@@ -78,8 +78,10 @@ TreeNode* buildTree(vector<int>& inorder, vector<int>& postorder) {
 }
 ```
 
-#### 3、二叉树的遍历
+### 3、二叉树的遍历
 
+> 树的遍历分为**深度优先遍历（DFS）和广度优先遍历（BFS），**深度优先遍历包括前序、中序和后序，广度优先遍历主要是指层次遍历。
+>
 > **前序遍历**：**先访问根节点**，再前序遍历左子树，再前序遍历右子树 **中序遍历**：先中序遍历左子树，**再访问根节点**，再中序遍历右子树 **后序遍历**：先后序遍历左子树，再后序遍历右子树，**再访问根节点**
 >
 > * 以根访问顺序决定是什么遍历
@@ -294,9 +296,9 @@ vector<vector<int>> levelOrder(TreeNode* root) {
 }
 ```
 
-### 二、应用
+## 二、应用
 
-#### 1、BFS 层次应用
+### 1、BFS 层次应用
 
 #### [binary-tree-level-order-traversal-ii](https://leetcode-cn.com/problems/binary-tree-level-order-traversal-ii/)
 
@@ -308,15 +310,43 @@ result.insert(result.begin(), level_val);
 // 2、尾插加最后反转
 reverse(res.begin(),res.end());
 // 3、使用栈中转
+
 ```
 
 #### [binary-tree-zigzag-level-order-traversal](https://leetcode-cn.com/problems/binary-tree-zigzag-level-order-traversal/)
+
+> 方法一：BFS（广度优先遍历） 
+>
+> 最直观的方法是 BFS，逐层遍历树。BFS 在每层的默认顺序是从左到右，因此需要调整 BFS 算法以生成锯齿序列。最关键的是使用**双端队列遍历**，可以在队列的任一端插入元素。
+
+> 如果需要 FIFO （先进先出）的顺序，则将新元素添加到队列尾部，后插入的元素就可以排在后面。如果需要 FILO （先进后出）的顺序，则将新元素添加到队列首部，后插入的元素就可以排在前面。
+>
+> 实现方式：
+>
+> * 使用两层嵌套循环。外层循环迭代树的层级，内层循环迭代每层上的节点。（**实现**）
+> * 也可以使用一层循环实现 BFS。将要访问的节点添加到队列中，使用 分隔符（例如：空节点）把不同层的节点分隔开。分隔符表示一层结束和新一层开始。
+>
+>  注意：一种替代做法是，实现标准的 BFS 算法，得到每层节点从左到右的遍历顺序。然后按照要求 **翻转** 某些层节点的顺序，得到锯齿形的遍历结果。
+
+![BFS&#xFF08;&#x5E7F;&#x5EA6;&#x4F18;&#x5148;&#x904D;&#x5386;&#xFF09; &#x590D;&#x6742;&#x5EA6;&#x5206;&#x6790;](../.gitbook/assets/333%20%281%29.png)
+
+> 方法二：DFS （深度优先遍历） 
+>
+> 也可以使用 DFS 实现 BFS 的遍历顺序。在 DFS 遍历期间，将结果保存在按层数索引的全局数组中。即元素 array\[level\] 存储同一层的所有节点。然后在 DFS 的每一步更新全局数组。与改进的 BFS 算法类似，使用双端队列保存同一层的所有节点，并交替插入方向（从首部插入或从尾部插入）得到需要的输出顺序。
+
+> 使用递归实现 DFS 算法。定义一个递归方法 DFS\(node, level\)，方法参数为当前节点 node 和指定层数 level。该方法共执行三个步骤：
+>
+> 1. 如果是第一次访问该层的节点，即该层的双端队列不存在。那么创建一个双端队列，并添加该节点到队列中。
+> 2. 如果当前层的双端队列已存在，根据顺序，将当前节点插入队列头部或尾部。
+> 3. 最后，为每个节点调用该递归方法。
+
+![DFS&#xFF08;&#x6DF1;&#x5EA6;&#x4F18;&#x5148;&#x904D;&#x5386;&#xFF09; &#x590D;&#x6742;&#x5EA6;&#x5206;&#x6790;](../.gitbook/assets/444.png)
 
 ```cpp
 
 ```
 
-#### 2、常见示例
+### 2、常见示例
 
 #### [maximum-depth-of-binary-tree](https://leetcode-cn.com/problems/maximum-depth-of-binary-tree/)
 
@@ -371,11 +401,17 @@ int maxDepth(TreeNode* root) {
 
 #### [lowest-common-ancestor-of-a-binary-tree](https://leetcode-cn.com/problems/lowest-common-ancestor-of-a-binary-tree/)
 
+ 对于有根树 T 的两个结点 p、q，最近公共祖先表示为一个结点 x，满足 x 是 p、q 的祖先且 x 的深度尽可能大（**一个节点也可以是它自己的祖先**）。
+
+```cpp
+
+```
+
 #### \*\*\*\*[**average-of-levels-in-binary-tree**](https://leetcode-cn.com/problems/average-of-levels-in-binary-tree/)\*\*\*\*
 
 > 方法一：深度优先搜索。使用两个数组： sum 存放树中每一层的节点数值之和，以及 count 存放树中每一层的节点数量之和。在遍历时，我们需要额外记录当前节点所在的高度，并根据高度 h 更新数组元素 sum\[h\] 和 count\[h\]。在遍历结束之后，res = sum / cnt 即为答案。
 >
-> 方法二：广度优先搜索。
+> 方法二：广度优先搜索。（**实现**）
 
 ```cpp
 vector<double> averageOfLevels(TreeNode* root) {
@@ -412,9 +448,9 @@ vector<double> averageOfLevels(TreeNode* root) {
 }
 ```
 
-### 三、线索二叉树
+## 三、线索二叉树
 
-#### 1、定义
+### 1、定义
 
 > 现有一棵结点数目为n的二叉树，采用二叉链表的形式存储。对于每个结点均有指向左右孩子的两个指针域，而结点为 n 的二叉树一共有 n-1 条有效分支路径，则二叉链表中存在 2n-\(n-1\)=n+1 个空指针域，这些空指针造成了空间浪费。因此将某结点的空指针域指向该结点的前驱后继，定义规则如下：
 
@@ -430,11 +466,11 @@ vector<double> averageOfLevels(TreeNode* root) {
 
 ![&#x7EBF;&#x7D22;&#x4E8C;&#x53C9;&#x6811;&#x7ED3;&#x70B9;](../.gitbook/assets/7043118-a05b18037d16368f.webp)
 
-#### 2、结构
+### 2、结构
 
 ![&#x4E2D;&#x5E8F;&#x904D;&#x5386;&#x7684;&#x7EBF;&#x7D22;&#x4E8C;&#x53C9;&#x6811;](../.gitbook/assets/20180614095912935.png)
 
-#### 3、创建
+### 3、创建
 
-#### 4、遍历
+### 4、遍历
 

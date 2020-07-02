@@ -9,6 +9,7 @@
   * [泛型编程](c++/advanced-c++/generic-programming.md)
   * [面向对象](c++/advanced-c++/object-oriented-programming.md)
 * [STL基础](c++/stl-basics/README.md)
+  * [algorithm](c++/stl-basics/algorithm-functions.md)
   * [vector/list](c++/stl-basics/vector-and-list.md)
   * [deque/stack/queue](c++/stl-basics/deque-stack-queue.md)
 
