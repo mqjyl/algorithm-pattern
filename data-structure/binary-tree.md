@@ -310,10 +310,47 @@ result.insert(result.begin(), level_val);
 // 2、尾插加最后反转
 reverse(res.begin(),res.end());
 // 3、使用栈中转
-
+vector<vector<int>> levelOrderBottom(TreeNode* root) {
+    vector<vector<int>> result;
+    if(!root)
+        return result;
+    int len = 1;
+    queue<TreeNode *> iqueue;
+    stack<vector<int>> istack;
+    iqueue.push(root);
+    TreeNode* ptr = root;
+    vector<int> level_val;
+    while(!iqueue.empty()){
+        int tmp_len = 0;
+        while(len > 0){
+            ptr = iqueue.front();
+            level_val.push_back(ptr->val);
+            if(ptr->left){
+                iqueue.push(ptr->left);
+                tmp_len++;
+            }
+            if(ptr->right){
+                iqueue.push(ptr->right);
+                tmp_len++;
+            }
+            iqueue.pop();
+            len--;
+        }
+        len = tmp_len;
+        istack.push(level_val);
+        level_val.clear();
+    }
+    while(!istack.empty()){
+        result.push_back(istack.top());
+        istack.pop();
+    }
+    return result;
+}
 ```
 
 #### [binary-tree-zigzag-level-order-traversal](https://leetcode-cn.com/problems/binary-tree-zigzag-level-order-traversal/)
+
+给定一个二叉树，返回其节点值的锯齿形层次遍历。（即先从左往右，再从右往左进行下一层遍历，以此类推，层与层之间交替进行）。
 
 > 方法一：BFS（广度优先遍历） 
 >
@@ -343,12 +380,59 @@ reverse(res.begin(),res.end());
 ![DFS&#xFF08;&#x6DF1;&#x5EA6;&#x4F18;&#x5148;&#x904D;&#x5386;&#xFF09; &#x590D;&#x6742;&#x5EA6;&#x5206;&#x6790;](../.gitbook/assets/444.png)
 
 ```cpp
-
+vector<vector<int>> zigzagLevelOrder(TreeNode* root) {
+    std::vector<std::vector<int>> result;
+    if(!root)
+        return result;
+    int len = 1;
+    bool flag = true;
+    std::deque<TreeNode *> ideque;
+    ideque.push_back(root);
+    TreeNode* ptr = root;
+    std::vector<int> level_val;
+    while(!ideque.empty()){
+        int tmp_len = 0;
+        while(len > 0){
+            if(flag){
+                ptr = ideque.back();
+                ideque.pop_back();
+                if(ptr->left){
+                    ideque.push_front(ptr->left);
+                    tmp_len++;
+                }
+                if(ptr->right) {
+                    ideque.push_front(ptr->right);
+                    tmp_len++;
+                }
+            }else{
+                ptr = ideque.front();
+                ideque.pop_front();
+                if(ptr->right) {
+                    ideque.push_back(ptr->right);
+                    tmp_len++;
+                }
+                if(ptr->left){
+                    ideque.push_back(ptr->left);
+                    tmp_len++;
+                }
+            }
+            level_val.push_back(ptr->val);
+            len--;
+        }
+        len = tmp_len;
+        flag = !flag;
+        result.push_back(level_val);
+        level_val.clear();
+    }
+    return result;
+}
 ```
 
 ### 2、常见示例
 
 #### [maximum-depth-of-binary-tree](https://leetcode-cn.com/problems/maximum-depth-of-binary-tree/)
+
+给定一个二叉树，找出其最大深度。二叉树的深度为根节点到最远叶子节点的最长路径上的节点数。
 
 ```cpp
 // 1、递归
@@ -399,9 +483,7 @@ int maxDepth(TreeNode* root) {
 
 #### [binary-tree-maximum-path-sum](https://leetcode-cn.com/problems/binary-tree-maximum-path-sum/)
 
-#### [lowest-common-ancestor-of-a-binary-tree](https://leetcode-cn.com/problems/lowest-common-ancestor-of-a-binary-tree/)
-
- 对于有根树 T 的两个结点 p、q，最近公共祖先表示为一个结点 x，满足 x 是 p、q 的祖先且 x 的深度尽可能大（**一个节点也可以是它自己的祖先**）。
+给定一个**非空**二叉树，返回其最大路径和。本题中，路径被定义为一条从树中任意节点出发，达到任意节点的序列。该路径**至少包含一个**节点，且不一定经过根节点。
 
 ```cpp
 

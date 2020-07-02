@@ -19,6 +19,7 @@
 * [字符串](data-structure/string.md)
 * [栈和队列](data-structure/stack-and-queue.md)
 * [二叉树](data-structure/binary-tree.md)
+* [并查集](data-structure/union-find.md)
 * [平衡二叉树](data-structure/balanced-binary-tree.md)
 * [堆和优先队列](data-structure/heap-and-priority-queues.md)
 * [图](data-structure/graph.md)
@@ -33,6 +34,7 @@
 ## 算法设计思想 <a id="algorithm-thinking"></a>
 
 * [递归算法](algorithm-thinking/recursive-algorithm.md)
+* [滑动窗口思想](algorithm-thinking/sliding-window.md)
 * [回溯法](algorithm-thinking/backtracking-algorithm.md)
 * [贪心算法](algorithm-thinking/greedy-algorithm.md)
 * [分治法](algorithm-thinking/divide-and-conquer-algorithm.md)
