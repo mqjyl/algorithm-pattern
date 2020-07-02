@@ -20,7 +20,7 @@ description: 这部分主要考察线性表的操作，包括数组、单链表�
 
 ## 基础题型
 
-#### [remove-duplicates-from-sorted-list](https://leetcode-cn.com/problems/remove-duplicates-from-sorted-list/)
+### [remove-duplicates-from-sorted-list](https://leetcode-cn.com/problems/remove-duplicates-from-sorted-list/)
 
 > 给定一个排序链表，删除所有重复的元素，使得每个元素只出现一次。
 
@@ -39,7 +39,7 @@ ListNode* deleteDuplicates(ListNode* head) {
 }
 ```
 
-#### [remove-duplicates-from-sorted-list-ii](https://leetcode-cn.com/problems/remove-duplicates-from-sorted-list-ii/)
+### [remove-duplicates-from-sorted-list-ii](https://leetcode-cn.com/problems/remove-duplicates-from-sorted-list-ii/)
 
 > 给定一个排序链表，删除所有含有重复数字的节点，只保留原始链表中 没有重复出现的数字。
 >
@@ -77,7 +77,7 @@ ListNode* deleteDuplicates(ListNode* head) {
 }
 ```
 
-#### [reverse-linked-list](https://leetcode-cn.com/problems/reverse-linked-list/)
+### [reverse-linked-list](https://leetcode-cn.com/problems/reverse-linked-list/)
 
 > 反转一个链表
 
@@ -112,11 +112,13 @@ ListNode* reverseList(ListNode* head) {
 */
 ```
 
-#### [reverse-linked-list-ii](https://leetcode-cn.com/problems/reverse-linked-list-ii/)
+### [reverse-linked-list-ii](https://leetcode-cn.com/problems/reverse-linked-list-ii/)
 
 > 反转从位置 _m_ 到 _n_ 的链表。请使用一趟扫描完成反转。
 
 ```cpp
 
 ```
+
+### [merge-two-sorted-lists](https://leetcode-cn.com/problems/merge-two-sorted-lists/)
 
