@@ -471,19 +471,11 @@ int maxDepth(TreeNode* root) {
 }
 ```
 
-#### [balanced-binary-tree](https://leetcode-cn.com/problems/balanced-binary-tree/)
-
-给定一个二叉树，判断它是否是高度平衡的二叉树。
-
-> 一棵高度平衡二叉树定义为：一个二叉树_每个节点_ 的左右两个子树的高度差的绝对值不超过1。
-
-```cpp
-
-```
-
 #### [binary-tree-maximum-path-sum](https://leetcode-cn.com/problems/binary-tree-maximum-path-sum/)
 
 给定一个**非空**二叉树，返回其最大路径和。本题中，路径被定义为一条从树中任意节点出发，达到任意节点的序列。该路径**至少包含一个**节点，且不一定经过根节点。
+
+> 方法一、递归
 
 ```cpp
 

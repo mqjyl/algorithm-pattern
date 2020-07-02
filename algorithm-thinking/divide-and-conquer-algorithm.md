@@ -22,5 +22,27 @@ description: 五大常用算法设计思想之一：分治算法，介绍其思�
 
 ### 1、[二叉树DFS深度搜索——自下而上](https://leetcode-cn.com/problems/binary-tree-preorder-traversal/)
 
+```cpp
+vector<int> preorderTraversal(TreeNode* root) {
+    vector<int> result;
+    // 返回条件(NULL)
+    if(!root)
+        return result;
+    // 分治(Divide)
+    vector<int> result_left, result_right;
+    if(root->left){
+        result_left = preorderTraversal(root->left);
+    } 
+    if(root->right){
+        result_right = preorderTraversal(root->right);
+    } 
+    // 合并结果(Conquer)
+    result.push_back(root->val);
+    result.insert(result.end(), result_left.begin(), result_left.end());
+    result.insert(result.end(), result_right.begin(), result_right.end());
+    return result;
+}  
+```
+
 
 
