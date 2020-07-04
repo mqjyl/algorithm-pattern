@@ -10,6 +10,10 @@ description: 数据结构和算法基础知识学习和总结。
 
 [在线](https://mqjyl2012.gitbook.io/algorithm/) ：文档基于Gitboot所写，代码实现使用C++语言。并且整个文档可以在[Github](https://github.com/JLCreater2015/algorithm-pattern)上下载，文档中代码都是在Leetcode上经过测试并且顺利Acceptd。Github上还上传了所有的代码，项目见这里。
 
+常用的数据结构总结如下（个人总结，如有不对之处请指教）：
+
+![&#x6570;&#x636E;&#x7ED3;&#x6784;&#x5206;&#x7C7B;&#x56FE;](.gitbook/assets/data-structure.png)
+
 ## 文档目录
 
 ### C++基础 ⚽ 
@@ -29,7 +33,7 @@ description: 数据结构和算法基础知识学习和总结。
 * [查找算法](algorithm/search-algorithm.md)
 * [表达式求值](algorithm/expression-evaluation.md)
 
-### 算法设计思想
+### 算法设计思想 🥎 
 
 * [递归算法](algorithm-thinking/recursive-algorithm.md)
 * [滑动窗口思想](algorithm-thinking/sliding-window.md)
