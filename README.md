@@ -26,4 +26,20 @@ description: 数据结构和算法基础知识学习和总结。
 ### 算法基础 🏐 
 
 * [排序算法](algorithm/sort-algorithm.md)
+* [查找算法](algorithm/search-algorithm.md)
+* [表达式求值](algorithm/expression-evaluation.md)
+
+### 算法设计思想
+
+* [递归算法](algorithm-thinking/recursive-algorithm.md)
+* [滑动窗口思想](algorithm-thinking/sliding-window.md)
+* [回溯法](algorithm-thinking/backtracking-algorithm.md)
+* [贪心算法](algorithm-thinking/greedy-algorithm.md)
+* [分治法](algorithm-thinking/divide-and-conquer-algorithm.md)
+* [动态规划](algorithm-thinking/dynamic-programming-algorithm.md)
+* [分支限界算法](algorithm-thinking/branch-and-bound.md)
+
+## 面试资源
+
+## 相关链接
 
