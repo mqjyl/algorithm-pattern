@@ -111,10 +111,120 @@ ListNode* reverseList(ListNode* head) {
 ### [reverse-linked-list-ii](https://leetcode-cn.com/problems/reverse-linked-list-ii/)
 
 > 反转从位置 _m_ 到 _n_ 的链表。请使用一趟扫描完成反转。
+>
+> 方法一：迭代法（下面的实现），先拆分再合并，需要注意的是从第一个节点开始反转的特例（可以通过在原始链表开头加入一个新节点（即哑节点）的方式）。
+>
+> 方法二：双指针，头插法（见下图）
+>
+> 方法三：交换值而非链接，递归和迭代都容易实现。
 
 ```cpp
-
+ListNode* reverseBetween(ListNode* head, int m, int n) {
+    if(!head->next)
+        return head;
+    ListNode *ptr = head;
+    // 对于 m=1 的情况要单独处理，因为这时候不需要下面的pre_tail
+    if(m == 1){
+        ListNode *pre_ptr= head->next;
+        ptr->next = NULL;
+        while(pre_ptr && n > 1){
+            ListNode *tmp_ptr = pre_ptr;
+            pre_ptr = pre_ptr->next;
+            tmp_ptr->next = ptr;
+            ptr = tmp_ptr;
+            n--;
+        }
+        head->next = pre_ptr;
+        return ptr;
+    }
+    while(m > 2){// m 的前一个要记录在pre_tail中
+        ptr = ptr->next;
+        m--; n--;
+    }
+    // 开始反转
+    ListNode *pre_tail = ptr;
+    ListNode *in_tail = ptr->next;
+    ListNode *pre_ptr = ptr->next;
+    ptr = ptr->next->next;
+    while(n > 2 && ptr){
+        ListNode *tmp_ptr = ptr;
+        ptr = ptr->next;
+        tmp_ptr->next = pre_ptr;
+        pre_ptr = tmp_ptr;
+        n--;
+    }
+    pre_tail->next = pre_ptr;
+    in_tail->next = ptr;
+    return head;
+}
 ```
 
 ### [merge-two-sorted-lists](https://leetcode-cn.com/problems/merge-two-sorted-lists/)
+
+```cpp
+ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {
+    ListNode *head = new ListNode(0);
+    ListNode *ptr = head;
+    while(l1 && l2){
+        if(l1->val > l2->val){
+            ptr->next = l2;
+            l2 = l2->next;
+        }else{
+            ptr->next = l1;
+            l1 = l1->next;
+        }
+        ptr = ptr->next;
+    }
+    if(l1){
+        ptr->next = l1;
+    }
+    if(l2){
+        ptr->next = l2;
+    }
+    ptr = head;
+    head = head->next;
+    delete ptr;
+    return head;
+}
+```
+
+### [partition-list](https://leetcode-cn.com/problems/partition-list/)
+
+给定一个链表和一个特定值 x，对链表进行分隔，使得所有小于 _x_ 的节点都在大于或等于 _x_ 的节点之前。
+
+> 思路：将小于或大于 x 的节点，放到另外一个链表，最后连接这两个链表。
+
+> 哑**巴节点使用场景 ：当头节点不确定的时候，使用哑巴节点**
+
+```cpp
+ListNode* partition(ListNode* head, int x) {
+    if(!(head && head->next)){
+        return head;
+    }
+    ListNode *dummy = new ListNode(0);
+    dummy->next = head;
+    bool flag = true;
+    ListNode *tmp_head_small, *tmp_ptr_small;
+    ListNode *ptr = dummy;
+    while(ptr->next){
+        if(ptr->next->val < x){
+            if(flag){
+                tmp_head_small = tmp_ptr_small = ptr->next;
+                flag = !flag;
+            }else{
+                tmp_ptr_small->next = ptr->next;
+                tmp_ptr_small = tmp_ptr_small->next;
+            }
+            ptr->next = ptr->next->next;
+        }else{
+            ptr = ptr->next;
+        }
+    }
+    if(tmp_head_small && tmp_ptr_small){
+        tmp_ptr_small->next = dummy->next;
+        dummy->next = tmp_head_small;
+    }
+    return dummy->next;
+}
+```
 
