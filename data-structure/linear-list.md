@@ -228,3 +228,60 @@ ListNode* partition(ListNode* head, int x) {
 }
 ```
 
+### \*\*\*\*[**swap-nodes-in-pairs**](https://leetcode-cn.com/problems/swap-nodes-in-pairs/)\*\*\*\*
+
+> 给定一个链表，两两交换其中相邻的节点，并返回交换后的链表。**不能只是单纯的改变节点内部的值**，而是需要实际的进行节点交换。
+
+```cpp
+// 递归
+ListNode* swapOnePair(ListNode* pre_head){
+    if(!(pre_head->next && pre_head->next->next))
+        return pre_head;
+    ListNode *tmp = pre_head;
+    ListNode *ptr = pre_head->next;
+    tmp->next = ptr->next;
+    ptr->next = ptr->next->next;
+    tmp = tmp->next;
+    tmp->next = ptr;
+    tmp = tmp->next;
+    swapOnePair(tmp);
+    return pre_head->next;
+}
+
+ListNode* swapPairs(ListNode* head) {
+    if(!(head && head->next))
+        return head;
+    ListNode *dummy = new ListNode(0);
+    dummy->next = head;
+    return swapOnePair(dummy);
+}
+// 迭代
+ListNode* swapPairs(ListNode* head) {
+    if(!(head && head->next))
+        return head;
+    ListNode *dummy = new ListNode(0);
+    dummy->next = head;
+    ListNode *ptr = dummy;
+    ListNode *tmp = ptr;
+    while(ptr->next){
+        ptr = ptr->next;
+        if(ptr->next){
+            tmp->next = ptr->next;
+            ptr->next = ptr->next->next;
+            tmp = tmp->next;
+            tmp->next = ptr;
+            tmp = tmp->next;
+        }
+    }
+    return dummy->next;*/
+}
+```
+
+### [sort-list](https://leetcode-cn.com/problems/sort-list/)
+
+> 在  __$$O(n log n)$$  时间复杂度和常数级空间复杂度下，对链表进行排序。
+
+```cpp
+
+```
+

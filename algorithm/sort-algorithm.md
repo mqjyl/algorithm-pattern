@@ -19,6 +19,7 @@ description: 总结常用的十大内部排序算法，并提供代码实现。
 * **不稳定**：如果a原本在b的前面，而a=b，排序之后 a 可能会出现在 b 的后面。
 * **时间复杂度**：对排序数据的总的操作次数。反映当n变化时，操作次数呈现什么规律。
 * **空间复杂度：**是指算法在计算机内执行时所需存储空间的度量，它也是数据规模n的函数。
+* **In-place**：原地操作，占用常数内存，不占用额外内存，**Out-place：**占用额外内存，开辟的辅助空间与问题规模有关。
 
 ![&#x5341;&#x5927;&#x5185;&#x90E8;&#x6392;&#x5E8F;&#x7B97;&#x6CD5;&#x6BD4;&#x8F83;](../.gitbook/assets/sort_algorithm.jpg)
 
@@ -55,6 +56,8 @@ vector<int> bubbleSort(vector<int>& nums) {
 > * 重新排序数列，所有元素比基准值小的摆放在基准前面，所有元素比基准值大的摆在基准的后面（相同的数可以到任一边）。在这个分区退出之后，该基准就处于数列的中间位置。这个称为分区（partition）操作；
 > * 递归地（recursive）把小于基准值元素的子数列和大于基准值元素的子数列排序。
 
+> #### 递归实现：
+
 ```cpp
 int partition(std::vector<int>& nums, int start, int stop){
     int idx = start + 1;
@@ -82,6 +85,12 @@ vector<int> sortArray(vector<int>& nums) {
     quickSort(nums, 0, nums.size() - 1);
     return nums;
 }
+```
+
+> #### 迭代实现：
+
+```cpp
+
 ```
 
 ### 简单插入排序
@@ -113,5 +122,73 @@ vector<int> insertionSort(vector<int>& nums){
 > * 按增量序列个数 k，对序列进行 k 趟排序；
 > * 每趟排序，根据对应的增量 $$t_i$$ ，将待排序列分割成若干长度为 m 的子序列，分别对各子表进行直接插入排序。仅增量因子为 1 时，整个序列作为一个表来处理，表长度即为整个序列的长度。
 
+### 简单选择排序
 
+> 选择排序的思想其实和冒泡排序有点类似，都是在一次排序后把最小的元素放到最前面，或者将最大值放在最后面。但是过程不同，冒泡排序是通过相邻的比较和交换。而选择排序是通过对整体的选择，每一趟从前往后查找出无序区最小值，将最小值交换至无序区最前面的位置。
+
+```cpp
+
+```
+
+### 堆排序
+
+> **堆是具有以下性质的完全二叉树：每个结点的值都大于或等于其左右孩子结点的值，称为大顶堆；或者每个结点的值都小于或等于其左右孩子结点的值，称为小顶堆。**
+>
+>  **堆排序的基本思想是：将待排序序列构造成一个大顶堆，此时，整个序列的最大值就是堆顶的根节点。将其与末尾元素进行交换，此时末尾就为最大值。然后将剩余n-1个元素重新构造成一个堆，这样会得到n个元素的次小值。如此反复执行，便能得到一个有序序列。**
+
+```cpp
+
+```
+
+### 归并排序（二路归并）
+
+> 归并排序，是创建在归并操作上的一种有效的排序算法。算法是采用分治法（Divide and Conquer）的一个非常典型的应用，且各层分治递归可以同时进行。归并排序思路简单，速度仅次于快速排序，为稳定排序算法，一般用于对总体无序，但是各子项相对有序的数列。
+>
+> 基本思想：归并排序是用分治思想，分治模式在每一层递归上有三个步骤：
+
+* **分解（Divide）**：将n个元素分成个含n/2个元素的子序列。
+* **解决（Conquer）**：用合并排序法对两个子序列递归的排序。
+* **合并（Combine）**：合并两个已排序的子序列已得到排序结果。
+
+> #### 递归实现：
+
+```cpp
+void merge_sort(std::vector<int>& nums, int start, int stop){
+    if(stop >= nums.size() || stop - start <= 0)
+        return;
+    // 拆分
+    int mid = (stop - start) / 2 + start;
+    //(stop - start + 1) / 2 + start; 有问题，因为[start,mid]是右闭区间
+    merge_sort(nums, start, mid);
+    merge_sort(nums, mid + 1, stop);
+    // 合并
+    std::vector<int> tmp;
+    int i = start, j = mid + 1;
+    while(i <= mid && j <= stop){
+        if(nums[i] < nums[j]){
+            tmp.push_back(nums[i++]);
+        }else{
+            tmp.push_back(nums[j++]);
+        }
+    }
+    while(i <= mid){
+        tmp.push_back(nums[i++]);
+    }
+    while(j <= stop){
+        tmp.push_back(nums[j++]);
+    }
+    for(i = 0, j = start; i < tmp.size() && j <= stop; i++, j++)
+        nums[j] = tmp[i];
+}
+vector<int> sortArray(vector<int>& nums) {
+    merge_sort(nums, 0, nums.size() - 1);
+    return nums;
+}
+```
+
+> #### 迭代实现：
+
+```cpp
+
+```
 
