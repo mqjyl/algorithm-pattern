@@ -144,5 +144,51 @@ int minimumTotal(vector<vector<int>>& triangle) {
 
 #### 1、[minimum-path-sum](https://leetcode-cn.com/problems/minimum-path-sum/)
 
-#### 
+给定一个包含非负整数的 _m_ x _n_ 网格，请找出一条从左上角到右下角的路径，使得路径上的数字总和为最小。
+
+$$
+function: f[x][y] = min(f[x-1][y], f[x][y-1]) + A[x][y]
+$$
+
+```cpp
+// 原地操作
+int minPathSum(vector<vector<int>>& grid) {
+    int m = grid.size();
+    int n = grid[0].size();
+    for(int i = 0;i < m;i++){
+        for(int j = 0;j < n;j++){
+            if(i == 0 && j == 0){
+                grid[i][j] = grid[i][j];
+            }else if(i == 0 && j > 0){
+                grid[i][j] = grid[i][j - 1] + grid[i][j];
+            }else if(j == 0 && i > 0){
+                grid[i][j] = grid[i - 1][j] + grid[i][j];
+            }else{
+                grid[i][j] = min(grid[i - 1][j], grid[i][j - 1]) + grid[i][j];
+            }
+        }
+    }
+    return grid[m - 1][n - 1];
+}
+```
+
+#### 2、[unique-paths](https://leetcode-cn.com/problems/unique-paths/)
+
+一个机器人位于一个 m x n 网格的左上角 。机器人每次只能向下或者向右移动一步。机器人试图达到网格的右下角。问总共有多少条不同的路径？
+
+$$
+function: f[x][y] = f[x-1][y], f[x][y-1]
+$$
+
+```cpp
+
+```
+
+#### 3、[unique-paths-ii](https://leetcode-cn.com/problems/unique-paths-ii/)
+
+ 在上一道题的基础上增加障碍物，网格中的障碍物和空位置分别用 `1` 和 `0` 来表示。
+
+```cpp
+
+```
 
