@@ -181,7 +181,15 @@ function: f[x][y] = f[x-1][y], f[x][y-1]
 $$
 
 ```cpp
-
+int uniquePaths(int m, int n) {
+    vector<int> dp(n, 1);
+    for(int i = 1;i < m;i++){
+        for(int j = 1;j < n;j++){
+            dp[j] = dp[j - 1] + dp[j];
+        }
+    }
+    return dp[n - 1];
+}
 ```
 
 #### 3、[unique-paths-ii](https://leetcode-cn.com/problems/unique-paths-ii/)
@@ -189,6 +197,60 @@ $$
  在上一道题的基础上增加障碍物，网格中的障碍物和空位置分别用 `1` 和 `0` 来表示。
 
 ```cpp
-
+int uniquePathsWithObstacles(vector<vector<int>>& obstacleGrid) {
+    if(obstacleGrid[0][0] == 1)
+        return 0;
+    int m = obstacleGrid.size();
+    int n = obstacleGrid[0].size();
+    std::vector<int> dp(n, 0);
+    for(int i = 0;i < m;i++){
+        for(int j = 0;j < n;j++){
+            if(i == 0 && j == 0){
+                dp[j] = 1;
+            }else if(i == 0 && j > 0){  // 初始化
+                if(obstacleGrid[i][j] == 1 || dp[j - 1] == 0){
+                    dp[j] = 0;
+                }else{
+                    dp[j] = 1;
+                }
+            }else if(j == 0 && i > 0){
+                if(obstacleGrid[i][j] == 1){
+                    dp[j] = 0;
+                }
+            }else{
+                if(obstacleGrid[i][j] == 1){
+                    dp[j] = 0;
+                }else{
+                    dp[j] = dp[j] + dp[j - 1];
+                }
+            }
+        }
+    }
+    return dp[n - 1];
+}
 ```
+
+### 🖊 序列类型（40%）
+
+#### 1、[climbing-stairs](https://leetcode-cn.com/problems/climbing-stairs/)
+
+假设你正在爬楼梯。需要 _n_ 阶你才能到达楼顶。
+
+```cpp
+int climbStairs(int n) {
+    if(n == 1 || n == 2)
+        return n;
+    int x = 1, y = 2;
+    for(int i = 2;i < n;i++){
+        int tmp = x + y;
+        x = y;
+        y = tmp;
+    }
+    return y;
+}
+```
+
+#### 2、[jump-game](https://leetcode-cn.com/problems/jump-game/)
+
+给定一个非负整数数组，你最初位于数组的第一个位置。 数组中的每个元素代表你在该位置可以跳跃的最大长度。 判断你是否能够到达最后一个位置。
 
