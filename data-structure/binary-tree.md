@@ -481,7 +481,17 @@ int maxDepth(TreeNode* root) {
 
 ```
 
+#### [lowest-common-ancestor-of-a-binary-tree](https://leetcode-cn.com/problems/lowest-common-ancestor-of-a-binary-tree/)
+
+> 给定一个二叉树, 找到该树中两个指定节点的最近公共祖先。
+
+```cpp
+
+```
+
 #### \*\*\*\*[**average-of-levels-in-binary-tree**](https://leetcode-cn.com/problems/average-of-levels-in-binary-tree/)\*\*\*\*
+
+给定一个非空二叉树, 返回一个由每层节点平均值组成的数组。
 
 > 方法一：深度优先搜索。使用两个数组： sum 存放树中每一层的节点数值之和，以及 count 存放树中每一层的节点数量之和。在遍历时，我们需要额外记录当前节点所在的高度，并根据高度 h 更新数组元素 sum\[h\] 和 count\[h\]。在遍历结束之后，res = sum / cnt 即为答案。
 >

@@ -12,7 +12,7 @@ description: 五大常用算法设计思想之一：分治算法，介绍其思�
 * 大整数乘法
 * Strassen矩阵乘法
 * 棋牌覆盖
-* 合并排序和快速排序
+* [归并排序](../algorithm/sort-algorithm.md#gui-bing-pai-xu-er-lu-gui-bing)和[快速排序](../algorithm/sort-algorithm.md#kuai-su-pai-xu)
 * 线性时间选择
 * 最接近点对问题
 * 循环赛日程表
@@ -44,5 +44,5 @@ vector<int> preorderTraversal(TreeNode* root) {
 }  
 ```
 
-
+### 2、
 
