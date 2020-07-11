@@ -72,3 +72,7 @@ $$
 
 通过master定理求得时间复杂度为： $$T(n) = O(n^{log_2 3 }) = O(n^{1.59})$$ 。
 
+> **Master 定理：**
+
+![](../.gitbook/assets/12.png)
+
