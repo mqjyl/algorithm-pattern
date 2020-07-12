@@ -127,3 +127,31 @@ string multiply(string num1, string num2) {
 }
 ```
 
+### 3、[**最大子序和**](https://leetcode-cn.com/problems/maximum-subarray/)\*\*\*\*
+
+给定一个整数数组 `nums` ，找到一个具有最大和的连续子数组（子数组最少包含一个元素），返回其最大和。
+
+> #### 方法一：Kadane算法 <a id="%E6%96%B9%E6%B3%95%E4%B8%80%EF%BC%9AKadane%E7%AE%97%E6%B3%95"></a>
+
+> 1. 遍历该数组， 在遍历过程中， 将遍历到的元素依次累加起来， 当累加结果小于或等于 0 ****时， 从下一个元素开始，重新开始累加。
+> 2. 累加过程中， 要用一个变量 result 记录所获得过的最大值。
+> 3. 一次遍历之后， 变量 result 中存储的即为最大子片段的和值。
+
+```cpp
+int maxSubArray(vector<int>& nums) {
+    int result = nums[0]; // 要求子数组最少包含一个元素，
+                          // 当数组中都为负数和0时，需要返回最大的一个值
+    int current = 0;
+    for(int i = 0;i < nums.size();i++){
+        current += nums[i];
+        if(current > result){
+            result = current;
+        }
+        if(current < 0){
+            current = 0;
+        }
+    }
+    return result;
+}
+```
+
