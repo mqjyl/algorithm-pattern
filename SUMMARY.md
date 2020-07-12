@@ -30,6 +30,7 @@
 * [排序算法](algorithm/sort-algorithm.md)
 * [查找算法](algorithm/search-algorithm.md)
 * [表达式求值](algorithm/expression-evaluation.md)
+* [附加——主定理](algorithm/master-theorem.md)
 
 ## 算法设计思想 <a id="algorithm-thinking"></a>
 
