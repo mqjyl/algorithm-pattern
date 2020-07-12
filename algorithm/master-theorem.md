@@ -20,9 +20,11 @@ $$
 
 从中我们可以看出，整个方法的复杂度取决于$$f(n)$$ 的复杂度。主定理对$$f(n)$$ 分了三种情况：
 
-1. $$\exists \varepsilon \gt 0\ s.t.\ f(n)=O(n^{\log_ba-\varepsilon})$$ 。此时， $$T(n)=\Theta(n^{\log_ba})$$ 。
-2. $$f(n)=\Theta(n^{\log_ba})$$ 。此时， $$T(n)=\Theta(n^{\log_ba}\lg n)$$ 。
-3. $$\exists \varepsilon \gt 0\ s.t.\ f(n)=\Omega(n^{\log_ba+\varepsilon})$$ 且 $$\exists c\lt 1$$ ，当n足够大时，有 $$a\, f(\frac{n}{b})\le c\, f(n)$$ 。此时， $$T(n)=\Theta(f(n))$$ 。
+1. $$f(n)\lt \Theta(n^{\log_ba})$$ ，且是多项式的小于，即$$\exists \varepsilon \gt 0\ s.t.\ f(n)=O(n^{\log_ba-\varepsilon})$$ ，此时， $$T(n)=\Theta(n^{\log_ba})$$ 。
+2. $$f(n)=\Theta(n^{\log_ba})$$ ，此时， $$T(n)=\Theta(n^{\log_ba}\lg n)$$ 。
+3. $$f(n)\gt \Theta(n^{\log_ba})$$ ，且是多项式的大于，即
+
+   $$\exists \varepsilon \gt 0\ s.t.\ f(n)=\Omega(n^{\log_ba+\varepsilon})$$ 且 $$\exists c\lt 1$$ ，当 $$n$$ 足够大时，有 $$a\, f(\frac{n}{b})\le c\, f(n)$$ ，此时， $$T(n)=\Theta(f(n))$$ 。
 
 ## **证明**
 
