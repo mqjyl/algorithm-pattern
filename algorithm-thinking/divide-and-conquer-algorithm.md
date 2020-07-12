@@ -88,6 +88,33 @@ $$
 
 ![](../.gitbook/assets/18.png)
 
+```cpp
+string multiply(string num1, string num2) {
+    if(num1[0] == '0' || num2[0] == '0'){
+        return "0";
+    }
+    int len1 = num1.size();
+    int len2 = num2.size();
+    vector<int> res(len1 + len2);
+    for (int i = len1 - 1; i >= 0; i--) {
+        int n1 = num1[i] - '0';
+        for (int j = len2 - 1; j >= 0; j--) {
+            int n2 = num2[j] - '0';
+            int sum = (res[i + j + 1] + n1 * n2);
+            res[i + j + 1] = sum % 10;
+            res[i + j] += sum / 10;
+        }
+    }
+    string result;
+    for (int i = 0; i < res.size(); i++) {
+        if (i == 0 && res[i] == 0) 
+            continue;
+        result.push_back(char(res[i] + '0'));
+    }
+    return result;
+}
+```
+
 > 二、模拟乘法，将所有数据不单独进位（可直接存入数组），最后统一进位。（实现）
 
 ![](../.gitbook/assets/17.png)
