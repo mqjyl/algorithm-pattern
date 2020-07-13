@@ -12,7 +12,7 @@ description: 数据结构和算法基础知识学习和总结。
 
 常用的数据结构总结如下（个人总结，如有不对之处请指教）：
 
-![&#x6570;&#x636E;&#x7ED3;&#x6784;&#x5206;&#x7C7B;&#x56FE;](.gitbook/assets/data-structure.png)
+![&#x6570;&#x636E;&#x7ED3;&#x6784;&#x77E5;&#x8BC6;&#x67B6;&#x6784;&#x56FE;](.gitbook/assets/shu-ju-jie-gou-.png)
 
 ## 文档目录
 
