@@ -190,6 +190,39 @@ int maxSubArray(vector<int>& nums) {
 
 > **方法二：动态规划**
 
+> 在每一步，维护两个变量，一个是全局最优，就是到当前元素为止最优的解是，一个是局部最优，就是必须包含当前元素的最优的解。假设我们已知第 **`i`**步的`global[i]`（全局最优）和`local[i]`（局部最优），那么第`i+1`步的表达式是：
+>
+> 1. `local[i+1]=Math.max(A[i], local[i]+A[i])`，就是局部最优是一定要包含当前元素，所以不然就是`上一步的局部最优local[i]+当前元素A[i]`（因为`local[i]`一定包含第`i`个元素，所以不违反条件），但是如果`local[i]`是负的，那么他就是不需要的，所以直接用`A[i]`；
+> 2. `global[i+1]=Math(local[i+1],global[i])`，有了当前的局部最优，那么全局最优就是当前的局部最优或者还是原来的全局最优。
+
+```cpp
+int maxSubArray(vector<int>& nums) {
+    int local = nums[0];
+    int global = nums[0];
+    for(int i = 1;i < nums.size();i++){
+        local = max(nums[i], local + nums[i]);
+        global = max(local, global);
+    }
+    return global;
+}
+```
+
+> 方法三：分治法
+>
+> 将数组均分为两个部分，那么最大子数组会存在于：
+>
+> * 左侧数组的最大子数组
+> * 右侧数组的最大子数组
+> * 左侧数组的以右侧边界为边界的最大子数组+右侧数组的以左侧边界为边界的最大子数组
+>
+> 假设数组下标有效范围是`l`到`r`，将数组分为左半部分下标为`（l，mid-1）`和右半部分下标为`(mid+1，r)`以及中间元素下标为`mid`，接下来递归求出左半部分的最大子序和：`left=helper(nums,l,mid-1)`；右半部分最大子序和`right=helper(nums,mid+1,r)`；
+>
+> 接下来再将左半部分右边界，右半部分左边界以及中间元素`nums[mid]`整合，用了两个循环，先整合左半部分右边界和中间值，再将整合结果与右半部分左边界整合得到整合以后的最大子序和`max_num`，最后返回`max_num`，`left`，`right`的最大值即是要求的最大子序和。
+
+```cpp
+
+```
+
 ### \*\*\*\*🖌 **4、**[**寻找两个正序数组的中位数**](https://leetcode-cn.com/problems/median-of-two-sorted-arrays/)\*\*\*\*
 
 给定两个大小为 m 和 n 的正序（从小到大）数组 nums1 和 nums2。找出这两个正序数组的中位数，并且要求算法的时间复杂度为 $$O(log(m + n))$$ ****。假设 nums1 和 nums2 不会同时为空。
