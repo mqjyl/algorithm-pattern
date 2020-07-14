@@ -12,6 +12,9 @@
   * [algorithm](c++/stl-basics/algorithm-functions.md)
   * [vector/list](c++/stl-basics/vector-and-list.md)
   * [deque/stack/queue](c++/stl-basics/deque-stack-queue.md)
+  * [heep/priority\_queue](c++/stl-basics/heep-priority_queue.md)
+  * [RB-tree/set/map](c++/stl-basics/rb-tree-set-map.md)
+  * [hashtable/hash\_set/hash\_map](c++/stl-basics/hashtable-hash_set-hash_map.md)
 
 ## 数据结构 <a id="data-structure"></a>
 
@@ -24,6 +27,7 @@
 * [堆和优先队列](data-structure/heap-and-priority-queues.md)
 * [图](data-structure/graph.md)
 * [二进制](data-structure/binary-system.md)
+* [散列表](data-structure/hash-table.md)
 
 ## 算法基础 <a id="algorithm"></a>
 

@@ -33,6 +33,7 @@ description: 数据结构和算法基础知识学习和总结。
 * [堆和优先队列](data-structure/heap-and-priority-queues.md)
 * [图](data-structure/graph.md)
 * [二进制](data-structure/binary-system.md)
+* [散列表](data-structure/hash-table.md)
 
 ### 算法基础 🏐 
 
@@ -52,6 +53,12 @@ description: 数据结构和算法基础知识学习和总结。
 * [分支限界算法](algorithm-thinking/branch-and-bound.md)
 
 ## 面试资源
+
+### 书籍 🍈 
+
+### 刷题网站 🍊 
+
+### 博客 🍍 
 
 ## 相关链接
 
