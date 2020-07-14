@@ -50,7 +50,9 @@ int singleNumber(vector<int>& nums) {
 
 要求：具有线性时间复杂度，且不使用额外空间。
 
+![](../.gitbook/assets/35%20%281%29.png)
 
+> 方法一：使用 `Set` 或 `Map` 可以在 $$\mathcal{O}(N)$$ 的时间和 $$\mathcal{O}(N)$$ 的空间内解决。
 
 ```cpp
 
