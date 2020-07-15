@@ -220,7 +220,35 @@ int maxSubArray(vector<int>& nums) {
 > 接下来再将左半部分右边界，右半部分左边界以及中间元素`nums[mid]`整合，用了两个循环，先整合左半部分右边界和中间值，再将整合结果与右半部分左边界整合得到整合以后的最大子序和`max_num`，最后返回`max_num`，`left`，`right`的最大值即是要求的最大子序和。
 
 ```cpp
-
+int maxSubArrayRecursion(std::vector<int>& nums, int start, int stop){
+    if(stop < start){
+        return INT_MIN;//注意此处不是返回0，比如｛-2，-1｝，
+        //分治以后变为左中右n｛｝，-1，｛-2｝三部分。左半部分｛｝应返回INT_MIN，
+        //因为还要和右半部分的返回值进行比较,最终正确结果返回-1。
+        //若左半部分返回0，0>-2,且大于左中右的最大组合值（-1），最终结果返回0，出错
+    }
+    if(stop == start){
+        return nums[start];
+    }
+    int mid = (stop - start + 1) / 2 + start;
+    int leftSum = maxSubArrayRecursion(nums, start, mid - 1);
+    int rightSum = maxSubArrayRecursion(nums, mid + 1, stop);
+    int midSum = nums[mid];
+    int tmp = nums[mid];
+    for(int i = mid - 1; i >= start; i--){
+        tmp += nums[i];
+        midSum = std::max(tmp, midSum);
+    }
+    tmp = midSum;
+    for(int i = mid + 1; i <= stop; i++){
+        tmp += nums[i];
+        midSum = std::max(tmp, midSum);
+    }
+    return std::max(std::max(leftSum, rightSum), midSum);
+}
+int maxSubArray(vector<int>& nums) {
+    return maxSubArrayRecursion(nums, 0, nums.size() - 1);
+}
 ```
 
 ### \*\*\*\*🖌 **4、**[**寻找两个正序数组的中位数**](https://leetcode-cn.com/problems/median-of-two-sorted-arrays/)\*\*\*\*
