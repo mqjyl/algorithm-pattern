@@ -92,5 +92,15 @@
 
 虽然 `C++ STL` 标准中，`set` 类模板中包含 `lower_bound()`、`upper_bound()`、`equal_range()` 这 3 个成员函数，但它们更适用于 `multiset` 容器，几乎不会用于操作 `set` 容器。
 
+### 🖋 5、`insert()`
 
+### 🖋6、删除数据 
+
+### 🖋 7、 `emplace()`和`emplace_hint()`
+
+### 🖋 8、 `multiset`容器
+
+##  ✏ 自定义关联式容器的排序规则
+
+## 
 
