@@ -55,6 +55,18 @@ int singleNumber(vector<int>& nums) {
 > 方法一：使用 `Set` 或 `Map` 可以在 $$\mathcal{O}(N)$$ 的时间和 $$\mathcal{O}(N)$$ 的空间内解决。
 
 ```cpp
-
+int singleNumber(vector<int>& nums) {
+    long sum = 0;
+    long tmpSum = 0;
+    std::set<int> iset;
+    for(int num : nums){
+        sum += num;
+        iset.insert(num);
+    }
+    for(std::set<int>::iterator iter = iset.begin(); iter != iset.end();iter++){
+        tmpSum += *iter;
+    }
+    return (tmpSum * 3 - sum) / 2;
+}
 ```
 
