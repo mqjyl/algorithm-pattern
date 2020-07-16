@@ -50,9 +50,13 @@ int singleNumber(vector<int>& nums) {
 
 要求：具有线性时间复杂度，且不使用额外空间。
 
-![](../.gitbook/assets/35%20%281%29.png)
-
 > 方法一：使用 `Set` 或 `Map` 可以在 $$\mathcal{O}(N)$$ 的时间和 $$\mathcal{O}(N)$$ 的空间内解决。
+>
+> 1、将输入数组存储到 `Set`，然后使用 `Set` 中数字和的三倍与数组之和比较。
+>
+> $$3 \times (a + b + c) - (a + a + a + b + b + b + c) = 2 c$$ 
+>
+> 2、使用`map`，遍历输入数组，统计每个数字出现的次数，最后返回出现次数为 1 的数字。
 
 ```cpp
 int singleNumber(vector<int>& nums) {
@@ -68,5 +72,15 @@ int singleNumber(vector<int>& nums) {
     }
     return (tmpSum * 3 - sum) / 2;
 }
+
+
 ```
+
+> 方法二：使用位运算，可以在$$\mathcal{O}(N)$$ 的时间和 $$\mathcal{O}(1)$$ 的空间内解决。
+>
+> 1、考虑数字的二进制形式，对于出现三次的数字，各 二进制位 出现的次数都是 3 的倍数。 因此，统计所有数字的各二进制位中 1 的出现次数，并对 3 求余，结果则为只出现一次的数字。数组 `counts` 长度恒为 `32` ，占用常数大小的额外空间。
+
+![](../.gitbook/assets/51%20%281%29.png)
+
+> 2、有限状态自动机+位运算
 
