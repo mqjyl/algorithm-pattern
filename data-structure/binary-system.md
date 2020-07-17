@@ -84,3 +84,5 @@ int singleNumber(vector<int>& nums) {
 
 > 2、有限状态自动机+位运算
 
+
+
