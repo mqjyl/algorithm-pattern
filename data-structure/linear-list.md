@@ -496,6 +496,7 @@ bool isPalindrome(ListNode* head) {
     }
     return true;
 }
+// 在实际项目中，最好在函数返回前将原链表恢复，这个函数理论上来说不能改动原链表。
 ```
 
 ### [copy-list-with-random-pointer](https://leetcode-cn.com/problems/copy-list-with-random-pointer/)
