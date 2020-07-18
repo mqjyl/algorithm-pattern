@@ -1,3 +1,7 @@
+---
+description: 总结并查集的特性和常见题型。
+---
+
 # 并查集
 
 ## ✏ 并查集（树）
@@ -24,7 +28,7 @@
 
  “路径压缩”，是一种在执行“查找”时扁平化树结构的方法。关键在于**在路径上的每个节点都可以直接连接到根上，**他们都有同样的表示方法。为了达到这样的效果，`Find`递归地经过树，改变每一个节点的引用到根节点。得到的树将更加扁平，为以后直接或者间接引用节点的操作加速。
 
-这两种方法的优势互补，同时使用二者的程序每个操作的平均时间仅为![O\(\alpha \(n\)\)](https://wikimedia.org/api/rest_v1/media/math/render/svg/0f2f9c5bf5571b12dd0907f0a1ef917e1c082201)，![\alpha \(n\)](https://wikimedia.org/api/rest_v1/media/math/render/svg/74c1642d9e2f86b9e5c86c0f18ee5377507da827)是![n=f\(x\)=A\(x,x\)](https://wikimedia.org/api/rest_v1/media/math/render/svg/5bcc6ab1771bb643699c39ff45998c876e788261)的反函数，其中![A](https://wikimedia.org/api/rest_v1/media/math/render/svg/7daff47fa58cdfd29dc333def748ff5fa4c923e3)是急速增加的阿克曼函数。因为![\alpha \(n\)](https://wikimedia.org/api/rest_v1/media/math/render/svg/74c1642d9e2f86b9e5c86c0f18ee5377507da827)是其的反函数，故![\alpha \(n\)](https://wikimedia.org/api/rest_v1/media/math/render/svg/74c1642d9e2f86b9e5c86c0f18ee5377507da827)在![n](https://wikimedia.org/api/rest_v1/media/math/render/svg/a601995d55609f2d9f5e233e36fbe9ea26011b3b)十分巨大时还是小于5。因此，平均运行时间是一个极小的常数。实际上，这是渐近最优算法：Fredman和Saks在1989年解释了![\Omega \(\alpha \(n\)\)](https://wikimedia.org/api/rest_v1/media/math/render/svg/9bfdfd41667be083aff4b7c292a9f35884b654b8)的平均时间内可以获得任何并查集。
+这两种方法的优势互补，同时使用二者的程序每个操作的平均时间仅为 $$O(\alpha(n))$$ ， $$\alpha(n)$$ 是$$n = f(x) = A(x, x)$$ 的反函数，其中 $$A$$ 是急速增加的阿克曼函数。因为$$\alpha(n)$$ 是其的反函数，故$$\alpha(n)$$ 在 $$n$$ 十分巨大时还是小于5。因此，平均运行时间是一个极小的常数。实际上，这是渐近最优算法：Fredman和Saks在1989年解释了$$\Omega(\alpha(n))$$ 的平均时间内可以获得任何并查集。
 
 ## ✏ 题型
 
