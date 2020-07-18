@@ -14,6 +14,8 @@ description: 这部分主要考察线性表的操作，包括数组、单链表�
 * 合并两个链表
 * 找到链表的中间节点
 
+无法高效获取长度，无法根据偏移快速访问元素，是链表的两个劣势。然而面试的时候经常碰见诸如获取倒数第k个元素，获取中间位置的元素，判断链表是否存在环，判断环的长度等和长度与位置有关的问题。这些问题都可以通过灵活运用双指针来解决。 **双指针并不是固定的公式，而是一种思维方式。**
+
 ## 基础题型
 
 ### [remove-duplicates-from-sorted-list](https://leetcode-cn.com/problems/remove-duplicates-from-sorted-list/)
@@ -190,15 +192,15 @@ ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {
 
 ### [partition-list](https://leetcode-cn.com/problems/partition-list/)
 
-给定一个链表和一个特定值 x，对链表进行分隔，使得所有小于 _x_ 的节点都在大于或等于 _x_ 的节点之前。
+给定一个链表和一个特定值 x，对链表进行分隔，使得所有小于 x 的节点都在大于或等于 x 的节点之前。
 
-> 思路：将小于或大于 x 的节点，放到另外一个链表，最后连接这两个链表。
+> 思路：将小于 `x` 的节点，放到另外一个链表，最后连接这两个链表。
 
 > 哑**巴节点使用场景 ：当头节点不确定的时候，使用哑巴节点**
 
 ```cpp
 ListNode* partition(ListNode* head, int x) {
-    if(!(head && head->next)){
+    if(!head || !head->next){
         return head;
     }
     ListNode *dummy = new ListNode(0);
@@ -280,8 +282,227 @@ ListNode* swapPairs(ListNode* head) {
 ### [sort-list](https://leetcode-cn.com/problems/sort-list/)
 
 > 在  __$$O(n log n)$$  时间复杂度和常数级空间复杂度下，对链表进行排序。
+>
+> 方法一、归并排序递归实现。
+
+> * 快慢指针 判断 `quickptr` 及 `quickptr.next` 是否为 `NULL` 值
+> * 递归 `merge` 前需要断开中间节点
+> * 递归出口为 `head` 为 `NULL` 或者 `head.next` 为 `NULL`
 
 ```cpp
-
+ListNode* sortList(ListNode* head) {
+    if(!head || !head->next)
+        return head;
+    // 拆分
+    ListNode *quickptr=head->next, *slowptr=head;
+    // 若quickptr=head，当原始链表长度为2时，会进入无线递归。
+    while(quickptr && quickptr->next){
+        quickptr = quickptr->next->next;
+        slowptr = slowptr->next;
+    }
+    ListNode *tmpHead = slowptr->next;
+    slowptr->next = NULL;
+    ListNode *head1 = sortList(head);
+    ListNode *head2 = sortList(tmpHead);
+    // 合并
+    return mergeTwoLists(head1, head2);
+}
+// quickptr 如果初始化为 head.next，则中点在 slowptr.Next
+// quickptr 初始化为 head，则中点在 slowptr
+// 在快慢指针的某些问题中，即不涉及删除和断链的问题，如链表的环问题中，quickptr可以设置为head，
+// 但是这里不可以，因为12行不能写成slowptr = NULL;
 ```
+
+> 方法二、
+
+### [reorder-list](https://leetcode-cn.com/problems/reorder-list/)
+
+给定一个单链表 `L：L0→L1→…→Ln-1→Ln` ， 将其重新排列后变为： `L0→Ln→L1→Ln-1→L2→Ln-2→…`
+
+不能只是单纯的改变节点内部的值，而是需要实际的进行节点交换。
+
+> 除了暴力外，有三种解法可以将时间复杂度降到 $$O(n)$$ 。依然用快慢指针：
+
+> 方法一：利用栈，存储前半部分的链表。
+>
+> 方法二：在第一次遍历的时候直接将前半部分链表反转，然后两个子链表交替链接（头插）。**或找到中点断开，翻转后面部分，然后合并前后两个链表（尾插）。（此方法最好）**
+>
+> 方法三：深度递归。
+
+```cpp
+// 方法一
+void reorderList(ListNode* head) {
+    if(!head || !head->next)
+        return;
+    ListNode *quickptr=head->next, *slowptr=head;
+    std::stack<ListNode *> istack;
+    while(quickptr && quickptr->next){
+        quickptr = quickptr->next->next;
+        istack.push(slowptr);
+        slowptr = slowptr->next;
+    }
+    ListNode *tmpHead = slowptr->next;
+    ListNode *tmpPtr = slowptr;
+    ListNode *newHead = tmpPtr;
+    if(!quickptr){ // 奇数个
+        tmpPtr->next = NULL;
+    }else{
+        tmpHead = tmpHead->next;
+        tmpPtr->next->next = NULL;
+    }
+    while(!istack.empty()){
+        tmpPtr = istack.top();
+        istack.pop();
+        ListNode *tmp = tmpHead->next;
+        tmpHead->next = newHead;
+        tmpPtr->next = tmpHead;
+        tmpHead = tmp;
+        newHead = tmpPtr;
+    }
+    head = newHead;
+}
+// 方法二
+void reorderList(ListNode* head) {
+    if(!head || !head->next)
+        return;
+    ListNode *quickptr=head->next, *slowptr=head;
+    while(quickptr && quickptr->next){
+        quickptr = quickptr->next->next;
+        slowptr = slowptr->next;
+    }
+    ListNode *rightHead = slowptr->next;
+    slowptr->next = NULL;
+    rightHead = reverseList(rightHead);
+    // 合并
+    ListNode *leftHead = head;
+    ListNode *tmpPtr = leftHead;
+    while(leftHead){
+        tmpPtr = leftHead;
+        leftHead = leftHead->next;
+        tmpPtr->next = rightHead;
+        if(rightHead){ // 奇数个的情况，所以需要判断
+            rightHead = rightHead->next;
+            tmpPtr->next->next = leftHead;
+        }
+    }
+}
+```
+
+### [linked-list-cycle](https://leetcode-cn.com/problems/linked-list-cycle/)
+
+给定一个链表，判断链表中是否有环。
+
+> 方法一、快慢指针法，快慢指针的特性 —— 每轮移动之后两者的距离会加一。如果一个链表存在环，那么快慢指针必然会相遇。
+>
+> 方法二、哈希表法， **通过`hash`表来检测节点之前是否被访问过**，来判断链表是否成环。
+
+```cpp
+// 方法一
+bool hasCycle(ListNode *head) {
+    if(!head || !head->next)
+        return false;
+    ListNode *quickptr=head->next, *slowptr=head;
+    while(quickptr && quickptr->next){
+        if(quickptr == slowptr){
+            return true;
+        }
+        quickptr = quickptr->next->next;
+        slowptr = slowptr->next;
+    }
+    return false;
+}
+// 方法二
+bool hasCycle(ListNode *head) {
+    if(!head || !head->next)
+        return false;
+    std::set<ListNode *> iset;
+    ListNode *ptr = head;
+    while(ptr){
+        if(iset.count(ptr) > 0){
+            return true;
+        }
+        iset.insert(ptr);
+        ptr = ptr->next;
+    }
+    return false;
+}
+```
+
+### [linked-list-cycle-ii](https://leetcode-cn.com/problems/linked-list-cycle-ii/)
+
+ 给定一个链表，返回链表开始入环的第一个节点。 如果链表无环，则返回 `null`。
+
+> Floyd 的算法：快慢指针，快慢指针相遇之后，慢指针回到头，快慢指针步调一致一起移动，相遇点即为入环点 。
+
+![](../.gitbook/assets/56.png)
+
+$$
+\begin{gather*}
+2⋅distance(slowptr) =distance(quickptr) \\
+2(F+a) = F+a+b+a \\
+F = b
+\end{gather*}
+$$
+
+```cpp
+ListNode *detectCycle(ListNode *head) {
+    if(!head || !head->next)
+        return NULL;
+    ListNode *quickptr=head->next, *slowptr=head;
+    while(quickptr && quickptr->next){
+        if(quickptr == slowptr){
+            quickptr = head;
+            slowptr = slowptr->next;
+            break;
+        }
+        quickptr = quickptr->next->next;
+        slowptr = slowptr->next;
+    }
+    if(quickptr == head){
+        while(quickptr != slowptr){
+            quickptr = quickptr->next;
+            slowptr = slowptr->next;
+        }
+        return quickptr;
+    }
+    return NULL;
+}
+```
+
+### [palindrome-linked-list](https://leetcode-cn.com/problems/palindrome-linked-list/)
+
+判断一个链表是否为回文链表。用 $$O(n)$$ 时间复杂度和 $$O(1)$$ 空间复杂度解决。
+
+```cpp
+bool isPalindrome(ListNode* head) {
+    if(!head || !head->next)
+        return true;
+    ListNode *quickptr=head->next, *slowptr=head;
+    while(quickptr && quickptr->next){
+        quickptr = quickptr->next->next;
+        slowptr = slowptr->next;
+    }
+    ListNode *rightHead = slowptr->next;
+    slowptr->next = NULL;
+    rightHead = reverseList(rightHead);
+    // 合并
+    ListNode *leftHead = head;
+    while(leftHead && rightHead){
+        if(leftHead->val != rightHead->val){
+            return false;
+        }
+        leftHead = leftHead->next;
+        rightHead = rightHead->next;
+    }
+    return true;
+}
+```
+
+### [copy-list-with-random-pointer](https://leetcode-cn.com/problems/copy-list-with-random-pointer/)
+
+给定一个链表，每个节点包含一个额外增加的随机指针，该指针可以指向链表中的任何节点或空节点。要求返回这个链表的 **深拷贝**。
+
+我们用一个由 `n` 个节点组成的链表来表示输入/输出中的链表。每个节点用一个 `[val, random_index]` 表示，`val`：一个表示 `Node.val` 的整数。 `random_index`：随机指针指向的节点索引（范围从 `0` 到 `n-1`）；如果不指向任何节点，则为 `null` 。
+
+
 
