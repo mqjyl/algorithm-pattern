@@ -26,6 +26,50 @@
 
 这两种方法的优势互补，同时使用二者的程序每个操作的平均时间仅为![O\(\alpha \(n\)\)](https://wikimedia.org/api/rest_v1/media/math/render/svg/0f2f9c5bf5571b12dd0907f0a1ef917e1c082201)，![\alpha \(n\)](https://wikimedia.org/api/rest_v1/media/math/render/svg/74c1642d9e2f86b9e5c86c0f18ee5377507da827)是![n=f\(x\)=A\(x,x\)](https://wikimedia.org/api/rest_v1/media/math/render/svg/5bcc6ab1771bb643699c39ff45998c876e788261)的反函数，其中![A](https://wikimedia.org/api/rest_v1/media/math/render/svg/7daff47fa58cdfd29dc333def748ff5fa4c923e3)是急速增加的阿克曼函数。因为![\alpha \(n\)](https://wikimedia.org/api/rest_v1/media/math/render/svg/74c1642d9e2f86b9e5c86c0f18ee5377507da827)是其的反函数，故![\alpha \(n\)](https://wikimedia.org/api/rest_v1/media/math/render/svg/74c1642d9e2f86b9e5c86c0f18ee5377507da827)在![n](https://wikimedia.org/api/rest_v1/media/math/render/svg/a601995d55609f2d9f5e233e36fbe9ea26011b3b)十分巨大时还是小于5。因此，平均运行时间是一个极小的常数。实际上，这是渐近最优算法：Fredman和Saks在1989年解释了![\Omega \(\alpha \(n\)\)](https://wikimedia.org/api/rest_v1/media/math/render/svg/9bfdfd41667be083aff4b7c292a9f35884b654b8)的平均时间内可以获得任何并查集。
 
+## ✏ 题型
+
+1. 对于无向图的连通分量数求解：把并查集用上扫描一遍边就出了答案。
+2. 对于区间的合并：这一类问题要注意的是每次合并的选择。 如果是任意选固然可以， 但是如果人为规定某个位置（区间最左或区间最右） 为根， 那么我们在合并的时候主要将精力放在一边的处理即可， 而不是两边。 
+3. 在二维矩阵中的合并：二维矩阵中的问题和区间的很相似， 不同的是矩阵内的合并是连续的， 而不像区间有可能是不连续。事实上这里也是要注意确定一个根节点的方向性（例如在左上之类）。 二维的合并其实比较复杂（主要是合并需要考虑的方向多）， 有的时候并查集并不是一个好的选择， 通常情况下除非有一定的动态查询要求， 否则用`BFS`或者`DFS`可能要比使用并查集更加简单。
+
+\*\*\*\*[**Number of Islands**](https://leetcode-cn.com/problems/number-of-islands/)\*\*\*\*
+
+给你一个由 '1'（陆地）和 '0'（水）组成的的二维网格，请你计算网格中岛屿的数量。岛屿总是被水包围，并且每座岛屿只能由水平方向或竖直方向上相邻的陆地连接形成。此外，你可以假设该网格的四条边均被水包围。
+
+#### \*\*\*\*[**Friend Circles**](https://leetcode-cn.com/problems/friend-circles/)\*\*\*\*
+
+班上有 N 名学生。其中有些人是朋友，有些则不是。他们的友谊具有是传递性。如果已知 A 是 B 的朋友，B 是 C 的朋友，那么我们可以认为 A 也是 C 的朋友。所谓的朋友圈，是指所有朋友的集合。
+
+给定一个 N \* N 的矩阵 M，表示班级中学生之间的朋友关系。如果`M[i][j] = 1`，表示已知第 i 个和 j 个学生互为朋友关系，否则为不知道。你必须输出所有学生中的已知的朋友圈总数。
+
+\*\*\*\*[**Redundant Connection**](https://leetcode-cn.com/problems/redundant-connection/)\*\*\*\*
+
+在本问题中, 树指的是一个连通且无环的无向图。
+
+输入一个图，该图由一个有着N个节点 \(节点值不重复1, 2, ..., N\) 的树及一条附加的边构成。附加的边的两个顶点包含在1到N中间，这条附加的边不属于树中已存在的边。
+
+结果图是一个以边组成的二维数组。每一个边的元素是一对`[u, v]` ，满足 `u < v`，表示连接顶点u 和v的无向图的边。返回一条可以删去的边，使得结果图是一个有着N个节点的树。如果有多个答案，则返回二维数组中最后出现的边。答案边 `[u, v]` 应满足相同的格式 `u < v`。
+
+\*\*\*\*[**Redundant Connection II**](https://leetcode-cn.com/problems/redundant-connection-ii/)\*\*\*\*
+
+在本问题中，有根树指满足以下条件的有向图。该树只有一个根节点，所有其他节点都是该根节点的后继。每一个节点只有一个父节点，除了根节点没有父节点。
+
+输入一个有向图，该图由一个有着N个节点 \(节点值不重复1, 2, ..., N\) 的树及一条附加的边构成。附加的边的两个顶点包含在1到N中间，这条附加的边不属于树中已存在的边。
+
+结果图是一个以边组成的二维数组。 每一个边 的元素是一对 `[u, v]`，用以表示有向图中连接顶点 u 和顶点 v 的边，其中 u 是 v 的一个父节点。返回一条能删除的边，使得剩下的图是有N个节点的有根树。若有多个答案，返回最后出现在给定二维数组的答案。
+
+\*\*\*\*[**Accounts Merge**](https://leetcode-cn.com/problems/accounts-merge/)\*\*\*\*
+
+给定一个列表 `accounts`，每个元素 `accounts[i]` 是一个字符串列表，其中第一个元素 `accounts[i][0]` 是 名称 \(name\)，其余元素是 emails 表示该帐户的邮箱地址。
+
+现在，我们想合并这些帐户。如果两个帐户都有一些共同的邮件地址，则两个帐户必定属于同一个人。请注意，即使两个帐户具有相同的名称，它们也可能属于不同的人，因为人们可能具有相同的名称。一个人最初可以拥有任意数量的帐户，但其所有帐户都具有相同的名称。
+
+合并帐户后，按以下格式返回帐户：每个帐户的第一个元素是名称，其余元素是按顺序排列的邮箱地址。accounts 本身可以以任意顺序返回。
+
+\*\*\*\*[**Sentence Similarity II**](https://leetcode-cn.com/problems/sentence-similarity-ii/)\*\*\*\*
+
+\*\*\*\*
+
 #### [lowest-common-ancestor-of-a-binary-tree](https://leetcode-cn.com/problems/lowest-common-ancestor-of-a-binary-tree/)
 
 对于有根树 T 的两个结点 p、q，最近公共祖先表示为一个结点 x，满足 x 是 p、q 的祖先且 x 的深度尽可能大（**一个节点也可以是它自己的祖先**）。
