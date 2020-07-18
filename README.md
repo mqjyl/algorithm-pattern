@@ -18,7 +18,7 @@ description: 数据结构和算法基础知识学习和总结。
 
 ### C++基础 ⚽ 
 
-* [C++基础语法](c++/c++-syntax.md)
+* [C++基础语法](c++/c++-syntax/)
 * [C++高级特性](c++/advanced-c++/)
 * [STL基础](c++/stl-basics/)
 
