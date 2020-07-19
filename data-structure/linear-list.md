@@ -503,7 +503,52 @@ bool isPalindrome(ListNode* head) {
 
 给定一个链表，每个节点包含一个额外增加的随机指针，该指针可以指向链表中的任何节点或空节点。要求返回这个链表的 **深拷贝**。
 
-我们用一个由 `n` 个节点组成的链表来表示输入/输出中的链表。每个节点用一个 `[val, random_index]` 表示，`val`：一个表示 `Node.val` 的整数。 `random_index`：随机指针指向的节点索引（范围从 `0` 到 `n-1`）；如果不指向任何节点，则为 `null` 。
+```cpp
+// Definition for a Node.
+class Node {
+public:
+    int val;
+    Node* next;
+    Node* random;
+    Node(int _val) { val = _val; next = NULL; random = NULL;}
+};
+```
 
+![](../.gitbook/assets/57.png)
 
+> 这道题的难度在于随机指针的复制，首先想到的是利用`map`存储原链表和新链表的对应节点的指针。
+
+```cpp
+Node* copyRandomList(Node* head) {
+    if(!head)
+        return NULL;
+    std::map<Node*, Node*> imap;
+    Node *ptr = head;
+    Node *newHead = new Node(0);
+    Node *newptr = newHead;
+    while(ptr){
+        newptr->next = new Node(ptr->val);
+        newptr = newptr->next;
+        imap.insert(std::make_pair(ptr, newptr));
+        ptr = ptr->next;
+    }
+    ptr = head;
+    newptr = newHead->next;
+    while(ptr){
+        if(ptr->random)
+            newptr->random = imap.find(ptr->random)->second;
+        ptr = ptr->next;
+        newptr = newptr->next;
+    }
+    return newHead->next;
+}
+```
+
+> 方法二、回溯法，（见[回溯法](../algorithm-thinking/backtracking-algorithm.md)）
+>
+> 方法三、不需要额外空间的迭代
+
+```cpp
+
+```
 
