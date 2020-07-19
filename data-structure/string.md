@@ -6,7 +6,7 @@ description: 总结字符串相关的算法考点和题型。
 
 ## ✏ 模式匹配
 
-字符串 $$S=[s_1,s_2,\ldots,s_n]$$ ，模式串 $$P=[p_1,p_2,\ldots,p_m]$$ ， $$i$$ 和 $$j$$ 为两个游标。
+字符串 $$S=[s_1,s_2,\ldots,s_n]$$ ，模式串 $$P=[p_1,p_2,\ldots,p_m]$$ ， $$i$$ 和 $$j$$ 为两个游标，从`1`开始。
 
 **解决字符串的算法非常多：**
 
@@ -16,12 +16,70 @@ description: 总结字符串相关的算法考点和题型。
 
 普通模式匹配算法，其实现过程没有任何技巧，就是简单粗暴地拿一个串同另一个串中的字符一一比对，得到最终结果。
 
+```c
+int strStr(string haystack, string needle) {
+    int i = 0, j = 0;
+    while(i < haystack.size() && j < needle.size()){
+        if(haystack[i] == needle[j]){
+            i++; j++;
+        }else{
+            i = i - j + 1; j = 0;
+        }
+    }
+    if(j >= needle.size())
+        return i - needle.size();
+    else
+        return -1;
+}
+```
+
 时间复杂度分析，匹配成功时：
 
 * 最好情况： $$s_1$$ 、 $$s_2$$ 、 $$\ldots$$ 、 $$s_{n-m}$$ 都与 $$p_1$$ 不匹配， $$[s_{n-m+1},\ldots,s_n]$$ 与 $$[p_1,p_2,\ldots,p_m]$$ 匹配，此时 $$i$$ 移动 $$n$$ 次， $$j$$ 移动 $$m$$ 次，复杂度 $$O(n+m)$$ 。
 * 最坏情况：$$s_1$$ 、 $$s_2$$ 、 $$\ldots$$ 、 $$s_{m-1}$$ 与$$p_1$$ 、 $$p_2$$ 、 $$\ldots$$ 、 $$p_{m-1}$$ 匹配，但是 $$s_m$$ 与 $$p_m$$ 不匹配，同样，$$s_2$$ 、 $$s_3$$ 、 $$\ldots$$ 、 $$s_{m}$$ 与$$p_1$$ 、 $$p_2$$ 、 $$\ldots$$ 、 $$p_{m-1}$$ 匹配，但是$$s_{m+1}$$ 与 $$p_m$$ 不匹配，依次进行，直到$$s_{n-m+1}$$ 、 $$s_{n-m+2}$$ 、 $$\ldots$$ 、 $$s_{n}$$ 与$$p_1$$ 、 $$p_2$$ 、 $$\ldots$$ 、 $$p_{m}$$ 匹配成功，此时 $$i$$ 移动 $$m(n-m)$$ 次， $$j$$ 移动 $$m(n-m)$$ 次，复杂度 $$O(n\times m)$$ 。
 
+分析：
+
+![](../.gitbook/assets/61.png)
+
+如图所示在 $$p_7$$ 处产生失配时，朴素的算法会将 $$i$$ 退到的位置， $$j$$ 回到 $$1$$ 重新匹配，但我们发现 $$s_6\text{-}s_8$$ 与 $$p_2\text{-}p_4$$ 已经匹配，而 $$p_1$$ 与$$p_2\text{-}p_4$$ 皆不同，则与$$s_6\text{-}s_8$$ 匹配必然失败，又$$p_1p_2$$ 知$$p_5p_6$$ 与相同，则可知$$p_1p_2$$与$$p_9p_{10}$$一定匹配，由此可知，$$i$$ 不需要回退，$$j$$只需从 $$3$$ 开始继续匹配。
+
 ### 🖋 2、`KMP`算法
+
+#### 🏀 2.1、分析
+
+1. 当模式串在 $$p_1$$ 时就产生失配，则将 $$i+1$$ ，再比较 $$s_i$$ 和 $$p_1$$ ，依次向后进行；
+2. 当匹配到 $$p_i$$ 时产生失配，
+
+![](../.gitbook/assets/62.png)
+
+此时，
+
+#### 🏀 2.2、求`next`数组
+
+`next`数组的定义如下：
+
+$$
+\begin{equation}
+next[j]= \begin{cases}
+	0, & j=1 \\
+	max\{k | 1<k<j \text{且} p_1,\ldots,p_{k-1} = p_{j-k+1},\ldots,p_{j-1}\}, & \\
+        1, & \text{其他情况}
+\end{cases}
+\end{equation}
+$$
+
+```text
+
+```
+
+#### 🏀 2.3、根据`next`数组，可得`KMP`算法
+
+```text
+
+```
+
+#### 🏀 2.4、通用`next`数组求法
 
 
 
@@ -30,8 +88,6 @@ description: 总结字符串相关的算法考点和题型。
 #### \*\*\*\*[**Implement strStr\(\)**](https://leetcode-cn.com/problems/implement-strstr/)\*\*\*\*
 
 实现 `strStr()` 函数。给定一个 `haystack` 字符串和一个 `needle` 字符串，在 `haystack` 字符串中找出 `needle` 字符串出现的第一个位置 \(从0开始\)。如果不存在，则返回 `-1`。 对于本题而言，当 `needle` 是空字符串时我们应当返回 0 。这与C语言的 `strstr()` 以及 Java的 `indexOf()` 定义相符。
-
-
 
 #### \*\*\*\*[**Repeated Substring Pattern**](https://leetcode-cn.com/problems/repeated-substring-pattern/)\*\*\*\*
 
