@@ -6,11 +6,22 @@ description: 总结字符串相关的算法考点和题型。
 
 ## ✏ 模式匹配
 
-### 🖋 1、BF算法
+字符串 $$S=[c_1,c_2,\ldots,c_n]$$ ，模式串 $$T=[p_1,p_2,\ldots,p_m]$$ 。
+
+**解决字符串的算法非常多：**
+
+朴素算法（`Naive Algorithm`）、`Rabin-Karp` 算法、有限自动机算法（`Finite Automation`）、 `Knuth-Morris-Pratt` 算法（即 `KMP Algorithm`）、`Boyer-Moore` 算法、`Simon` 算法、`Colussi` 算法、`Galil-Giancarlo` 算法、`Apostolico-Crochemore` 算法、`Horspool` 算法和 `Sunday` 算法等。
+
+### 🖋 1、`BF`算法
 
 普通模式匹配算法，其实现过程没有任何技巧，就是简单粗暴地拿一个串同另一个串中的字符一一比对，得到最终结果。
 
-### 🖋 2、KMP算法
+时间复杂度分析：
+
+* 
+### 🖋 2、`KMP`算法
+
+
 
 ## ✏ 题型
 
