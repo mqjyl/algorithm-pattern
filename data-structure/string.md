@@ -69,6 +69,8 @@ next[j]= \begin{cases}
 \end{equation}
 $$
 
+从`next`的定义出发，给出下面的求解程序：
+
 ```text
 
 ```
