@@ -112,6 +112,8 @@ $$
 
  请实现一个函数，把字符串 `s` 中的每个空格替换成`"%20"`。
 
+> 最容易想到的是按空格拆分字符串，然后再组合。
+
 
 
 ### \*\*\*\*[**First Unique Character in a String**](https://leetcode-cn.com/problems/first-unique-character-in-a-string/)\*\*\*\*
