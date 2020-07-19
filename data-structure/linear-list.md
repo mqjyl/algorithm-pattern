@@ -516,7 +516,9 @@ public:
 
 ![](../.gitbook/assets/57.png)
 
-> 这道题的难度在于随机指针的复制，首先想到的是利用`map`存储原链表和新链表的对应节点的指针。
+> 这道题的难度在于随机指针的复制，首先想到的暴力法：先将新链表创建出来，然后对于新链表中的每个节点的random指针，用两个同步指针在新旧链表上找对应位置。
+>
+> 第二种方法是利用`map`存储原链表和新链表的对应节点的指针。
 
 ```cpp
 Node* copyRandomList(Node* head) {
@@ -544,9 +546,15 @@ Node* copyRandomList(Node* head) {
 }
 ```
 
-> 方法二、回溯法，（见[回溯法](../algorithm-thinking/backtracking-algorithm.md)）
+> 方法三、回溯法，（见[回溯法](../algorithm-thinking/backtracking-algorithm.md)）
 >
-> 方法三、不需要额外空间的迭代
+> 方法四、不需要额外空间的迭代：暴力法的一种改进，既然是新旧链表的同步，那可以先将拷贝节点放在原来节点的旁边，创造出一个旧节点和新节点交错的链表。
+
+![](../.gitbook/assets/59.png)
+
+> 迭代这个新旧节点交错的链表，并用旧节点的 `random` 指针去更新对应新节点的 `random` 指针。比方说， `B` 的 `random` 指针指向 `A`，意味着 `B'` 的 `random` 指针指向 `A'`。可以用**前后指针**。
+
+![](../.gitbook/assets/60.png)
 
 ```cpp
 
