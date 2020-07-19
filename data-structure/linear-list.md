@@ -557,6 +557,41 @@ Node* copyRandomList(Node* head) {
 ![](../.gitbook/assets/60.png)
 
 ```cpp
-
+Node* copyRandomList(Node* head) {
+    if(!head)
+        return NULL;
+    Node *ptr = head;
+    Node *tmpptr = head;
+    while(ptr){
+        tmpptr = ptr->next;
+        ptr->next = new Node(ptr->val);
+        ptr->next->next = tmpptr;
+        ptr = tmpptr;
+    }
+    ptr = head;
+    tmpptr = head->next;
+    while(tmpptr){
+        if(ptr->random)
+            tmpptr->random = ptr->random->next;
+        if(tmpptr->next){
+            tmpptr = tmpptr->next->next;
+            ptr = ptr->next->next;
+        }else{
+            break;
+        }
+    }
+    // 拆分
+    Node *newHead = head->next;
+    ptr = head;
+    tmpptr = head->next;
+    while(tmpptr && tmpptr->next){
+        ptr->next = tmpptr->next;
+        tmpptr->next = tmpptr->next->next;
+        ptr = ptr->next;
+        tmpptr = tmpptr->next;
+    }
+    ptr->next = NULL; // 原来的链表最后一个节点的next一定要置NULL。
+    return newHead;
+}
 ```
 
