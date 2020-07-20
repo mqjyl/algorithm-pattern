@@ -7,6 +7,7 @@
 * [C++基础语法](c++/c++-syntax/README.md)
   * [基础类型转换](c++/c++-syntax/type-conversion.md)
 * [C++高级特性](c++/advanced-c++/README.md)
+  * [并发与多线程](c++/advanced-c++/concurrency-and-multithreading.md)
   * [泛型编程](c++/advanced-c++/generic-programming.md)
   * [面向对象](c++/advanced-c++/object-oriented-programming.md)
 * [STL基础](c++/stl-basics/README.md)
