@@ -49,3 +49,8 @@
 * [动态规划](algorithm-thinking/dynamic-programming-algorithm.md)
 * [分支限界算法](algorithm-thinking/branch-and-bound.md)
 
+## 面试题
+
+* [基础知识题](mian-shi-ti/basic-knowledge.md)
+* [设计题](mian-shi-ti/design-problems.md)
+
