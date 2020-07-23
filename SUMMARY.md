@@ -6,6 +6,9 @@
 
 * [C++基础语法](c++/c++-syntax/README.md)
   * [基础类型转换](c++/c++-syntax/type-conversion.md)
+  * [指针和引用](c++/c++-syntax/pointers-and-references.md)
+  * [c语言到c++](c++/c++-syntax/c-cpp.md)
+  * [常考的关键字](c++/c++-syntax/keywords.md)
 * [C++高级特性](c++/advanced-c++/README.md)
   * [并发与多线程](c++/advanced-c++/concurrency-and-multithreading.md)
   * [泛型编程](c++/advanced-c++/generic-programming.md)
