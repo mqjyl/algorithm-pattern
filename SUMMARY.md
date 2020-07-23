@@ -9,8 +9,11 @@
   * [指针和引用](c++/c++-syntax/pointers-and-references.md)
   * [c语言到c++](c++/c++-syntax/c-cpp.md)
   * [常考的关键字](c++/c++-syntax/keywords.md)
+  * [内存申请和释放](c++/c++-syntax/memory-request-and-release.md)
 * [C++高级特性](c++/advanced-c++/README.md)
   * [并发与多线程](c++/advanced-c++/concurrency-and-multithreading.md)
+  * [RTTI技术](c++/advanced-c++/rtti.md)
+  * [智能指针](c++/advanced-c++/smart-pointer.md)
   * [泛型编程](c++/advanced-c++/generic-programming.md)
   * [面向对象](c++/advanced-c++/object-oriented-programming.md)
 * [STL基础](c++/stl-basics/README.md)
@@ -56,4 +59,5 @@
 
 * [基础知识题](mian-shi-ti/basic-knowledge.md)
 * [设计题](mian-shi-ti/design-problems.md)
+* [C++面试题总结](mian-shi-ti/cpp-interview-question.md)
 

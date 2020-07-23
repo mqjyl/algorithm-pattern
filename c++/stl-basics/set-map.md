@@ -4,6 +4,32 @@
 
 `map`是一种关联式容器，存储的都是 `pair` 对象，也就是用 `pair` 类模板创建的键值对。 包括 C++ 基本数据类型（`int`、`double` 等）和使用结构体或类自定义的类型。
 
+map是`STL`里的一个模板类，用来存放键值对的数据结构，它的定义如下：
+
+```cpp
+template < class Key,                                   //map::key_type
+           class T,                                     //map::mapped_type
+           class Compare = less<Key>,                   //map::key_compare
+           class Alloc = allocator<pair<const Key, T>>  //map::allocator_type
+           > class map;
+```
+
+* 第1个参数存储了key。
+* 第2个参数存储了mapped value。
+* 第3个参数是比较函数的函数对象。map用它来判断两个key的大小，并返回bool类型的结果。利用这个函数，map可以确定元素在容器中遵循的顺序以及两个元素键是否相等`(!comp(a, b) && !comp(b, a))`，确保map中没有两个元素可以具有等效键。这里，它的默认值是`less<key>`，定义如下：
+
+```cpp
+template <class T> 
+struct less {
+  bool operator() (const T& x, const T& y) const {return x < y;}
+  typedef T first_argument_type;
+  typedef T second_argument_type;
+  typedef bool result_type;
+};
+```
+
+* 第4个参数是用来定义存储分配模型的。
+
 ### 🖋 1、特点
 
 1. `map` 容器存储的各个键值对，键的值既不能重复也不能被修改。换句话说，`map` 容器中存储的各个键值对不仅键的值独一无二，键的类型也会用 const 修饰，这意味着只要键值对被存储到 `map` 容器中，其键的值将不能再做任何修改。
@@ -60,6 +86,166 @@
 ### 🖋 7、 `emplace()`和`emplace_hint()`
 
 ### 🖋 8、 `multimap`容器
+
+### 🖋 9、key的有序性之自定义类型作为`map`的`key`
+
+#### 🐹 9.1、简单方法: 重载operator&lt;\(\)操作符
+
+在我们插入时，map会先通过比较函数地函数对象来比对key的大小，然后根据比对结果进行有序存储。c++标准库中，map比较函数的函数对象不可避免地会用到`‘<’`运算，因此一种方法就是直接在自定义类里重载`operator<()`操作符：
+
+```cpp
+class Person{
+public:
+    string name;
+    int age;
+    Person(string n, int a){
+        name = n;
+        age = a;
+    }
+    bool operator < (const Person &p) const //注意这里的两个const
+    {
+        return (age < p.age) || (age == p.age && name.length() < p.name.length()) ;
+    }
+};
+```
+
+需要注意的是，在重载`operator<(){}`时，无论是参数还是整个函数的`const`都不能少。参照`less`的定义，`less`的参数和函数整体都是`const`，那么被调用的`operator<()`必然也是同等要求。
+
+#### 🐹 9.2、其它方法：比较函数的函数对象
+
+除了直接重载`operator<()`，我们可以直接自定义比较函数的函数对象。首先简要介绍一下函数对象的概念：在《C++ Primer Plus》里面，函数对象是可以以函数方式与\(\)结合使用的任意对象。这包括函数名、指向函数的指针和重载了`“operator()”`操作符的类对象。基于此，我们提出3种定义方法。 
+
+#### 9.2.1、方法1: 利用std::function <a id="3.1"></a>
+
+它是一种通用、多态、类型安全的函数封装，其实例可以对任何可调用目标实体（包括普通函数、Lambda表达式、函数指针、以及其它函数对象等）进行存储、复制和调用操作，方法如下：
+
+```cpp
+#include <iostream>
+#include <map>
+#include <string>
+#include <functional>
+using namespace std;
+
+class Person{
+public:
+    string name;
+    int age;
+    Person(string n, int a){
+        name = n;
+        age = a;
+    }
+};
+
+bool MyCompare(const Person &p1, const Person &p2) {//普通的函数
+    return (p1.age < p2.age) || (p1.age == p2.age && p1.name.length() < p2.name.length());
+}
+
+int main(int argc, char* argv[]){
+    map<Person, int, function<bool(const Person &, const Person &)>> group(MyCompare); //需要在构造函数中指明
+    group[Person("Mark", 17)] = 40561;
+    group[Person("Andrew",18)] = 40562;
+    for ( auto ii = group.begin() ; ii != group.end() ; ii++ )
+        cout << ii->first.name 
+        << " " << ii->first.age
+        << " : " << ii->second
+        << endl;
+    return 0;
+}
+```
+
+我们利用`std::function`为`MyCompare()`构建函数实例。初始化时，这个函数实例就会被分配那个指向`MyCompare()`的指针。因此，在对group进行申明时，需要构造函数指明函数实例。
+
+另外，c++11增加了一个新的关键词`decltype`，它可以直接获取自定义哈希函数的类型，并把它作为参数传送。因此，group的声明可以如下修改：
+
+```cpp
+map<Person, int, decltype(&MyCompare)> group(MyCompare);
+```
+
+#### 9.2.2、方法2: 重载operator\(\)的类 <a id="3.1"></a>
+
+利用重载operator\(\)的类，将比较函数打包成可以直接调用的类：
+
+```cpp
+#include <iostream>
+#include <map>
+#include <string>
+using namespace std;
+
+class Person{
+public:
+    string name;
+    int age;
+    Person(string n, int a){
+        name = n;
+        age = a;
+    }
+};
+
+struct MyCompare{  //Function Object
+    bool operator()(const Person &p1, const Person &p2) const{
+        return (p1.age < p2.age) || (p1.age == p2.age && p1.name.length() < p2.name.length());
+    }
+};
+
+int main(int argc, char* argv[]){
+	map<Person, int, MyCompare> group;
+	group[Person("Mark", 17)] = 40561;
+    group[Person("Andrew",18)] = 40562;
+    for ( auto ii = group.begin() ; ii != group.end() ; ii++ )
+        cout << ii->first.name 
+        << " " << ii->first.age
+        << " : " << ii->second
+        << endl;
+    return 0;
+}
+
+```
+
+值得注意的是，这时group的声明不再需要将函数对象的引用传入构造器里。因为map会追踪类定义，当需要比较时，它可以动态地构造对象并传递数据。
+
+#### 9.2.3、方法3: less函数的模板定制 <a id="3.1"></a>
+
+通过map的定义可知，第三个参数的默认值是less。显而易见，less属于模板类。那么，我们可以对它进行模板定制，如下所示：
+
+```cpp
+#include <iostream>
+#include <map>
+#include <string>
+using namespace std;
+
+class Person{
+public:
+    string name;
+    int age;
+    Person(string n, int a){
+        name = n;
+        age = a;
+    }
+};
+
+template <> //function-template-specialization
+    struct less<Person>{
+    public :
+        bool operator()(const Person &p1, const Person &p2) const {
+            return (p1.age < p2.age) || (p1.age == p2.age && p1.name.length() < p2.name.length());
+        }
+};
+
+int main(int argc, char* argv[]){
+    map<Person, int> group; //无需指定第三个参数啦
+    group[Person("Mark", 17)] = 40561;
+    group[Person("Andrew",18)] = 40562;
+    for ( auto ii = group.begin() ; ii != group.end() ; ii++ )
+        cout << ii->first.name 
+        << " " << ii->first.age
+        << " : " << ii->second
+        << endl;
+
+    return 0;
+}
+```
+
+### 🖋 10、const与static的map
 
 ## ✏ Set
 
