@@ -58,6 +58,9 @@ description: 数据结构和算法基础知识学习和总结。
 
 ### 刷题网站 🍊 
 
+1. Leetcode：[https://leetcode-cn.com/problemset/all/](https://leetcode-cn.com/problemset/all/)
+2. 牛客网：[https://www.nowcoder.com/activity/oj](https://www.nowcoder.com/activity/oj)
+
 ### 博客 🍍 
 
 ## 相关链接
