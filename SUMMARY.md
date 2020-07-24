@@ -33,6 +33,7 @@
 * [二叉树](data-structure/binary-tree.md)
 * [并查集](data-structure/union-find.md)
 * [平衡二叉树](data-structure/balanced-binary-tree.md)
+* [平衡多路搜索树](data-structure/balanced-multipath-search-tree.md)
 * [堆和优先队列](data-structure/heap-and-priority-queues.md)
 * [图](data-structure/graph.md)
 * [二进制](data-structure/binary-system.md)
