@@ -156,7 +156,7 @@ struct less {
 | std::less\_equal&lt;T&gt; | 底层采用 &lt;= 运算符实现升序排序，多用于 `multimap` 和 `multiset` 容器。 |
 | std::greater\_equal&lt;T&gt; | 底层采用 &gt;= 运算符实现降序排序，多用于 `multimap` 和 `multiset` 容器。 |
 
-### 使用[函数对象](../c++-syntax/function-object.md)自定义排序规则
+### 使用[函数对象](../advanced-c++/function-object.md)自定义排序规则
 
 ```cpp
 class cmp {
