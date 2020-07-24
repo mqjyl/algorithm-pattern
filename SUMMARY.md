@@ -4,9 +4,11 @@
 
 ## C++基础 <a id="c++"></a>
 
-* [c语言](c++/c.md)
+* [c语言](c++/c/README.md)
+  * [函数指针与回调函数](c++/c/function-pointer-callback-function.md)
 * [C++基础语法](c++/c++-syntax/README.md)
   * [类型转换](c++/c++-syntax/type-conversion.md)
+  * [函数对象](c++/c++-syntax/function-object.md)
   * [指针和引用](c++/c++-syntax/pointers-and-references.md)
   * [c语言到c++](c++/c++-syntax/c-cpp.md)
   * [常考的关键字](c++/c++-syntax/keywords.md)
