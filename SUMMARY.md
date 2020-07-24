@@ -25,7 +25,7 @@
   * [deque/stack/queue](c++/stl-basics/deque-stack-queue.md)
   * [heep/priority\_queue](c++/stl-basics/heep-priority_queue.md)
   * [set/map](c++/stl-basics/set-map.md)
-  * [hashtable/hash\_set/hash\_map](c++/stl-basics/hashtable-hash_set-hash_map.md)
+  * [unordered\_set/unordered\_map](c++/stl-basics/unordered_set-unordered_map.md)
 
 ## 数据结构 <a id="data-structure"></a>
 
