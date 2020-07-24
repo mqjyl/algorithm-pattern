@@ -4,6 +4,7 @@
 
 ## C++基础 <a id="c++"></a>
 
+* [c语言](c++/c.md)
 * [C++基础语法](c++/c++-syntax/README.md)
   * [类型转换](c++/c++-syntax/type-conversion.md)
   * [指针和引用](c++/c++-syntax/pointers-and-references.md)
