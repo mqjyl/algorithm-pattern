@@ -385,3 +385,36 @@ int main(){
 }
 ```
 
+不是所有的地方发生错误的时候都可以通过`error`获取错误代码：
+
+```cpp
+#include"stdio.h"
+#include "stdlib.h"
+#include "errno.h"
+#include "netdb.h"
+#include "sys/types.h"
+#include "netinet/in.h"
+int main (int argc, char *argv[])
+{
+    struct hostent *h;
+    if (argc != 2){
+        fprintf (stderr ,"usage: getip address\n");
+        exit(1);
+    }
+    /* 取得主机信息 */
+    if((h=gethostbyname(argv[1])) == NULL){
+        /* 如果gethostbyname 失败，则给出错误信息 */
+        //gethostbyname()返回对应于给定主机名的包含主机名字和地址信息的hostent结构的指针。结构的声明与gethostbyaddr()中一致。
+        herror(“gethostbyname”);
+        exit(1);
+    }
+    /* 列印程序取得的信息 */
+    printf(“Host name : %s\n”, h->h_name);
+    printf(“IP Address : %s\n”, inet_ntoa (*((struct in_addr *)h->h_addr))）;
+    return 0;
+}
+```
+
+使用`gethostbyname()`函数，不能使用`perror()`来输出错误信息（因为错误代码存储在 `h_errno` 中而不是`errno`中。所以需要调用`herror()`函数。  
+简单的传给`gethostbyname()`一个机器名`（“`[`bbs.tsinghua.edu.cn`](http://bbs.tsinghua.edu.cn/)`”）`，然后就从返回的结构`struct hostent` 中得到了IP 等其他信息。程序中输出IP 地址的程序需要解释一下：`h->h_addr` 是一个`char`，但是`inet_ntoa()`函数需要传递的是一个`struct in_addr` 结构。所以上面将`h->h_addr` 强制转换为`struct in_addr`，然后通过它得到了所有数据。
+
