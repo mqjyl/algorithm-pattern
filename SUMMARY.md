@@ -6,6 +6,7 @@
 
 * [c语言](c++/c/README.md)
   * [函数指针与回调函数](c++/c/function-pointer-callback-function.md)
+  * [errno](c++/c/errno.md)
 * [C++基础语法](c++/c++-syntax/README.md)
   * [c语言到c++](c++/c++-syntax/c-cpp.md)
   * [类型转换](c++/c++-syntax/type-conversion.md)
