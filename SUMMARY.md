@@ -4,7 +4,7 @@
 
 ## C++基础 <a id="c++"></a>
 
-* [c语言](c++/c/README.md)
+* [C语言](c++/c/README.md)
   * [函数指针与回调函数](c++/c/function-pointer-callback-function.md)
   * [errno](c++/c/errno.md)
 * [C++基础语法](c++/c++-syntax/README.md)

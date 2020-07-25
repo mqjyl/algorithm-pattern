@@ -19,6 +19,7 @@ description: 数据结构和算法基础知识学习和总结。
 ### C++基础 ⚽ 
 
 * [C++基础语法](c++/c++-syntax/)
+* [c语言](c++/c/)
 * [C++高级特性](c++/advanced-c++/)
 * [STL基础](c++/stl-basics/)
 
@@ -30,6 +31,7 @@ description: 数据结构和算法基础知识学习和总结。
 * [二叉树](data-structure/binary-tree.md)
 * [并查集](data-structure/union-find.md)
 * [平衡二叉树](data-structure/balanced-binary-tree.md)
+* [平衡多路搜索树](data-structure/balanced-multipath-search-tree.md)
 * [堆和优先队列](data-structure/heap-and-priority-queues.md)
 * [图](data-structure/graph.md)
 * [二进制](data-structure/binary-system.md)
@@ -46,6 +48,7 @@ description: 数据结构和算法基础知识学习和总结。
 
 * [递归算法](algorithm-thinking/recursive-algorithm.md)
 * [滑动窗口思想](algorithm-thinking/sliding-window.md)
+* [博弈论](algorithm-thinking/game-theory.md)
 * [回溯法](algorithm-thinking/backtracking-algorithm.md)
 * [贪心算法](algorithm-thinking/greedy-algorithm.md)
 * [分治法](algorithm-thinking/divide-and-conquer-algorithm.md)
@@ -56,12 +59,23 @@ description: 数据结构和算法基础知识学习和总结。
 
 ### 书籍 🍈 
 
+* 《数据结构与算法分析——C语言描述》
+* 《数据结构》——邓俊辉
+
 ### 刷题网站 🍊 
 
-1. Leetcode：[https://leetcode-cn.com/problemset/all/](https://leetcode-cn.com/problemset/all/)
+1. `Leetcode`：[https://leetcode-cn.com/problemset/all/](https://leetcode-cn.com/problemset/all/)
 2. 牛客网：[https://www.nowcoder.com/activity/oj](https://www.nowcoder.com/activity/oj)
 
 ### 博客 🍍 
+
+* 查找算法：[https://mp.weixin.qq.com/s/yRLqpF5eT7jfp89VRWCFEw](https://mp.weixin.qq.com/s/yRLqpF5eT7jfp89VRWCFEw)
+
+### 项目 🍇 
+
+* 算法可视化：[https://github.com/algorithm-visualizer/algorithm-visualizer](https://github.com/algorithm-visualizer/algorithm-visualizer)
+* `LeetCode`题解：[https://github.com/soulmachine/leetcode](https://github.com/soulmachine/leetcode)
+* Linux命令搜索：[https://wangchujiang.com/linux-command/](https://wangchujiang.com/linux-command/)
 
 ## 相关链接
 
