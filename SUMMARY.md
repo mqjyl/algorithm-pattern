@@ -5,6 +5,7 @@
 ## C++基础 <a id="c++"></a>
 
 * [C语言](c++/c/README.md)
+  * [C标准库之IO](c++/c/c-io.md)
   * [函数指针与回调函数](c++/c/function-pointer-callback-function.md)
   * [C标准库之errno](c++/c/errno.md)
 * [C++基础语法](c++/c++-syntax/README.md)

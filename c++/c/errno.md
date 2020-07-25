@@ -362,7 +362,7 @@ __thread_stack_pointer (void)
 
 参数：s: 字符串提示符
 
-输出形式：const char \*s: strerror\(errno\) //提示符：发生系统错误的原因
+输出形式：`const char *s: strerror(errno)` //提示符：发生系统错误的原因
 
 ### 3.2、字符串显示错误信息
 
@@ -370,9 +370,18 @@ __thread_stack_pointer (void)
 
 头文件：`#include <string.h>` 
 
-函数原型：char \*strerror\(int errnum\);
+函数原型：`char *strerror(int errnum);`
 
-参数：errno
+参数：`errno`
 
 返回值：返回错误码字符串信息
+
+```cpp
+int main(){
+    FILE *fp;
+    if ( (fp = fopen("no/such/file","r+")) == NULL ){
+        printf("errON[%d]errMsg[%s]\n",errno,strerror(errno));
+    }
+}
+```
 
