@@ -80,6 +80,8 @@ void slidingWindow(string s, string t) {
         
         // 判断左侧窗口是否要收缩
         while(window needs shrink) {
+            // 更新结果
+            ...
             // d 是将移出窗口的字符
             char d = s[left];
             // 左移窗口
@@ -320,6 +322,30 @@ vector<int> findAnagrams(string s, string p) {
 ### [longest-substring-without-repeating-characters](https://leetcode-cn.com/problems/longest-substring-without-repeating-characters/)
 
 ### \*\*\*\*[**Max Consecutive Ones III**](https://leetcode-cn.com/problems/max-consecutive-ones-iii/)\*\*\*\*
+
+给定一个由若干 `0` 和 `1` 组成的数组 `A`，我们最多可以将 `K` 个值从 0 变成 1 （`0 <= K <= A.length`）。返回仅包含 1 的最长（连续）子数组的长度。
+
+```cpp
+int lengthOfLongestSubstring(string s) {
+    int result = 0;
+    int len = s.size();
+    if(len == 0 || len == 1)
+        return  len;
+    int start = 0, current = 1;
+    while(current < len){
+        for(int i = current - 1; i >= start; i--){
+            if(s[i] == s[current]){
+                start = i + 1;
+                break;
+            }
+        }
+        result = result < (current - start + 1) ? (current - start + 1) : result;
+        current++;
+    }
+
+    return result;
+}
+```
 
 
 
