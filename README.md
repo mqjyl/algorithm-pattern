@@ -70,6 +70,8 @@ description: 数据结构和算法基础知识学习和总结。
 ### 博客 🍍 
 
 * 查找算法：[https://mp.weixin.qq.com/s/yRLqpF5eT7jfp89VRWCFEw](https://mp.weixin.qq.com/s/yRLqpF5eT7jfp89VRWCFEw)
+* `labuladong`：[https://labuladong.gitbook.io/algo/](https://labuladong.gitbook.io/algo/)
+* `algorithm-pattern`：[https://greyireland.gitbook.io/algorithm-pattern/](https://greyireland.gitbook.io/algorithm-pattern/)
 
 ### 项目 🍇 
 
