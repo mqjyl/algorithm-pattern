@@ -343,6 +343,9 @@ int lengthOfLongestSubstring(string s) {
 
     return result;
 }
+
+// 按模板写
+
 ```
 
 ### \*\*\*\*[**Max Consecutive Ones III**](https://leetcode-cn.com/problems/max-consecutive-ones-iii/)\*\*\*\*
@@ -350,24 +353,33 @@ int lengthOfLongestSubstring(string s) {
 给定一个由若干 `0` 和 `1` 组成的数组 `A`，我们最多可以将 `K` 个值从 0 变成 1 （`0 <= K <= A.length`）。返回仅包含 1 的最长（连续）子数组的长度。
 
 ```cpp
-int lengthOfLongestSubstring(string s) {
-    int result = 0;
-    int len = s.size();
-    if(len == 0 || len == 1)
-        return  len;
-    int start = 0, current = 1;
-    while(current < len){
-        for(int i = current - 1; i >= start; i--){
-            if(s[i] == s[current]){
-                start = i + 1;
-                break;
+int longestOnes(vector<int>& A, int K) {
+    if(K == A.size())
+        return K;
+    int left = 0, right = 0;
+    int result = 0, window = 0;
+    while(right < A.size()){
+        int i = A[right];
+        right++;
+        if(i == 1 || K > 0) {
+            window++;
+            if(i == 0)
+                K--;
+        }else{
+            result = std::max(result, window);
+            window++;
+            K--;
+            while(K < 0){
+                int j = A[left];
+                left++;
+                window--;
+                if(j == 0){
+                    K++;
+                }
             }
         }
-        result = result < (current - start + 1) ? (current - start + 1) : result;
-        current++;
     }
-
-    return result;
+    return std::max(result, window);
 }
 ```
 

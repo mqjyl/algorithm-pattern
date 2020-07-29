@@ -39,7 +39,6 @@
 * [字符串](data-structure/string.md)
 * [栈和队列](data-structure/stack-and-queue.md)
 * [二叉树](data-structure/binary-tree.md)
-* [并查集](data-structure/union-find.md)
 * [平衡二叉树](data-structure/balanced-binary-tree.md)
 * [平衡多路搜索树](data-structure/balanced-multipath-search-tree.md)
 * [堆和优先队列](data-structure/heap-and-priority-queues.md)
@@ -51,6 +50,7 @@
 
 * [排序算法](algorithm/sort-algorithm.md)
 * [查找算法](algorithm/search-algorithm.md)
+* [并查集](algorithm/union-find.md)
 * [表达式求值](algorithm/expression-evaluation.md)
 * [附加——主定理](algorithm/master-theorem.md)
 

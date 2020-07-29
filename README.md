@@ -29,7 +29,6 @@ description: 数据结构和算法基础知识学习和总结。
 * [字符串](data-structure/string.md)
 * [栈和队列](data-structure/stack-and-queue.md)
 * [二叉树](data-structure/binary-tree.md)
-* [并查集](data-structure/union-find.md)
 * [平衡二叉树](data-structure/balanced-binary-tree.md)
 * [平衡多路搜索树](data-structure/balanced-multipath-search-tree.md)
 * [堆和优先队列](data-structure/heap-and-priority-queues.md)
@@ -41,6 +40,7 @@ description: 数据结构和算法基础知识学习和总结。
 
 * [排序算法](algorithm/sort-algorithm.md)
 * [查找算法](algorithm/search-algorithm.md)
+* [并查集](algorithm/union-find.md)
 * [表达式求值](algorithm/expression-evaluation.md)
 * [主定理](algorithm/master-theorem.md)
 

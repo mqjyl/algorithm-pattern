@@ -93,7 +93,9 @@ auto_ptr< string > pstr_auto2( pstr_auto.get() ); //这是两个auto_ptr拥有�
 auto_ptr< string > pstr_auto2( pstr_auto.release() ); //release可以首先释放所有权
 ```
 
-## ✏ 2、unique\_ptr
+## ✏ 2、`unique_ptr`
+
+`unique_ptr` 是 `auto_ptr` 的升级版，`unique_ptr`实现独占式拥有或严格拥有概念，保证同一时间内只有一个智能指针可以指向该对象。它对于避免资源泄露\(例如“以new创建对象后因为发生异常而忘记调用delete”\)特别有用。
 
 
 
