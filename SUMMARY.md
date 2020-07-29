@@ -65,6 +65,12 @@
 * [动态规划](algorithm-thinking/dynamic-programming-algorithm.md)
 * [分支限界算法](algorithm-thinking/branch-and-bound.md)
 
+## LeetCode系列
+
+* [死磕二叉树](leetcode-xi-lie/stick-to-binary-tree.md)
+* [股票买卖问题](leetcode-xi-lie/stockjobbing.md)
+* [打家劫舍问题](leetcode-xi-lie/robbery.md)
+
 ## 面试题
 
 * [基础知识题](mian-shi-ti/basic-knowledge.md)

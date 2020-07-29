@@ -141,6 +141,8 @@ vector<int> preorderTraversal(TreeNode* root) {
 
 > 中序遍历和前序遍历唯一的区别就是：针对树中的任何一个结点，前序是在压栈前访问，而中序是在压栈后访问。
 
+培养算法框架思维：所谓的前序遍历和后序遍历，只是两个很有用的时间点，**前序遍历的代码在进入某一个节点之前的那个时间点执行，后序遍历代码在离开某个节点之后的那个时间点执行**。
+
 ```cpp
 vector<int> inorderTraversal(TreeNode* root) {
     vector<int> inorder;

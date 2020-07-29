@@ -345,7 +345,29 @@ int lengthOfLongestSubstring(string s) {
 }
 
 // 按模板写
-
+int lengthOfLongestSubstring(string s) {
+    int result = 0;
+    int len = s.size();
+    if(len == 0 || len == 1)
+        return len;
+    unordered_map<char, int> window;
+    int left = 0, right = 0;
+    while(right < len){
+        char c = s[right];
+        right++;
+        window[c]++;
+        if(window[c] > 1){
+            result = max(result, right - left - 1);
+            while(s[left] != c){
+                window[s[left]]--;
+                left++;
+            }
+            window[s[left]]--;
+            left++;
+        }
+    }
+    return max(result, right - left);
+}
 ```
 
 ### \*\*\*\*[**Max Consecutive Ones III**](https://leetcode-cn.com/problems/max-consecutive-ones-iii/)\*\*\*\*
