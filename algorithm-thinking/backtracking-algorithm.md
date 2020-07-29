@@ -92,6 +92,12 @@ vector<vector<int>> permute(vector<int>& nums) {
 
 ## ✏ 2、题型
 
+### \*\*\*\*[**N-Queens**](https://leetcode-cn.com/problems/n-queens/)\*\*\*\*
+
+ $$n$$ __皇后问题研究的是如何将 $$n$$ 个皇后放置在 $$n\times n$$ 的棋盘上，并且使皇后彼此之间不能相互攻击。
+
+
+
 ### [copy-list-with-random-pointer](https://leetcode-cn.com/problems/copy-list-with-random-pointer/)
 
 
