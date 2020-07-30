@@ -125,7 +125,77 @@ void testReinterpretCast() {
 
 ## ✏ **4、dynamic\_cast**
 
-\*\*\*\*
+`dynamic_cast`即用于在运行时实现向下类型转换。其转换格式：
+
+```cpp
+dynamic_cast <type-id> (expression)
+```
+
+将expression转换为`type-id`类型，type-id必须是类的指针、类的引用或者是void \*；如果type-id是指针类型，那么expression也必须是一个指针；如果type-id是一个引用，那么expression也必须是一个引用。
+
+ 特点如下：
+
+1. 其他三种都是编译时完成的，dynamic\_cast 是运行时处理的，运行时要进行类型检查。
+2. 不能用于内置的基本数据类型的强制转换。
+3. dynamic\_cast 要求 &lt;&gt; 内所描述的目标类型必须为指针或引用。dynamic\_cast 转换如果成功的话返回的是指向类的指针或引用，转换失败的话则会返回 `nullptr`。
+4. 在类的转换时，在类层次间进行上行转换（子类指针指向父类指针）时，dynamic\_cast 和 static\_cast 的效果是一样的。在进行下行转换（父类指针转化为子类指针）时，dynamic\_cast 具有类型检查的功能，比 static\_cast 更安全。 向下转换的成功与否还与将要转换的类型有关，即要转换的指针指向的对象的实际类型与转换以后的对象类型一定要相同，否则转换失败。在C++中，编译期的类型转换有可能会在运行时出现错误，特别是涉及到类对象的指针或引用操作时，更容易产生错误。`dynamic_cast`操作符则可以在运行期对可能产生问题的类型转换进行测试。
+5. 使用 dynamic\_cast 进行转换的，**基类中一定要有虚函数**，否则编译不通过（类中存在虚函数，就说明它有想要让基类指针或引用指向派生类对象的情况，此时转换才有意义）。这是由于运行时类型检查需要运行时类型信息，而这个信息存储在类的虚函数表中，只有定义了虚函数的类才有虚函数表。
+
+```cpp
+class AA {
+public:
+    virtual void print() {
+        cout << "in class AA" << endl;
+    };
+};
+
+class BB :public AA {
+public:
+    void print() {
+        cout << "in class BB" << endl;
+    };
+};
+
+void testDynamicCast() {
+    AA* a1 = new BB; // a1是A类型的指针指向一个B类型的对象
+    AA* a2 = new AA; // a2是A类型的指针指向一个A类型的对象
+
+    BB* b1, * b2, * b3, * b4;
+
+    b1 = dynamic_cast<BB*>(a1);	// not null，向下转换成功，a1 之前指向的就是 B 类型的对象，所以可以转换成 B 类型的指针。
+    if (b1 == nullptr) 
+        cout << "b1 is null" << endl;
+    else               
+        cout << "b1 is not null" << endl;
+
+    b2 = dynamic_cast<BB*>(a2);	// null，向下转换失败
+    if (b2 == nullptr) 
+        cout << "b2 is null" << endl;
+    else               
+        cout << "b2 is not null" << endl;
+
+    // 用 static_cast，Resharper C++ 会提示修改为 dynamic_cast
+    b3 = static_cast<BB*>(a1);	// not null
+    if (b3 == nullptr) 
+        cout << "b3 is null" << endl;
+    else               
+        cout << "b3 is not null" << endl;
+
+    b4 = static_cast<BB*>(a2);	// not null
+    if (b4 == nullptr) 
+        cout << "b4 is null" << endl;
+    else               
+        cout << "b4 is not null" << endl;
+
+    a1->print();	// in class BB
+    a2->print();	// in class AA
+
+    b1->print();	// in class BB
+    //b2->print();    // null 引发异常
+    b3->print();	// in class BB
+    b4->print();	// in class AA
+}
+```
 
 ## ✏ **总结**
 
