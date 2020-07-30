@@ -26,9 +26,91 @@ t1.before(t2) // 返回指出t1是否出现在t2之前的bool值
 
 type\_info类提供了public虚 析构函数，以使用户能够用其作为基类。它的默认构造函数和拷贝构造函数及赋值操作符都定义为private，所以不能定义或复制type\_info类型的对象。**程序中创建type\_info对象的唯一方法是使用`typeid`操作符**（由此可见，如果把`typeid`看作函数的话，其应该是`type_info`的 友元）。type\_info的name成员函数返回`C-style`的字符串，用来表示相应的类型名，但务必注意这个返回的类型名与程序中使用的相应类型名并不一定一致，这具体由编译器的实现所决定的，标准只要求实现为每个类型返回唯一的字符串。
 
+```cpp
+class A
+{
+public:
+    void Print() { cout << "This is class A." << endl; }
+    // virtual void Print() { cout << "This is class A." << endl; }
+};
 
+class B : public A
+{
+public:
+    void Print() { cout << "This is class B." << endl; }
+};
 
+int main()
+{
+    A* pA = new B();
+    cout << typeid(pA).name() << endl;  // class A *
+    cout << typeid(*pA).name() << endl; // class A  
+    // 如果将 print 函数变成虚函数， 则输出class B
+    return 0;
+}
+```
 
+使用type\_info类中重载的==和!=比较两个对象的类型是否相等：
+
+```cpp
+class C : public A
+{
+public:
+    void Print() { cout << "This is class C." << endl; }
+};
+
+void Handle(A* a)
+{
+    if (typeid(*a) == typeid(A))
+    {
+        cout << "I am a A truly." << endl;
+    }
+    else if (typeid(*a) == typeid(B))
+    {
+        cout << "I am a B truly." << endl;
+    }
+    else if (typeid(*a) == typeid(C))
+    {
+        cout << "I am a C truly." << endl;
+    }
+    else
+    {
+        cout << "I am alone." << endl;
+    }
+}
+
+int main()
+{
+    A* pA = new B();
+    Handle(pA);   // I am a B truly.
+    delete pA;
+    pA = new C(); // I am a C truly.
+    Handle(pA);
+    return 0;
+}
+```
+
+### 🖋  [**dynamic\_cast**](../c++-syntax/type-conversion.md#4-dynamic_cast)**的内幕**
+
+dynamic\_cast主要用于在多态的时候，它允许在运行时刻进行类型转换，从而使程序能够在一个类层次结构中安全地转换类型，把基类指针（引用）转换为派生类指针（引用）。当类中存在虚函数时，编译器就会在类的成员变量中添加一个指向虚函数表的`__vptr`指针，每一个class所关联的`type_info object`也经由`virtual table`被指出来，通常这个`type_info object`放在虚函数表的第一个`slot`。 当我们进行dynamic\_cast时，编译器会帮我们进行语法检查。如果指针的静态类型和目标类型相同，那么就什么事情都不做；否则，首先对指针进行调整，使得它指向`vftable`，并将其和调整之后的指针、调整的偏移量、静态类型以及目标类型传递给内部函数。其中最后一个参数指明转换的是指针还是引用。**两者唯一的区别是，如果转换失败，前者返回NULL，后者抛出`bad_cast`异常**。
+
+```cpp
+void Handle(A* a)
+{
+    if (dynamic_cast<B*>(a))
+    {
+        cout << "I am a B truly." << endl;
+    }
+    else if (dynamic_cast<C*>(a))
+    {
+        cout << "I am a C truly." << endl;
+    }
+    else
+    {
+        cout << "I am alone." << endl;
+    }
+}
+```
 
 ### 🖋 使用场景举例
 
@@ -38,12 +120,12 @@ type\_info类提供了public虚 析构函数，以使用户能够用其作为基
 class File
 {
 public:
-	virtual ~File() = 0; // 纯虚拟析构函数
-
-	virtual int open(const std::string& filename, std::fstream& f_io) = 0;
-	virtual int close(const std::string& filename, std::fstream& f_io) = 0;
-	virtual int write(const std::string& data, std::fstream f_io) = 0;
-	virtual int read(const std::string& buff, std::fstream f_io) = 0;
+    virtual ~File() = 0; // 纯虚拟析构函数
+    
+    virtual int open(const std::string& filename, std::fstream& f_io) = 0;
+    virtual int close(const std::string& filename, std::fstream& f_io) = 0;
+    virtual int write(const std::string& data, std::fstream f_io) = 0;
+    virtual int read(const std::string& buff, std::fstream f_io) = 0;
 };
 ```
 
@@ -53,13 +135,13 @@ public:
 class DiskFile :public File
 {
 public:
-	int open(const std::string& filename, std::fstream& f_io) {}
-	int close(const std::string& filename, std::fstream& f_io) {}
-	int write(const std::string& data, std::fstream f_io) {}
-	int read(const std::string& buff, std::fstream f_io) {}
-
-	virtual int flush() {}
-	virtual int defragment() {}
+    int open(const std::string& filename, std::fstream& f_io) {}
+    int close(const std::string& filename, std::fstream& f_io) {}
+    int write(const std::string& data, std::fstream f_io) {}
+    int read(const std::string& buff, std::fstream f_io) {}
+    
+    virtual int flush() {}
+    virtual int defragment() {}
 };
 ```
 
@@ -131,6 +213,4 @@ void menu::build(const File* pfile)
 	}
 }
 ```
-
-
 
