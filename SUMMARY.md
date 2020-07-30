@@ -5,10 +5,12 @@
 ## C++基础 <a id="c++"></a>
 
 * [C语言](c++/c/README.md)
-  * [C标准库之IO](c++/c/c-io.md)
+  * [指针与数组](c++/c/pointer-array.md)
   * [函数指针与回调函数](c++/c/function-pointer-callback-function.md)
-  * [C标准库之errno](c++/c/c-errno.md)
-  * [C标准库之stdarg](c++/c/c-stdarg.md)
+  * [C标准库之stdio](c++/c/clib-stdio.md)
+  * [C标准库之string](c++/c/clib-string.md)
+  * [C标准库之errno](c++/c/clib-errno.md)
+  * [C标准库之stdarg](c++/c/clib-stdarg.md)
 * [C++基础语法](c++/c++-syntax/README.md)
   * [c语言到c++](c++/c++-syntax/c-cpp.md)
   * [可变模板参数](c++/c++-syntax/variable-template-parameter.md)
