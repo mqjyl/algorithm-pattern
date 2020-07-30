@@ -28,6 +28,15 @@ void func(int a, char b, int c, double d, int e) {
 按照C标准的说明，支持变长参数的函数在原型声明中，**必须有至少一个最左固定参数**\(这一点与传统C有区别，传统C允许不带任何固定参数的纯变长参数函数\)，这样我们可以得到其中固定参数的地址，根据上面的参数入栈顺序，我们可尝试写一个可变长参数的函数：
 
 ```cpp
-
+void var_args_func(const char* fmt, ...)
+{
+    char* ap;
+    ap = ((char*)&fmt) + sizeof(fmt);
+    printf("%d\n", *(int*)ap);
+    ap = ap + sizeof(int);
+    printf("%d\n", *(int*)ap);
+    ap = ap + sizeof(int);
+    printf("%s\n", *((char**)ap));
+}
 ```
 
