@@ -122,3 +122,7 @@ volatile bool bStop = FALSE;
 
 ## ✏ **5、extern**
 
+\*\*\*\*
+
+## ✏ **6、**explicit
+
