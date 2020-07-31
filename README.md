@@ -6,7 +6,7 @@ description: 数据结构和算法基础知识学习和总结。
 
 ![](.gitbook/assets/title.png)
 
-此项目是自己在准备找工作的时候，对数据结构和算法的基础内容复习总结的，历时二十天的时间将基础的内容复习了一遍，也就是本文档所总结的内容。。。
+此项目是自己在准备找工作的时候，对数据结构和算法的基础内容复习总结的，历时二十天左右的时间将基础的内容复习了一遍，也就是本文档所总结的内容。。。
 
 [在线文档](https://mqjyl2012.gitbook.io/algorithm/)基于`Gitbook`所写，代码实现使用C++语言。并且整个文档可以在[Github](https://github.com/JLCreater2015/algorithm-pattern)上下载，文档中代码都是在`Leetcode`上经过测试并且顺利`Accepted`。`Github`上还上传了所有的代码，项目见[这里](https://github.com/JLCreater2015/algorithm-pattern-code)。
 
@@ -15,6 +15,8 @@ description: 数据结构和算法基础知识学习和总结。
 ![&#x6570;&#x636E;&#x7ED3;&#x6784;&#x77E5;&#x8BC6;&#x67B6;&#x6784;&#x56FE;](.gitbook/assets/shu-ju-jie-gou-.png)
 
 **数据结构是工具，算法是通过合适的工具解决特定问题的方法**。也就是说，学习算法之前，最起码得了解那些常用的数据结构，了解它们的特性和缺陷。
+
+注：第一部分C++基础部分的代码都在`VC16.0(VS2019)`或`GCC(Clion2020)`上测试过。有代码示例的地方，如果没有说明具体的平台，说明在两个平台上的支持是一样的，不一样的地方都会有说明。
 
 ## 文档目录
 
