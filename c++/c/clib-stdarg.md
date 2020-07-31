@@ -317,3 +317,76 @@ void minprintf(char *fmt, ...)
 
 4、取得地址后，再结合参数的类型，就可以正确的处理参数，写出适合于自己机器的实现来。
 
+## ✏ 4、默认参数提升
+
+C标准中有一个默认参数提升（default argument promotions）规则。 如果一个函数的形参类型未知， 例如使用了Old Style C风格的函数声明，或者函数的参数列表中有 `...`，那么调用函数时要对相应的实参做Integer Promotion，此外，相应的实参如果是**floa**t型的也要被提升为**double**类型，这条规则称为Default Argument Promotion。
+
+### 🖋  **默认参数提升在可变参数函数中的陷阱**
+
+该问题在《C陷阱与缺陷》中有提到。
+
+以上面的简易版`printf`函数为例，如果我们加一种case，即"%c"按字符输出，则应该写为：
+
+```cpp
+#include<stdarg.h>
+
+void minprintf(char *fmt, ...)
+{
+    va_list ap;
+    ...
+    char cval;
+
+    va_start(ap, fmt);
+    for (p = fmt; *p; p++) {
+        if(*p != '%') {
+            putchar(*p);
+            continue;
+        }
+        switch(*++p) {
+        case 'c':
+            cval = va_arg(ap, int);
+            printf("%c", cval);
+            break;
+        ...
+        default:
+            putchar(*p);
+            break;
+        }
+    }
+    va_end(ap);
+}
+```
+
+注意，这里的`va_arg(ap, type)`取参数的时候，type是int而不是char。为什么呢？-- 这里就牵扯到默认参数提升问题。在C语言中，调用一个不带原型声明的函数时：调用者会对每个参数执行“默认实际参数提升\(default argument promotions\)。同时，对可变长参数列表超出最后一个有类型声明的形式参数之后的每一个实际参数，也将执行上述提升工作。
+
+提升工作如下：
+
+* **float**类型的实际参数将提升到**double**
+* **char**、**short**和相应的signed、unsigned类型的实际参数提升到**int**
+* 如果**int**不能存储原值，则提升到**unsigned int**
+
+然后，调用者将提升后的参数传递给被调用者。 所以，`minprintf`函数是绝对无法接收到以下类型的实际参数的：
+
+* **char**、signed **char**、unsigned **char**
+* **short**、unsigned **short**
+* signed **short**、**short int**、signed **short int**、unsigned **short int**
+* **float**
+
+如果type是上述类型之一，则在GCC编译器下不能生成有效的汇编代码，运行到相应位置时，会输出Illegal instruction，程序退出。同理， 如果需要使用short和float， 也应该这样：
+
+```cpp
+short shval = (short)va_arg(ap, int);
+float fval = (float)va_arg(ap, double);
+```
+
+### 🖋 符号扩展
+
+符号扩展的定义：简单来说，符号扩展是一个整数从位数较小扩展到位数较多的过程。
+
+需要澄清的一点是：**符号扩展问题和默认参数提升这两个概念本身是没有半毛钱关系的，只是在实现默认参数提升这个标准的过程中会牵扯到符号扩展问题。也就是说，符号扩展问题并不仅仅在是在默认参数提升过程中存在，它还存在于其它很多情况下，比如不同类型的数据之间进行转换时也会进行符号扩展。**
+
+总结如下：
+
+1. 对于无符号整数，很简单，只需要在高位补0就可以了，即零扩展。
+2. 对于有符号整数，需要区分正数和负数：① 对于正数，规则和无符号整数一样，零扩展。 ② 对于负数，高位补1就可以了。对于有符号整数的规则又称符号位扩展。
+
