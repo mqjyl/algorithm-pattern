@@ -79,6 +79,11 @@
 * [股票买卖问题](leetcode-xi-lie/stockjobbing.md)
 * [打家劫舍问题](leetcode-xi-lie/robbery.md)
 
+## 经典算法问题
+
+* [区间问题](jing-dian-suan-fa-wen-ti/interval-questions.md)
+* [背包问题](jing-dian-suan-fa-wen-ti/backpack-questions.md)
+
 ## 面试题
 
 * [基础知识题](mian-shi-ti/basic-knowledge.md)
