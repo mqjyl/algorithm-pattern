@@ -58,14 +58,12 @@
 * [排序算法](algorithm/sort-algorithm.md)
 * [查找算法](algorithm/search-algorithm.md)
 * [并查集](algorithm/union-find.md)
-* [表达式求值](algorithm/expression-evaluation.md)
+* [递归算法](algorithm/recursive-algorithm.md)
 * [附加——主定理](algorithm/master-theorem.md)
 
 ## 算法设计思想 <a id="algorithm-thinking"></a>
 
-* [递归算法](algorithm-thinking/recursive-algorithm.md)
 * [滑动窗口思想](algorithm-thinking/sliding-window.md)
-* [博弈论](algorithm-thinking/game-theory.md)
 * [BFS/DFS](algorithm-thinking/bfs-dfs.md)
 * [回溯法](algorithm-thinking/backtracking-algorithm.md)
 * [贪心算法](algorithm-thinking/greedy-algorithm.md)
@@ -83,6 +81,7 @@
 
 * [区间问题](jing-dian-suan-fa-wen-ti/interval-questions.md)
 * [背包问题](jing-dian-suan-fa-wen-ti/backpack-questions.md)
+* [表达式求值](jing-dian-suan-fa-wen-ti/expression-evaluation.md)
 
 ## 面试题
 

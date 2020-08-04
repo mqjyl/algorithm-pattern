@@ -45,14 +45,14 @@ description: 数据结构和算法基础知识学习和总结。
 * [排序算法](algorithm/sort-algorithm.md)
 * [查找算法](algorithm/search-algorithm.md)
 * [并查集](algorithm/union-find.md)
-* [表达式求值](algorithm/expression-evaluation.md)
+* [表达式求值](jing-dian-suan-fa-wen-ti/expression-evaluation.md)
 * [主定理](algorithm/master-theorem.md)
 
 ### 算法设计思想 🥎 
 
-* [递归算法](algorithm-thinking/recursive-algorithm.md)
+* [递归算法](algorithm/recursive-algorithm.md)
 * [滑动窗口思想](algorithm-thinking/sliding-window.md)
-* [博弈论](algorithm-thinking/game-theory.md)
+* [博弈论]()
 * [回溯法](algorithm-thinking/backtracking-algorithm.md)
 * [贪心算法](algorithm-thinking/greedy-algorithm.md)
 * [分治法](algorithm-thinking/divide-and-conquer-algorithm.md)
