@@ -24,6 +24,7 @@
   * [面向对象之继承](c++/c++-syntax/oop-inheritance.md)
   * [面向对象之多态](c++/c++-syntax/oop-polymorphism.md)
   * [泛型编程](c++/c++-syntax/generic-programming.md)
+  * [C++的锁](c++/c++-syntax/locks.md)
   * [并发与多线程](c++/c++-syntax/concurrency-and-multithreading.md)
 * [C++高级特性](c++/advanced-c++/README.md)
   * [lambda表达式](c++/advanced-c++/lambda.md)
