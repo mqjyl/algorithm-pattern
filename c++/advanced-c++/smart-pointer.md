@@ -95,7 +95,59 @@ auto_ptr< string > pstr_auto2( pstr_auto.release() ); //release可以首先释�
 
 ## ✏ 2、`unique_ptr`
 
-`unique_ptr` 是 `auto_ptr` 的升级版，`unique_ptr`实现独占式拥有或严格拥有概念，保证同一时间内只有一个智能指针可以指向该对象。它对于避免资源泄露\(例如“以new创建对象后因为发生异常而忘记调用delete”\)特别有用。
+`unique_ptr` 是 `auto_ptr` 的升级版，`unique_ptr`实现独占式拥有或严格拥有概念，保证同一时间内只有一个智能指针可以指向该对象。它对于避免资源泄露\(例如“以new创建对象后因为发生异常而忘记调用delete”\)特别有用。`unique_ptr`定义在`<memory>`头文件中：
+
+`std::unique_ptr` 有两个版本：
+
+1. 管理个对象（例如以 new 分配）
+2. 管理动态分配的对象数组（例如以 new\[\] 分配）
+
+```cpp
+template <class T, class D = default_delete<T>> class unique_ptr;
+template <class T, class D> class unique_ptr<T[],D>;
+```
+
+**1） 任意时刻`unique_ptr`只能指向某一个对象，指针销毁时，指向的对象也会被删除（通过内置删除器，通过调用析构函数实现删除对象）**
+
+**2）禁止拷贝和赋值（底层实现拷贝构造函数和复制构造函数 = delete），可以使用`std::move()`、`unique_ptr.reset(...)` 转移对象指针控制权。**
+
+### 🖋 **2.1、构造函数表**
+
+类满足可移动构造 \(Move ****Constructible\) 和可移动赋值 \(Move Assignable\) 的要求，但不满足可复制构造 \(Copy Constructible\) 或可复制赋值 \(Copy Assignable\) 的要求。
+
+```cpp
+// default (1)	
+constexpr unique_ptr() noexcept;
+// from null pointer (2)	
+constexpr unique_ptr (nullptr_t) noexcept : unique_ptr() {}
+// from pointer (3)	
+explicit unique_ptr (pointer p) noexcept;
+// from pointer + lvalue deleter (4)	
+unique_ptr (pointer p,
+    typename conditional<is_reference<D>::value,D,const D&> del) noexcept;
+// from pointer + rvalue deleter (5)	
+unique_ptr (pointer p,
+    typename remove_reference<D>::type&& del) noexcept;
+// move (6)	
+unique_ptr (unique_ptr&& x) noexcept;
+// move-cast (7)	
+template <class U, class E>
+  unique_ptr (unique_ptr<U,E>&& x) noexcept;
+// move from auto_ptr (8)	
+template <class U>
+  unique_ptr (auto_ptr<U>&& x) noexcept;
+// 拷贝构造 copy (deleted!) (9)
+unique_ptr (const unique_ptr&)= delete;
+// 复制作业 (deleted!) (10)
+unique_ptr＆operator = (const unique_ptr&)= delete;
+```
+
+在下列两者之一发生时用关联的删除器释放对象：
+
+* 销毁了管理的 `unique_ptr` 对象
+* 通过 operator= 或 reset\(\) 赋值另一指针给管理的 `unique_ptr` 对象。
+
+通过调用 `get_deleter()(ptr)` ，用潜在为用户提供的删除器释放对象。默认删除器用 delete 运算符，它销毁对象并解分配内存。`unique_ptr` 亦可以不占有对象，该情况下称它为_空_ \(empty\)。
 
 
 
