@@ -70,10 +70,10 @@ int func(int a, int b, int c)
 }
 
 //方式1 :声明一种函数类型
-typedef int(MY_FUNC)(int, int);
+typedef int(MY_FUNC)(int, int);  // MY_FUNC是一个函数
 
 //方式2 :声明一种函数类型的指针类型
-typedef int(*MY_FUNC_P)(int, int);//我喜欢这样用
+typedef int(*MY_FUNC_P)(int, int);// MY_FUNC_P是一个函数指针
 
 int ()
 {
@@ -88,7 +88,7 @@ int ()
     fp1(25, 30);
 
     //方式3 :直接通过指针类型创建，不需用typedef预定义。
-    int(*fp3)(int, int) = NULL;
+    int(*fp3)(int, int) = NULL;    // pf3是指向某函数的指针
     fp3 = func; //fp3 ---> func(int,int)
     fp3(27, 89);
 
@@ -98,8 +98,9 @@ int ()
     fp4 = func; //fp4 ---> func(int,int,int)
     fp4(10, 30, 30);
     
-    //
-    unsigned psize = sizeof ( (*) ());
+    // 获取函数指针的大小
+    unsigned psize = sizeof ( int (*) (int, int));
+    cout << psize << endl;  // 4
 
     return 0;
 }
@@ -107,5 +108,34 @@ int ()
 
 ## ✏ 3、回调函数
 
+**函数注册和回调：回调函数**是对函数指针的应用，通过使用函数指针来调用一个函数，而**函数注册**就是把函数指针作为参数传递出去便于别的模块使用的过程。回调函数可以把调用者与被调用者分开，所以调用者不关心谁是被调用者以及被调用者如何实现。
 
+在设计模式中注册回调的方式叫做回调模式。在`SDK`开发中，为增强开发者的`SDK`通用性，排序或者一些算法逻辑需要使用者进行编写。这时候就需要向`SDK`传递回调函数。 注册回调能使下层主动与上层通信。从而避免了上层不停询问下层的模式。`SDK`的接口会提供一个注册回调函数，来规范回调函数的格式，如返回值，参数等。使用者编写一个固定格式的回调函数，来调用`SDK`提供的注册回调函数。
+
+在c中注册回调的实现方式是通过函数指针，在c++中可以通过function和bind实现。
+
+```cpp
+// SDK
+typedef void(*P)(string s);//使用函数指针通常先typedef
+P p = nullptr;//sdk模块创建函数指针对象
+
+void print(P p, string str)//回调函数
+{
+    p = prin;
+    p(str);
+}
+//使用者
+void my_print(string str)//回调函数
+{
+    printf(str.c_str());
+}
+
+int test1()
+{
+    print(my_print, "hello word");
+    return 0;
+}
+```
+
+许多编译器有几种调用规范。如在Visual C++中，可以在函数类型前加`_cdecl`，`_stdcall`或者`_pascal`来表示其调用规范（默认为`_cdecl`）。C++ Builder支持`_fastcall`调用规范。调用规范影响编译器产生的给定函数名，参数传递的顺序（从右到左或从左到右），堆栈清理责任（调用者或者被调用者）以及参数传递机制（堆栈，CPU寄存器等）。
 
