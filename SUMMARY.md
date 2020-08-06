@@ -20,6 +20,7 @@
   * [重要的关键字（一）](c++/c++-syntax/keywords-1.md)
   * [重要的关键字（二）](c++/c++-syntax/keywords-2.md)
   * [内存申请和释放](c++/c++-syntax/memory-request-and-release.md)
+  * [内联函数](c++/c++-syntax/inline-functions.md)
   * [面向对象之封装](c++/c++-syntax/oop-encapsulation.md)
   * [面向对象之继承](c++/c++-syntax/oop-inheritance.md)
   * [面向对象之多态](c++/c++-syntax/oop-polymorphism.md)
