@@ -154,12 +154,189 @@ unique_ptr＆operator = (const unique_ptr&)= delete;
 1、`auto_ptr`有拷贝语义，拷贝后源对象变得无效，这可能引发很严重的问题；而`unique_ptr`则无拷贝语义，但提供了移动语义，这样的错误不再可能发生，因为很明显必须使用std::move\(\)进行转移。
 
 ```cpp
+class A
+{
+public:
+    string id;
+    A(string id) :id(id)
+    {
+        cout << id << "：构造函数" << endl;
+    }
+    ~A()
+    {
+        cout << id << "：析构函数" << endl;
+    }
+};
 
+int main()
+{
+    auto_ptr<A> auto_ap(new A("auto_ptr")), auto_bp;
+    cout << auto_ap.get() << endl;
+    auto_bp = auto_ap;
+    cout << auto_bp.get() << endl;
+
+    cout << auto_ap.get() << endl;
+
+    unique_ptr<A> unique_ap(new A("unique_ptr")), unique_bp;
+    cout << unique_ap.get() << endl;
+    // unique_bp = unique_ap;  // 报错
+    unique_bp = move(unique_ap);
+    cout << auto_bp.get() << endl;
+    
+    cout << unique_ap.get() << endl;
+    
+    unique_ap = unique_ptr<A>(new A("unique_ptr_new"));
+    cout << unique_ap.get() << endl;
+    return 0;
+}
+// 输出
+auto_ptr：构造函数
+00CEFD48
+00CEFD48
+00000000
+unique_ptr：构造函数
+00CEFE20
+00CEFD48
+00000000
+unique_ptr_new：构造函数
+00CEFF40
+unique_ptr：析构函数
+unique_ptr_new：析构函数
+auto_ptr：析构函数
 ```
+
+`unique_ptr`聪明的地方在于：当程序试图将一个 `unique_ptr` 赋值给另一个时，如果源 `unique_ptr` 是个临时右值，编译器允许这么做；如果源 `unique_ptr` 将存在一段时间，编译器将禁止这么做（如32行）。
 
 2、`auto_ptr`不可作为容器元素，`unique_ptr`可以作为容器元素。因为`auto_ptr`的拷贝和赋值具有破坏性，不满足容器要求：拷贝或赋值后，两个对象必须具有相同值。
 
 3、`auto_ptr`不可指向动态数组，`unique_ptr`可以指向动态数组。因为`unique_ptr`有`unique_ptr<T[]>`重载版本，销毁动态对象时调用delete\[\]。
 
+```cpp
+class A
+{
+public:
+    string id;
+    A(string id) :id(id)
+    {
+        cout << id << "：构造函数" << endl;
+    }
+    ~A()
+    {
+        cout << id << "：析构函数" << endl;
+    }
+    void print() {
+        cout << "Hello, " << id << endl;
+    }
+};
+
+int main()
+{
+    unique_ptr<A[]> unique_ap_array(new A[2]{ A("unique_ptr1"), A("unique_ptr2") });
+    cout << unique_ap_array.get() << endl;
+    cout << unique_ap_array.get() + 1 << endl;
+    unique_ap_array[0].print();
+    unique_ap_array.get()->print();
+    (unique_ap_array.get() + 1)->print();
+    return 0;
+}
+// 输出
+unique_ptr1：构造函数
+unique_ptr2：构造函数
+0165EA04
+0165EA20
+Hello, unique_ptr1
+Hello, unique_ptr1
+Hello, unique_ptr2
+unique_ptr2：析构函数
+unique_ptr1：析构函数
+```
+
 4、`auto_ptr`不可以自定义删除器`deleter`，而`unique_ptr`可以。
+
+```cpp
+int main()
+{
+    unique_ptr<A, void(*)(A*)> unique_ap_1(
+        new A[2]
+        {
+            A("unique_ptr1"),A("unique_ptr2")
+        },
+        [](A* a)
+        {
+            delete[]a;
+        });
+
+    unique_ptr<A[]> unique_ap_2(new A[2]{ A("unique_ptr1"), A("unique_ptr2") });
+    return 0;
+}
+// 输出
+unique_ptr1：构造函数
+unique_ptr2：构造函数
+unique_ptr1：构造函数
+unique_ptr2：构造函数
+unique_ptr2：析构函数
+unique_ptr1：析构函数
+unique_ptr2：析构函数
+unique_ptr1：析构函数
+```
+
+## ✏ 3、`shared_ptr`
+
+## ✏ 4、 **`week_ptr`**
+
+`share_ptr`虽然已经很好用了，但是有一点`share_ptr`智能指针还是有内存泄露的情况，当两个对象相互使用一个`shared_ptr`成员变量指向对方，会造成循环引用，使引用计数失效，从而导致内存泄漏。
+
+`weak_ptr` 是一种不控制对象生命周期的智能指针，它指向一个 `shared_ptr` 管理的对象。进行该对象的内存管理的是那个强引用的`shared_ptr`，`weak_ptr`只是提供了对管理对象的一个访问手段。weak\_ptr 设计的目的是为配合 shared\_ptr 而引入的一种智能指针来协助 shared\_ptr 工作，它只可以从一个 shared\_ptr 或另一个 weak\_ptr 对象构造，它的构造和析构不会引起引用记数的增加或减少。weak\_ptr是用来解决shared\_ptr相互引用时的死锁问题，如果说两个shared\_ptr相互引用，那么这两个指针的引用计数永远不可能下降为0，资源永远不会释放。它是对对象的一种弱引用，不会增加对象的引用计数，和shared\_ptr之间可以相互转化，shared\_ptr可以直接赋值给它，它可以通过调用lock函数来获得shared\_ptr。
+
+## ✏ **5、**make\_unique与make\_shared
+
+### 🖋 5.1、make\_unique
+
+std::make\_unique 和 std::make\_unique\_for\_overwrite  定义于头文件 `<memory>`， 构造 `T` 类型对象并将其包装进 `std::unique_ptr` 。
+
+```cpp
+// (1)(C++14 起)(仅对非数组类型)
+template< class T, class... Args >
+    unique_ptr<T> make_unique( Args&&... args );
+// (2)(C++14 起)(仅对未知边界数组)
+template< class T >
+    unique_ptr<T> make_unique( std::size_t size );
+// (3)(C++14 起)(仅对已知边界数组)
+template< class T, class... Args >
+/* unspecified */ make_unique( Args&&... args ) = delete;
+
+// (4)(C++20 起)(仅对非数组类型)
+template< class T  >
+    unique_ptr<T> make_unique_for_overwrite( );
+// (5)(C++20 起)(仅对未知边界数组)
+template< class T >
+    unique_ptr<T> make_unique_for_overwrite( std::size_t size );
+// (6)(C++20 起)(仅对已知边界数组)
+template< class T, class... Args >
+/* unspecified */ make_unique_for_overwrite( Args&&... args ) = delete;
+```
+
+1\) 构造非数组类型 `T` 对象。传递参数 `args` 给 `T` 的构造函数。此重载仅若 `T` 不是数组类型才参与重载决议。函数等价于：
+
+```cpp
+unique_ptr<T>(new T(std::forward<Args>(args)...))
+```
+
+2\) 构造未知边界的 `T` 数组。此重载仅若 `T` 是未知边界数组才参与重载决议。函数等价于：
+
+```cpp
+unique_ptr<T>(new typename std::remove_extent<T>::type[size]())
+```
+
+3,6\) 不允许构造已知边界的数组。4\) 同 \(1\) ，除了默认初始化对象。此重载仅若 `T` 不是数组类型才参与重载决议。函数等价于：
+
+```cpp
+unique_ptr<T>(new T)
+```
+
+5\) 同 \(2\) ，除了默认初始化数组。此重载仅若 `T` 是未知边界数组才参与重载决议。函数等价于：
+
+```cpp
+unique_ptr<T>(new typename std::remove_extent<T>::type[size])
+```
 
