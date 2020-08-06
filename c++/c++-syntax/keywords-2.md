@@ -10,3 +10,7 @@ explicit关键字只能用于修饰只有一个参数的类构造函数，它的
 
 ## ✏ 8、constexpr
 
+## ✏ 9、default
+
+## ✏ 10、delete
+
