@@ -104,7 +104,7 @@ auto_ptr< string > pstr_auto2( pstr_auto.release() ); //release可以首先释�
 
 ```cpp
 template <class T, class D = default_delete<T>> class unique_ptr;
-template <class T, class D> class unique_ptr<T[],D>;
+template <class T, class D> class unique_ptr<T[], D>;
 ```
 
 **1） 任意时刻`unique_ptr`只能指向某一个对象，指针销毁时，指向的对象也会被删除（通过内置删除器，通过调用析构函数实现删除对象）**
@@ -149,5 +149,17 @@ unique_ptr＆operator = (const unique_ptr&)= delete;
 
 通过调用 `get_deleter()(ptr)` ，用潜在为用户提供的删除器释放对象。默认删除器用 delete 运算符，它销毁对象并解分配内存。`unique_ptr` 亦可以不占有对象，该情况下称它为_空_ \(empty\)。
 
+### 🖋 2.2、`auto_ptr`与`unique_ptr`
 
+1、`auto_ptr`有拷贝语义，拷贝后源对象变得无效，这可能引发很严重的问题；而`unique_ptr`则无拷贝语义，但提供了移动语义，这样的错误不再可能发生，因为很明显必须使用std::move\(\)进行转移。
+
+```cpp
+
+```
+
+2、`auto_ptr`不可作为容器元素，`unique_ptr`可以作为容器元素。因为`auto_ptr`的拷贝和赋值具有破坏性，不满足容器要求：拷贝或赋值后，两个对象必须具有相同值。
+
+3、`auto_ptr`不可指向动态数组，`unique_ptr`可以指向动态数组。因为`unique_ptr`有`unique_ptr<T[]>`重载版本，销毁动态对象时调用delete\[\]。
+
+4、`auto_ptr`不可以自定义删除器`deleter`，而`unique_ptr`可以。
 
