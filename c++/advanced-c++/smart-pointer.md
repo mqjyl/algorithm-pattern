@@ -234,6 +234,7 @@ int main()
     unique_ptr<A[]> unique_ap_array(new A[2]{ A("unique_ptr1"), A("unique_ptr2") });
     cout << unique_ap_array.get() << endl;
     cout << unique_ap_array.get() + 1 << endl;
+    cout << sizeof(A) << endl;
     unique_ap_array[0].print();
     unique_ap_array.get()->print();
     (unique_ap_array.get() + 1)->print();
@@ -244,6 +245,7 @@ unique_ptr1：构造函数
 unique_ptr2：构造函数
 0165EA04
 0165EA20
+28
 Hello, unique_ptr1
 Hello, unique_ptr1
 Hello, unique_ptr2
