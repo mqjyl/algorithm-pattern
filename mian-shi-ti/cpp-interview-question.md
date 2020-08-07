@@ -12,5 +12,39 @@
 
 3、为什么 C 语言不支持重载， C++支持重载呢？【[链接](../c-cpp/c++-syntax/c-cpp.md#2-han-shu-zhong-zai)】
 
+4、`struct{ char a; int b; }p;sizeof(p)` 是多大？
+
+5、public 、private、 和保护。【链接】
+
+6、delete 和 delete\[\] 什么区别。【链接】
+
+7、malloc 和 realloc。【链接】
+
+8、static 修饰有什么作用？【链接】
+
+* static 修饰一个函数，函数有什么变化？
+
+9、C++ 如何调用C 里面的库？
+
+10、如何封装一个库？
+
+11、包含警告：遇到过头文件include多次的问题吗，怎么解决？（\#ifndef）
+
+12、多态和继承的关系。
+
+13、为什么会有虚函数？
+
+14、inline与define有什么区别？
+
+## STL
+
+1、vector 和 list 有什么区别？
+
+2、vector 的size\(\) 和 cap 的区别。
+
+3、hash\_map 和 map 有什么区别？
+
+4、deque的扩容机制。
+
 
 
