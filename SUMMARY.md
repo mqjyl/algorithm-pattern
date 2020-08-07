@@ -48,6 +48,7 @@
   * [regex](c-cpp/cpp-standard-library/regex.md)
   * [bitset](c-cpp/cpp-standard-library/bitset.md)
   * [numeric](c-cpp/cpp-standard-library/numeric.md)
+* [STL深入源码](c-cpp/stl-source-analysis.md)
 
 ## 数据结构 <a id="data-structure"></a>
 
