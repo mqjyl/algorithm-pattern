@@ -28,19 +28,19 @@
   * [C++的锁](c++/c++-syntax/locks.md)
   * [并发与多线程](c++/c++-syntax/concurrency-and-multithreading.md)
 * [C++高级特性](c++/advanced-c++/README.md)
+  * [函数对象](c++/advanced-c++/function-object.md)
   * [lambda表达式](c++/advanced-c++/lambda.md)
-  * [并发与多线程](c++/advanced-c++/concurrency-and-multithreading.md)
   * [RTTI技术](c++/advanced-c++/rtti.md)
   * [RAII技术](c++/advanced-c++/raii.md)
   * [智能指针](c++/advanced-c++/smart-pointer.md)
-  * [函数对象](c++/advanced-c++/function-object.md)
   * [模板的特化](c++/advanced-c++/template-specialization.md)
 * [STL基础](c++/stl-basics/README.md)
-  * [algorithm](c++/stl-basics/algorithm-functions.md)
   * [array/vector/list](c++/stl-basics/array-vector-list.md)
   * [deque/stack/queue](c++/stl-basics/deque-stack-queue.md)
   * [set/map](c++/stl-basics/set-map.md)
   * [unordered\_set/unordered\_map](c++/stl-basics/unordered_set-unordered_map.md)
+  * [algorithm](c++/stl-basics/algorithm-functions.md)
+  * [functional](c++/stl-basics/functional.md)
 
 ## 数据结构 <a id="data-structure"></a>
 
