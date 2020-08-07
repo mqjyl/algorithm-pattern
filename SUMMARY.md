@@ -51,8 +51,8 @@
 * [STL深入源码](c-cpp/stl-source-analysis.md)
 * [第三方库](c-cpp/third-party-libraries/README.md)
   * [JsonCpp](c-cpp/third-party-libraries/jsoncpp.md)
-* [QT Quick与QML](c-cpp/qt-quick-qml.md)
 * [QT Widgets](c-cpp/qt-widgets.md)
+* [QT Quick与QML](c-cpp/qt-quick-qml.md)
 
 ## 数据结构 <a id="data-structure"></a>
 
