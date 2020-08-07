@@ -22,7 +22,129 @@ int main()
 
 ## ✏ **1、**不同函数复用相同处理代码
 
+### \*\*\*\*🖋 1.1、**C语言的处理方式**
 
+使用函数指针和回调函数来实现代码复用。例如`qsort()`
+
+```cpp
+#include <stdio.h>  
+#include <stdlib.h>  
+int arr_sort( const void *a, const void *b) {
+    return *(int*)a - *(int*)b;  
+}
+  
+int main() {  
+   int arr[5] = { 4, 1, 2, 5, 6 };  
+   qsort(arr, 5, sizeof(arr[0]), arr_sort);
+   // qsort()函数的第四个参数为 函数指针：
+   // typedef int (__cdecl* _CoreCrtNonSecureSearchSortCompareFunction)(void const*, void const*);
+   for (int i = 0; i < 5; i++){  
+      printf("%i\n", arr[i]);  
+   }
+   return 0;  
+}
+```
+
+### 🖋 1.2、**C++语言的处理方式**
+
+#### 🐹 **1.2.1、**函数指针方式
+
+```cpp
+#include <iostream>  
+#include <algorithm>  
+using namespace std;  
+inline bool Sort(int a, int b){
+    return a > b;
+}
+inline void Display(int a){
+    cout << a << endl;
+}
+
+int main() {  
+    int arr[5] = { 4, 1, 2, 5, 6 }; 
+    sort(arr, arr + 5, Sort);  
+    for_each(arr, arr + 5, Display);
+    return 0;   
+}
+```
+
+#### 🐹 1.2.2、函数模板方式
+
+```cpp
+#include <iostream>  
+#include <algorithm>  
+using namespace std;  
+template<class T>
+inline bool Sort(T const& a, T const& b){
+    return a > b;
+}
+
+template<class T>
+inline void Display(T a){
+    cout << a << endl;
+}
+
+int main() {  
+    int arr[5] = { 4, 1, 2, 5, 6 }; 
+    sort(arr, arr + 5, Sort<int>);  
+    for_each(arr, arr + 5, Display<int>);
+    return 0;   
+}
+```
+
+#### 🐹 1.2.3、仿函数方式
+
+```cpp
+class Sort{  
+public:  
+    bool operator()(int a, int b) const {
+        return a > b;
+    }   
+};
+
+class Display{
+public:
+    void operator()(int a) const{
+        cout << a << endl;
+    } 
+};
+
+int main()  
+{  
+    int arr[5] = { 4, 1, 2, 5, 6 }; 
+    sort(arr, arr + 5, Sort());  
+    for_each(arr, arr + 5, Display());
+    return 0;   
+}
+```
+
+#### 🐹 1.2.4、仿函数模板方式
+
+```cpp
+template<class T>
+class Sort{  
+public:  
+    inline bool operator()(T const& a, T const& b) const {
+        return a > b;
+    }   
+};
+
+template<class T>
+class Display{
+public:
+    inline void operator()(T const& a) const{
+        cout << a << endl;
+    } 
+};
+
+int main()  
+{  
+    int arr[5] = { 4, 1, 2, 5, 6 }; 
+    sort(arr, arr + 5, Sort<int>());  
+    for_each(arr, arr + 5, Display<int>());
+    return 0;   
+}
+```
 
 ## ✏ 2、优势
 
@@ -102,11 +224,42 @@ int main() {
 80 71 53 45 33 32 26 12
 ```
 
-### 🖋 3.2、 **谓词函数** 
+### 🖋 3.2、**谓词函数** 
 
-## ✏ **4、**函数包装器
+谓词函数是一个返回布尔值的函数。
 
-## ✏ 5、 std::invoke
+一元谓词函数就是只釆用一个实参的函数。使用一元谓词函数可以确定一个给定对象是否具有某些特征。
 
-\*\*\*\*
+```cpp
+bool isEven(int i) {
+    return ((i % 2) == 1);
+}
+
+class IsEven
+{
+public:
+    bool operator()(int x)
+    {
+        return x % 2 == 0;
+    }
+}
+```
+
+二元谓词函数就是釆用两个形参的谓词函数。使用二元谓词函数可以确定两个对象是否以某种方式相关联。
+
+```cpp
+bool lessThan(int a, int b)
+{
+    return a < b;
+}
+
+class LessThan
+{
+public:
+    bool operator()(int a, int b)
+    {
+        return a < b;
+    }
+}
+```
 
