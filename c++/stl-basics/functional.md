@@ -13,7 +13,7 @@
 | 取模 | `modulus<T>` |
 | 取反 | `negate<T>` |
 
-**基本实现**
+**定义：**
 
 ```cpp
 template< class T >
