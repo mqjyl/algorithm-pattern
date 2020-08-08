@@ -15,6 +15,15 @@
 这里我们将默认构造函数定义为：无参的构造函数或者所有参数都有默认值的构造函数（二者不属于重重载的关系，一个类只能有一个默认构造函数）。这里的无参构造函数可以是显示定义的也可以是编译器自动生成的。调用默认构造函数也可以省略括号，即用下面的方式创建对象时调用的构造函数可以看成是默认的构造函数：
 
 ```cpp
+class Student
+{
+public:
+    Student()
+    {
+        cout << "调用了默认构造函数！" << endl;
+    }
+}
+
 Student stu1;
 Student stu2();
 
@@ -40,13 +49,13 @@ Student *pstu2 = new Student();
 
 * 复制构造函数的参数可以是 const 引用，也可以是非 const 引用。 一般使用前者，这样既能以常量对象（初始化后值不能改变的对象）作为参数，也能以非常量对象作为参数去初始化其他对象。一个类中写两个复制构造函数，一个的参数是 const 引用，另一个的参数是非 const 引用，也是可以的。
 * 如果类的设计者不显示定义复制构造函数，编译器就会自动生成复制构造函数。大多数情况下，其作用是实现从源对象到目标对象逐个字节的复制，即使得目标对象的每个成员变量都变得和源对象相等。编译器自动生成的复制构造函数称为“默认复制构造函数”。默认构造函数（即无参构造函数）不一定存在，但是复制构造函数总是会存在。
-* 构造函数不能以本类的对象作为唯一参数，以免和复制构造函数相混淆。例如，不能写如下构造函数：`Complex (Student stu) {...}`
+* 构造函数不能以本类的对象作为唯一参数，以免和复制构造函数相混淆。例如，不能写如下构造函数：`Student (Student stu) {...}`
 
 ### 🐹 2.1、复制构造函数调用的时机
 
 1. 当用一个对象去初始化同类的另一个对象时，会引发复制构造函数被调用。
 2. 如果函数 F 的参数是类 A 的对象，那么当 F 被调用时，类 A 的复制构造函数将被调用。换句话说，作为形参的对象，是用复制构造函数初始化的，而且调用复制构造函数时的参数，就是调用函数时所给的实参。由此可见：函数的形参的值等于函数调用时对应的实参，不一定是正确的。如果形参是一个对象，那么形参的值是否等于实参，取决于该对象所属的类的复制构造函数是如何实现的。
-3. 如果函数的返冋值是类 A 的对象，则函数返冋时，类 A 的复制构造函数被调用。换言之，作为函数返回值的对象是用复制构造函数初始化 的，而调用复制构造函数时的实参，就是 return 语句所返回的对象。 需要说明的是，有些编译器出于程序执行效率的考虑，编译的时候进行了优化，函数返回值对象就不用复制构造函数初始化了，这并不符合 C++ 的标准。
+3. 如果函数的返冋值是类 A 的对象，则函数返冋时，类 A 的复制构造函数被调用。换言之，作为函数返回值的对象是用复制构造函数初始化 的，而调用复制构造函数时的实参，就是 `return` 语句所返回的对象。 需要说明的是，有些编译器出于程序执行效率的考虑，编译的时候进行了优化，函数返回值对象就不用复制构造函数初始化了，这并不符合 C++ 的标准。
 
 ```cpp
 class Student
@@ -103,10 +112,10 @@ int main()
 对于基本类型的数据以及简单的对象，它们之间的拷贝非常简单，就是按位复制内存。如：
 
 ```cpp
-class C {
+class Base {
 public:
-    C() : m_a(0), m_b(0) { }
-    C(int a, int b) : m_a(a), m_b(b) { }
+    Base() : m_a(0), m_b(0) { }
+    Base(int a, int b) : m_a(a), m_b(b) { }
 private:
     int m_a;
     int m_b;
@@ -115,17 +124,376 @@ private:
 int main() {
     int a = 10;
     int b = a;  //拷贝
+    
+    Base obj1(10, 20);
+    Base obj2 = obj1;  //拷贝
+    return 0;
+}
+```
 
-    C obj1(10, 20);
-    C obj2 = obj1;  //拷贝
+ b 和 obj2 都是以拷贝的方式初始化的，具体来说，就是将 a 和 obj1 所在内存中的数据按照二进制位（Bit）复制到 b 和 obj2 所在的内存，这种默认的拷贝行为就是浅拷贝，这和调用 `memcpy()` 函数的效果非常类似。  
+  
+对于简单的类，默认的拷贝构造函数一般就够用了，我们也没有必要再显式地定义一个功能类似的拷贝构造函数。但是当类持有其它资源时，例如动态分配的内存、指向其他数据的指针等，默认的拷贝构造函数就不能拷贝这些资源了，我们必须显式地定义拷贝构造函数，以完整地拷贝对象的所有数据。
+
+```cpp
+//变长数组类
+class Array {
+public:
+    Array(int len);
+    Array(const Array& arr);  //拷贝构造函数
+    ~Array();
+public:
+    int operator[](int i) const { return m_p[i]; }  //获取元素（读取）
+    int& operator[](int i) { return m_p[i]; }  //获取元素（写入）
+    int length() const { return m_len; }
+private:
+    int m_len;
+    int* m_p;
+};
+
+Array::Array(int len) : m_len(len) {
+    m_p = (int*)calloc(len, sizeof(int));
+}
+
+Array::Array(const Array& arr) {  //拷贝构造函数
+    this->m_len = arr.m_len;
+    this->m_p = (int*)calloc(this->m_len, sizeof(int));
+    memcpy(this->m_p, arr.m_p, m_len * sizeof(int));
+}
+
+Array::~Array() { free(m_p); }
+
+//打印数组元素
+void printArray(const Array& arr) {
+    int len = arr.length();
+    for (int i = 0; i < len; i++) {
+        if (i == len - 1) {
+            cout << arr[i] << endl;
+        }
+        else {
+            cout << arr[i] << ", ";
+        }
+    }
+}
+
+int main() {
+    Array arr1(10);
+    for (int i = 0; i < 10; i++) {
+        arr1[i] = i;
+    }
+
+    Array arr2 = arr1;
+    arr2[5] = 100;
+    arr2[3] = 29;
+
+    printArray(arr1);
+    printArray(arr2);
+
+    return 0;
+}
+
+// 输出
+0, 1, 2, 3, 4, 5, 6, 7, 8, 9
+0, 1, 2, 29, 4, 100, 6, 7, 8, 9
+```
+
+> 本例中显式地定义了拷贝构造函数，它除了会将原有对象的所有成员变量拷贝给新对象，还会为新对象再分配一块内存，并将原有对象所持有的内存也拷贝过来。这样做的结果是，原有对象和新对象所持有的动态内存是相互独立的，更改一个对象的数据不会影响另外一个对象。  
+>   
+> 这种将对象所持有的其它资源一并拷贝的行为叫做深拷贝，我们必须显式地定义拷贝构造函数才能达到深拷贝的目的。  
+>   
+> 如果将上例中的拷贝构造函数删除，那么运行结果将变为：
+>
+> 0, 1, 2, 29, 4, 100, 6, 7, 8, 9  
+> 0, 1, 2, 29, 4, 100, 6, 7, 8, 9
+>
+> 可以发现，更改 `arr2` 的数据也影响到了 `arr1`。这是因为，在创建 `arr2` 对象时，默认拷贝构造函数将 `arr1.m_p` 直接赋值给了 `arr2.m_p`，导致 `arr2.m_p` 和 `arr1.m_p` 指向了同一块内存，所以会相互影响。  
+>   
+> 另外需要注意的是，`printArray()` 函数的形参为引用类型，这样做能够避免在传参时调用拷贝构造函数；又因为 `printArray()` 函数不会修改任何数组元素，所以我们添加了 const 限制，以使得语义更加明确。
+
+如果一个类拥有指针类型的成员变量，那么绝大部分情况下就需要深拷贝，因为只有这样，才能将指针指向的内容再复制出一份来，让原有对象和新生对象相互独立，彼此之间不受影响。如果类的成员变量没有指针，一般浅拷贝足以。
+
+另外一种需要深拷贝的情况就是在创建对象时进行一些预处理工作，比如统计创建过的对象的数目、记录对象创建的时间等，如：
+
+```cpp
+class Base {
+public:
+    Base(int a = 0, int b = 0);
+    Base(const Base& obj);  //拷贝构造函数
+public:
+    int getCount() const { return m_count; }
+    time_t getTime() const { return m_time; }
+private:
+    int m_a;
+    int m_b;
+    time_t m_time;  //对象创建时间
+    static int m_count;  //创建过的对象的数目
+};
+
+int Base::m_count = 0;
+
+Base::Base(int a, int b) : m_a(a), m_b(b) {
+    m_count++;
+    m_time = time((time_t*)NULL);
+}
+
+Base::Base(const Base& obj) {  //拷贝构造函数
+    this->m_a = obj.m_a;
+    this->m_b = obj.m_b;
+    this->m_count++;
+    this->m_time = time((time_t*)NULL);
+}
+
+int main() {
+    Base obj1(10, 20);
+    cout << "obj1: count = " << obj1.getCount() << ", time = " << obj1.getTime() << endl;
+
+    Sleep(3000);  //在Linux和Mac下要写作 sleep(3);
+
+    Base obj2 = obj1;
+    cout << "obj2: count = " << obj2.getCount() << ", time = " << obj2.getTime() << endl;
+    return 0;
+}
+
+// 输出
+obj1: count = 1, time = 1596878998
+obj2: count = 2, time = 1596879001
+```
+
+> Base 类中的 m\_time 和 m\_count 分别记录了对象的创建时间和创建数目，它们在不同的对象中有不同的值，所以需要在初始化对象的时候提前处理一下，这样浅拷贝就不能胜任了，就必须使用深拷贝了。
+
+## 🖋 3、转换构造函数
+
+在 C/C++ 中，不同的数据类型之间可以相互转换。无需用户指明如何转换的称为自动类型转换（隐式类型转换），需要用户显式地指明如何转换的称为强制类型转换。强制类型转换示例：
+
+```cpp
+int n = 100;
+int *p1 = &n;
+float *p2 = (float*)p1;
+```
+
+> `p1` 是`int *`类型，它指向的内存里面保存的是整数，`p2` 是`float *`类型，将 `p1` 赋值给 `p2` 后，`p2` 也指向了这块内存，并把这块内存中的数据作为小数处理。我们知道，整数和小数的存储格式大相径庭，将整数作为小数处理非常荒诞，可能会引发莫名其妙的错误，所以编译器默认不允许将 `p1` 赋值给 `p2`。但是，使用强制类型转换后，编译器就认为我们知道这种风险的存在，并进行了适当的权衡，所以最终还是允许了这种行为。
+
+不管是自动类型转换还是强制类型转换，前提必须是编译器知道如何转换，如果编译器不知道转换规则就不能转换，使用强制类型也无用，比如自定义类型和基本类型之间相互转换。C++ 允许我们自定义类型转换规则，用户可以将其它类型转换为当前类类型，也可以将当前类类型转换为其它类型。这种自定义的类型转换规则只能以类的成员函数的形式出现，换句话说，这种转换规则只适用于类。
+
+将其它类型转换为当前类类型需要借助转换构造函数（Conversion constructor）。转换构造函数也是一种构造函数，它遵循构造函数的一般规则。转换构造函数只有一个参数。
+
+```cpp
+//复数类
+class Complex{
+public:
+    Complex(): m_real(0.0), m_imag(0.0){ }
+    Complex(double real, double imag): m_real(real), m_imag(imag){ }
+    Complex(double real): m_real(real), m_imag(0.0){ }  //转换构造函数
+public:
+    friend ostream & operator<<(ostream &out, Complex &c);  //友元函数
+private:
+    double m_real;  //实部
+    double m_imag;  //虚部
+};
+
+//重载>>运算符
+ostream & operator<<(ostream &out, Complex &c){
+    out << c.m_real <<" + "<< c.m_imag <<"i";;
+    return out;
+}
+
+int main(){
+    Complex a(10.0, 20.0);
+    cout<<a<<endl;
+    a = 25.5;  //调用转换构造函数
+    cout<<a<<endl;
+    return 0;
+}
+
+// 输出
+10 + 20i
+25.5 + 0i
+```
+
+> 在进行数学运算、赋值、拷贝等操作时，如果遇到类型不兼容、需要将 double 类型转换为 Complex 类型时，编译器会检索当前的类是否定义了转换构造函数，如果没有定义的话就转换失败，如果定义了的话就调用转换构造函数。
+
+转换构造函数也是构造函数的一种，它除了可以用来将其它类型转换为当前类类型，还可以用来初始化对象，这是构造函数本来的意义。下面创建对象的方式是正确的：
+
+```cpp
+Complex c1(26.4);    //创建具名对象
+Complex c2 = 240.3;  //以拷贝的方式初始化对象
+Complex(15.9);       //创建匿名对象
+c1 = Complex(46.9);  //创建一个匿名对象并将它赋值给 c1
+```
+
+> 在以拷贝的方式初始化对象时，编译器先调用转换构造函数，将 240.3 转换为 Complex 类型（创建一个 Complex 类的匿名对象），然后再拷贝给 `c2`。
+
+如果已经对`+`运算符进行了重载，使之能进行两个 Complex 类对象的相加，那么下面的语句也是正确的：
+
+```cpp
+Complex c1(15.6, 89.9);
+Complex c2;c2 = c1 + 29.6;
+cout<<c2<<endl;
+```
+
+在进行加法运算符时，编译器先将 29.6 转换为 Complex 类型（创建一个 Complex 类的匿名对象）再相加。
+
+需要注意的是，为了获得目标类型，编译器会“不择手段”，会综合使用内置的转换规则和用户自定义的转换规则，并且会进行多级类型转换，例如：
+
+* 编译器会根据内置规则先将 int 转换为 double，再根据用户自定义规则将 double 转换为 Complex（int --&gt; double --&gt; Complex）；
+* 编译器会根据内置规则先将 char 转换为 int，再将 int 转换为 double，最后根据用户自定义规则将 double 转换为 Complex（char --&gt; int --&gt; double --&gt; Complex）。
+
+从本例看，只要一个类型能转换为 double 类型，就能转换为 Complex 类型。请看下面的例子：
+
+```cpp
+int main(){
+    Complex c1 = 100;  //int --> double --> Complex
+    cout<<c1<<endl;
+    
+    c1 = 'A';  //char --> int --> double --> Complex
+    cout<<c1<<endl;
+    
+    c1 = true;  //bool --> int --> double --> Complex
+    cout<<c1<<endl;
+    
+    return 0;
+}
+// 输出
+100 + 0i
+65 + 0i
+1 + 0i
+```
+
+ 上面的 Complex 类中我们定义了三个构造函数，其中包括两个普通的构造函数和一个转换构造函数。其实，借助函数的默认参数，我们可以将这三个构造函数简化为一个：
+
+```cpp
+//复数类
+class Complex{
+public:
+    Complex(double real = 0.0, double imag = 0.0): m_real(real), m_imag(imag){ }
+public:
+    friend ostream & operator<<(ostream &out, Complex &c);  //友元函数
+private:
+    double m_real;  //实部
+    double m_imag;  //虚部
+};
+
+//重载>>运算符
+ostream & operator<<(ostream &out, Complex &c){
+    out << c.m_real <<" + "<< c.m_imag <<"i";;
+    return out;
+}
+
+int main(){
+    Complex a(10.0, 20.0);  //向构造函数传递 2 个实参，不使用默认参数
+    Complex b(89.5);        //向构造函数传递 1 个实参，使用 1 个默认参数
+    Complex c;              //不向构造函数传递实参，使用全部默认参数
+    a = 25.5;               //调用转换构造函数（向构造函数传递 1 个实参，使用 1 个默认参数）
 
     return 0;
 }
 ```
 
-## 🖋 3、转换构造函数
-
 ## 🖋 4、赋值构造函数
+
+初始化和赋值的区别：在定义的同时进行赋值叫做初始化（Initialization），定义完成以后再赋值（不管在定义的时候有没有赋值）就叫做赋值（Assignment）。初始化只能有一次，赋值可以有多次。
+
+当以拷贝的方式初始化一个对象时，会调用拷贝构造函数；当给一个对象赋值时，会调用重载过的赋值运算符。
+
+即使我们没有显式的重载赋值运算符，编译器也会以默认地方式重载它。默认重载的赋值运算符功能很简单，就是将原有对象的所有成员变量一一赋值给新对象，这和默认拷贝构造函数的功能类似。
+
+对于简单的类，默认的赋值运算符一般就够用了，我们也没有必要再显式地重载它。但是当类持有其它资源时，例如动态分配的内存、打开的文件、指向其他数据的指针、网络连接等，默认的赋值运算符就不能处理了，我们必须显式地重载它，这样才能将原有对象的所有数据都赋值给新对象。仍然以上面的 Array 类为例，该类拥有一个指针成员，指向动态分配的内存。为了让 Array 类的对象之间能够正确地赋值，我们必须重载赋值运算符：
+
+```cpp
+//变长数组类
+class Array {
+public:
+    Array(int len);
+    Array(const Array& arr);  //拷贝构造函数
+    ~Array();
+public:
+    int operator[](int i) const { return m_p[i]; }  //获取元素（读取）
+    int& operator[](int i) { return m_p[i]; }  //获取元素（写入）
+    Array& operator=(const Array& arr);  //重载赋值运算符
+    int length() const { return m_len; }
+private:
+    int m_len;
+    int* m_p;
+};
+
+Array::Array(int len) : m_len(len) {
+    m_p = (int*)calloc(len, sizeof(int));
+}
+
+Array::Array(const Array& arr) {  //拷贝构造函数
+    this->m_len = arr.m_len;
+    this->m_p = (int*)calloc(this->m_len, sizeof(int));
+    memcpy(this->m_p, arr.m_p, m_len * sizeof(int));
+}
+
+Array::~Array() { free(m_p); }
+
+Array& Array::operator=(const Array& arr) {  //重载赋值运算符
+    if (this != &arr) {  //判断是否是给自己赋值
+        this->m_len = arr.m_len;
+        free(this->m_p);  //释放原来的内存
+        this->m_p = (int*)calloc(this->m_len, sizeof(int));
+        memcpy(this->m_p, arr.m_p, m_len * sizeof(int));
+    }
+    return *this;
+}
+
+//打印数组元素
+void printArray(const Array& arr) {
+    int len = arr.length();
+    for (int i = 0; i < len; i++) {
+        if (i == len - 1) {
+            cout << arr[i] << endl;
+        }
+        else {
+            cout << arr[i] << ", ";
+        }
+    }
+}
+
+int main() {
+    Array arr1(10);
+    for (int i = 0; i < 10; i++) {
+        arr1[i] = i;
+    }
+    printArray(arr1);
+
+    Array arr2(5);
+    for (int i = 0; i < 5; i++) {
+        arr2[i] = i;
+    }
+    printArray(arr2);
+    arr2 = arr1;  //调用operator=()
+    printArray(arr2);
+    arr2[3] = 234;  //修改arr1的数据不会影响arr2
+    arr2[7] = 920;
+    printArray(arr1);
+
+    return 0;
+}
+
+// 输出
+0, 1, 2, 3, 4, 5, 6, 7, 8, 9
+0, 1, 2, 3, 4
+0, 1, 2, 3, 4, 5, 6, 7, 8, 9
+0, 1, 2, 3, 4, 5, 6, 7, 8, 9
+```
+
+> 将 `arr1` 赋值给 `arr2` 后，修改 `arr2` 的数据不会影响 `arr1`。如果把 `operator=()` 注释掉，那么运行结果将变为：  
+> 0, 1, 2, 3, 4, 5, 6, 7, 8, 9  
+> 0, 1, 2, 3, 4  
+> 0, 1, 2, 3, 4, 5, 6, 7, 8, 9  
+> 0, 1, 2, 234, 4, 5, 6, 920, 8, 9
+
+> 去掉`operator=()`后，由于 `m_p` 指向的堆内存会被 `free()` 两次，所以还会导致内存错误。
+
+### 🐹 4.1、分析
+
+1. `operator=()` 的返回值类型为`Array &`，这样不但能够避免在返回数据时调用拷贝构造函数，还能够达到连续赋值的目的。下面的语句就是连续赋值：`arr4 = arr3 = arr2 = arr1;`
+2. `if( this != &arr)`语句的作用是「判断是否是给同一个对象赋值」：如果是，那就什么也不做；如果不是，那就将原有对象的所有成员变量一一赋值给新对象，并为新对象重新分配内存。
+3. `return *this`表示返回当前对象（新对象）。
+4. `operator=()` 的形参类型为`const Array &`，这样不但能够避免在传参时调用拷贝构造函数，还能够同时接收 const 类型和非 const 类型的实参。
+5. 赋值运算符重载函数除了能有对象引用这样的参数之外，也能有其它参数。但是其它参数必须给出默认值，例如：`Array & operator=(const Array &arr, int a = 100);`
 
 ## 🖋 5、析构函数
 
@@ -150,11 +518,19 @@ int main() {
 
 > 析构时，编译器先调用自定义析构函数（如果有的话），释放一些引用的堆内存，系统资源等等；然后，再调用默认析构函数，对类的一些普通数据所占用的内存进行释放。
 
-在C++中复制控制是一个比较重要的话题，主要包括复制构造函数、重载赋值操作符、析构函数这三部分，这三个函数是一致的，如果类需要析构函数，则它也需要复制操作符 和 复制构造函数，这个规则被称为 C++的**“三法则”**。如果需要手动定义了其中了一个，那么另外的两个也需要定义，通常在存在指针或者前期相关操作的情况下，都需要手动的定义。
-
 ## 🖋 6、移动构造函数
+
+### 🐹 6.1、对象移动（见[移动语义](../advanced-c++/mobile-semantic-perfect-forward.md)）
+
+C++11引入了对象移动而非拷贝的概念，有时候对象发生拷贝后就被销毁了，这种情况下移动而非拷贝对象会大幅度提升性能。
+
+### 🐹 6.2、移动构造函数
+
+移动构造函数类似于拷贝构造函数，不同的是移动构造函数的第一个参数是一个右值引用，移动构造函数仅仅移动数据成员，不会分配新的内存，所以比拷贝构造函数性能更好。
 
 ## 🖋 7、移动赋值运算符
 
 ## 🖋 8、拷贝控制操作\(三五法则\)
+
+在C++中复制控制是一个比较重要的话题，主要包括复制构造函数、重载赋值操作符、析构函数这三部分，这三个函数是一致的，如果类需要析构函数，则它也需要复制操作符 和 复制构造函数，这个规则被称为 C++的**“三法则”**。如果需要手动定义了其中了一个，那么另外的两个也需要定义，通常在存在指针或者前期相关操作的情况下，都需要手动的定义。
 
