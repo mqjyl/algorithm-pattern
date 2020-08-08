@@ -263,3 +263,38 @@ public:
 }
 ```
 
+在调用用到函数对象的标准库算法时，除非显式地指定模板类型为传引用，否则默认情况下函数对象是按值传递的，因此，如果传递一个具有内部状态的函数对象，则被改变状态的是函数内部被复制的临时对象，函数结束后随之消失。真正传进来的函数对象状态并为改变。
+
+```cpp
+class B
+{
+public:
+    B(int n = 0) : th(n), count(1) {}
+    bool operator() (int)
+    {
+        return count++ == th;
+    }
+
+    int getCount() const
+    {
+        return count;
+    }
+private:
+    int th;
+    int count;
+};
+
+int main() {
+    vector<int> vec({2, 4, 5, 7, 8, 6, 9});
+    B b(3);
+    vector<int>::iterator iter = find_if(vec.begin(), vec.end(), bbB(3)); //调用函数对象，查找第三个数字  
+    cout << "3rd:" << *iter << endl;
+    cout << "State:" << b.getCount() << endl;  //指向函数对象内容，但内部值却为改变
+    return 0;
+}
+```
+
+**原则：**
+
+不是所有的返回布尔值的函数对象都适合作为谓词函数，因此用作谓词函数的函数对象，最好不要依赖其内部状态的改变。
+
