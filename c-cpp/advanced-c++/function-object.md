@@ -287,7 +287,7 @@ private:
 int main() {
     vector<int> vec({2, 4, 5, 7, 8, 6, 9});
     B b(3);
-    vector<int>::iterator iter = find_if(vec.begin(), vec.end(), bbB(3)); //调用函数对象，查找第三个数字  
+    vector<int>::iterator iter = find_if(vec.begin(), vec.end(), b); //调用函数对象，查找第三个数字  
     cout << "3rd:" << *iter << endl;
     cout << "State:" << b.getCount() << endl;  //指向函数对象内容，但内部值却为改变
     return 0;
