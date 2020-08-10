@@ -595,6 +595,30 @@ Node* copyRandomList(Node* head) {
 }
 ```
 
+### \*\*\*\*[**Remove Nth Node From End of List**](https://leetcode-cn.com/problems/remove-nth-node-from-end-of-list/)\*\*\*\*
+
+ 给定一个链表，删除链表的倒数第 _n_ 个节点，并且返回链表的头结点。
+
+> 方法一：两边扫描，前后指针，相差 n + 1 个。
+
+```cpp
+ListNode* ListHandler::removeNthFromEnd(ListNode* head, int n){
+    ListNode *dummy = new ListNode(0);
+    dummy->next = head;
+    ListNode *prev = dummy, *post = dummy;
+    while(n >= 0){
+        prev = prev->next;
+        n--;
+    }
+    while(prev){
+        prev = prev->next;
+        post = post->next;
+    }
+    post->next = post->next->next;
+    return dummy->next;
+}
+```
+
 ## ✏ 循环链表 & 双向链表
 
 **循环链表：**链表的两头连接，形成了一个环状链表，称为循环链表。

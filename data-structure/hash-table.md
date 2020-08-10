@@ -63,11 +63,62 @@
 
 ## ✏ 例题
 
-### 🖋 1、`TwoSum` 问题
+### 🖋 1、[`TwoSum` 问题](https://leetcode-cn.com/problems/two-sum/)
 
+给定一个整数数组 `nums` 和一个目标值 target，请你在该数组中找出和为目标值的那 两个 整数，并返回他们的数组下标。可以假设每种输入只会对应一个答案。但是，数组中同一个元素不能使用两遍。
 
+```cpp
+vector<int> twoSum(vector<int>& nums, int target) {
+    std::unordered_map<int, int> ihash;
+    for(int i = 0;i < nums.size(); ++i){
+        int tar = target - nums[i];
+        if(ihash.count(tar) && ihash[tar] != i)
+        {
+            return std::vector<int>{ihash[tar], i}; // 不能反过来
+        }
+        ihash[nums[i]] = i;  // 必须在后面加进去，否则会被覆盖
+    }
+    return std::vector<int>{};
+}
+```
 
+\*\*\*\*[**3Sum**](https://leetcode-cn.com/problems/3sum/)\*\*\*\*
 
+给你一个包含 n 个整数的数组 `nums`，判断 `nums` 中是否存在三个元素 a，b，c ，使得 a + b + c = 0 ？请你找出所有满足条件且不重复的三元组。注意：答案中不可以包含重复的三元组。
+
+```cpp
+std::vector<std::vector<int>> HashTable::threeSum(std::vector<int>& nums)
+{
+    sort(nums.begin(), nums.end()); // 为了去重
+    int len = nums.size();
+    vector<vector<int>> result;
+    for(int i = 0; i < len; ++i){
+        std::unordered_map<int, int> ihash;
+        for(int j = i + 1;j < len; ++j){
+            int tar = 0 - nums[i] - nums[j];
+            if(ihash.count(tar) && ihash[tar] != j)
+            {
+                vector<int> temp{nums[i], nums[ihash[tar]], nums[j]};
+                result.push_back(temp); //反过来
+                int t = nums[j];
+                while(++j < len && t == nums[j]);  // 去重
+                --j;
+            }
+            ihash[nums[j]] = j;
+        }
+        int t = nums[i];
+        while(++i < len && t == nums[i]); // 去重
+        --i;
+    }
+    return result;
+}
+```
+
+#### [**4Sum**](https://leetcode-cn.com/problems/4sum/)\*\*\*\*
+
+给定一个包含 n 个整数的数组 `nums` 和一个目标值 target，判断 `nums` 中是否存在四个元素 a，b，c 和 d ，使得 a + b + c + d 的值与 target 相等？找出所有满足条件且不重复的四元组。注意：答案中不可以包含重复的四元组。
+
+#### \*\*\*\*
 
 
 
