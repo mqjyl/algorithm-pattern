@@ -562,6 +562,13 @@ private:
 可以看出，类Base的三个构造函数除了参数不同，初始化列表、函数体基本相同，其代码存在着很多重复。在C++11中，我们可以使用委托构造函数来减少代码重复，精简构造函数：
 
 ```cpp
+class A
+{
+public:
+    int m_id;
+    string m_str;
+}
+
 class Base
 {
 public:
@@ -571,7 +578,8 @@ public:
 private:
     void initRest() {/* init othre members */ }
     int type{1};
-    char name{'a'};
+    char name{'a'};  
+    A m_a{5, "hello"}; // 非静态数据成员初始值设定项
 };
 ```
 
