@@ -585,6 +585,35 @@ private:
 
 如果在委托构造函数中使用try，可以捕获目标构造函数中抛出的异常。
 
+```cpp
+class Base
+{
+public:
+    Base(int i) try : Base(i, 'c')
+    {
+        cout << "start assignment" << endl;
+        type = i;
+    } catch (...)
+    {
+        cout << "caugth exception" << endl;
+    }
+private:
+    Base(int i, char c)
+    {
+        cout << "throw exception" << endl;
+        throw 0;
+    }
+    int type;
+    char name;
+};
+
+// 输出
+throw exception
+caugth exception
+```
+
+> 在GCC下会委托构造函数可以捕获构造函数的异常，在VS C++下会异常中断。这样的设计是合理的，因为目标构造函数抛出异常说明对象并没有完成初始化，在委托构造函数中进行赋值操作都是一些无意义的动作。
+
 ## 🖋 6、析构函数
 
 **析构函数（`Destructor`）**也是一种特殊的成员函数，没有返回值，不需要程序员显式调用（程序员也没法显式调用），而是在销毁对象时自动执行。构造函数的名字和类名相同，而析构函数的名字是在类名前面加一个`~`符号。
