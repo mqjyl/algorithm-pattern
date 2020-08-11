@@ -599,7 +599,7 @@ Node* copyRandomList(Node* head) {
 
  给定一个链表，删除链表的倒数第 _n_ 个节点，并且返回链表的头结点。
 
-> 方法一：两边扫描，前后指针，相差 n + 1 个。
+> 前后指针，相差 n + 1 个。
 
 ```cpp
 ListNode* ListHandler::removeNthFromEnd(ListNode* head, int n){

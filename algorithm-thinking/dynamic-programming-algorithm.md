@@ -269,24 +269,3 @@ bool canJump(vector<int>& nums) {
 }
 ```
 
-#### 3、[jump-game-ii](https://leetcode-cn.com/problems/jump-game-ii/)
-
-给定一个非负整数数组，你最初位于数组的第一个位置。 数组中的每个元素代表你在该位置可以跳跃的最大长度。 你的目标是使用最少的跳跃次数到达数组的最后一个位置。假设你总是可以到达数组的最后一个位置。
-
-```cpp
-// 1、每次用 当前位置的最小步数加1 来更新 当前位置可以到达的所有位置的步数
-int jump(vector<int>& nums) {
-    int len = nums.size();
-    std::vector<int> dp(len, len);
-    dp[0] = 0;
-    for(int i = 0;i < len;i++){
-        for(int j = 1;j <= nums[i] && i + j < len;j++){
-            dp[i + j] = std::min(dp[i + j], dp[i] + 1);
-        }
-    }
-    return dp[len - 1];
-}
-// 2、动态规划+贪心优化
-
-```
-
