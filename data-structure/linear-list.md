@@ -623,11 +623,11 @@ ListNode* ListHandler::removeNthFromEnd(ListNode* head, int n){
 
 **循环链表：**链表的两头连接，形成了一个环状链表，称为循环链表。
 
-![](../.gitbook/assets/image%20%281%29.png)
+![](../.gitbook/assets/image%20%282%29.png)
 
 **双向链表：**在单向链表的基础上，给各个结点额外配备一个指针变量，用于指向每个结点的直接前趋元素。
 
-![](../.gitbook/assets/image%20%283%29.png)
+![](../.gitbook/assets/image%20%284%29.png)
 
 双向链表的优点：可以很方便地**维护一个有序的链表**。
 
