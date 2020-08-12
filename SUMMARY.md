@@ -90,6 +90,7 @@
 * [分治法](algorithm-thinking/divide-and-conquer-algorithm.md)
 * [动态规划](algorithm-thinking/dynamic-programming-algorithm.md)
 * [分支限界算法](algorithm-thinking/branch-and-bound.md)
+* [几何问题](algorithm-thinking/geometry-problems.md)
 
 ## LeetCode系列
 
