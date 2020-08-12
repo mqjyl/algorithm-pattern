@@ -100,7 +100,90 @@ vector<vector<int>> permute(vector<int>& nums) {
 
  $$n$$ __皇后问题研究的是如何将 $$n$$ 个皇后放置在 $$n\times n$$ 的棋盘上，并且使皇后彼此之间不能相互攻击。
 
+```cpp
+bool isValid(std::vector<int> &solution, int col){
+    int len = solution.size();
+    // 在同一对角线上的剪枝
+    for(int i = 0; i < len; ++i){
+        if(std::abs(len - i) == std::abs(col - solution[i]))
+            return false;
+    }
+    return true;
+}
 
+void backtrack_n(std::vector<std::vector<std::string>> &result, std::vector<int> &solution, std::vector<std::string> &cases, int n){
+    if(n == solution.size()){
+        std::vector<std::string> temp;
+        for(int i : solution){
+            temp.push_back(cases[i]);
+        }
+        result.push_back(temp);
+        return;
+    }
+    for(int i = 0; i < n; ++i){
+        // 同行同列剪枝
+        if(std::find(solution.begin(), solution.end(), i) != solution.end())
+            continue;
+        if(isValid(solution, i)){
+            solution.push_back(i);
+            backtrack_n(result, solution, cases, n);
+            solution.pop_back();
+        }
+    }
+}
+
+vector<vector<string>> solveNQueens(int n) {
+    // 构建每行的结果集
+    std::vector<std::string> cases;
+    for(int i = 0; i < n; ++i){
+        std::string str = std::string(i, '.') + 'Q' + std::string(n - i - 1, '.');
+        cases.push_back(str);
+    }
+    std::vector<std::vector<std::string>> result;
+    std::vector<int> track;
+    backtrack_n(result, track, cases, n);
+    return result;
+}
+```
+
+### \*\*\*\*[**N-Queens II**](https://leetcode-cn.com/problems/n-queens-ii/)\*\*\*\*
+
+ 返回 _n_ 皇后不同的解决方案的数量。
+
+```cpp
+bool isValid(std::vector<int> &solution, int col){
+    int len = solution.size();
+    // 在同一对角线上的剪枝
+    for(int i = 0; i < len; ++i){
+        if(std::abs(len - i) == std::abs(col - solution[i]))
+            return false;
+    }
+    return true;
+}
+
+void backtrack_n(int &result, std::vector<int> &solution, int n){
+    if(n == solution.size()){
+        result++;
+        return;
+    }
+    for(int i = 0; i < n; ++i){
+        // 同行同列剪枝
+        if(std::find(solution.begin(), solution.end(), i) != solution.end())
+            continue;
+        if(isValid(solution, i)){
+            solution.push_back(i);
+            backtrack_n(result, solution, n);
+            solution.pop_back();
+        }
+    }
+}
+int totalNQueens(int n) {
+    int result = 0;
+    std::vector<int> track;
+    backtrack_n(result, track, n);
+    return result;
+}
+```
 
 ### [copy-list-with-random-pointer](https://leetcode-cn.com/problems/copy-list-with-random-pointer/)
 
