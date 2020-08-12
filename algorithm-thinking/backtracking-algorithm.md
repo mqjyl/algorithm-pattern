@@ -185,6 +185,12 @@ int totalNQueens(int n) {
 }
 ```
 
+### \*\*\*\*[**Sudoku Solver**](https://leetcode-cn.com/problems/sudoku-solver/)\*\*\*\*
+
+```cpp
+
+```
+
 ### [copy-list-with-random-pointer](https://leetcode-cn.com/problems/copy-list-with-random-pointer/)
 
 
