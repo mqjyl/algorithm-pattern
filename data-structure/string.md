@@ -4,7 +4,7 @@ description: 总结字符串相关的算法考点和题型。
 
 # 字符串
 
-## ✏ 模式匹配
+## ✏ [模式匹配](https://leetcode-cn.com/problems/implement-strstr/)
 
 字符串 $$S=[s_1,s_2,\ldots,s_n]$$ ，模式串 $$P=[p_1,p_2,\ldots,p_m]$$ ， $$i$$ 和 $$j$$ 为两个游标，从`1`开始。
 
@@ -97,6 +97,8 @@ $$
 
 ## ✏ 字符串相关算法题
 
+
+
 ### \*\*\*\*[**Add Binary**](https://leetcode-cn.com/problems/add-binary/)\*\*\*\*
 
 给你两个二进制字符串，返回它们的和（用二进制表示）。输入为 **非空** 字符串且只包含数字 `1` 和 `0`。
@@ -112,17 +114,89 @@ $$
 
  请实现一个函数，把字符串 `s` 中的每个空格替换成`"%20"`。
 
-> 最容易想到方法的是新建字符串（如果是静态数组，则长度为原来的三倍），然后依次复制原串的内容到新串，遇到空格用`"%20"`替换。
+> 1、最容易想到方法的是新建字符串（如果是静态数组，则长度为原来的三倍），然后依次复制原串的内容到新串，遇到空格用`"%20"`替换。
 >
-> 其次是按空格拆分字符串`split`，然后再组合。
+> 2、其次是按空格拆分字符串`split`，然后再组合。
 >
-> 还有一种原地替换的方法：先根据空格数量在字符串末尾扩容两个字符的空间，然后倒叙遍历将原来位置的字符放到后面, 最后返回`s`就可以了。
+> 3、还有一种原地替换的方法：先根据空格数量在字符串末尾扩容两个字符的空间，然后倒叙遍历将原来位置的字符放到后面, 最后返回`s`就可以了。
 
-```text
-
+```cpp
+// const std::string p = "%20";
+std::string StringHandler::replaceSpace(std::string s, const std::string p){
+    int count = 0;
+    for(auto c : s){
+        if(c == ' ')
+            ++count;
+    }
+    int len = count * p.size() + s.size() - count;
+    string result(len, ' ');
+    int i = 0;
+    for(auto c : s){
+        if(c != ' '){
+            result[i++] = c;
+        }
+        else{
+            for(auto d : p){
+                result[i++] = d;
+            }
+        }
+    }
+    return result;
+}
 ```
 
 ### \*\*\*\*[**First Unique Character in a String**](https://leetcode-cn.com/problems/first-unique-character-in-a-string/)\*\*\*\*
 
 给定一个字符串，找到它的第一个不重复的字符，并返回它的索引。如果不存在，则返回 `-1`。
+
+### \*\*\*\*[**Longest Palindromic Substring**](https://leetcode-cn.com/problems/longest-palindromic-substring/)\*\*\*\*
+
+ 给定一个字符串 `s`，找到 `s` 中最长的回文子串。你可以假设 `s` 的最大长度为 1000。
+
+{% tabs %}
+{% tab title="中心扩展" %}
+```cpp
+string longestPalindrome(string s) {
+    string result = s.substr(0,1);
+    int len = s.length();
+    for(int i = 1;i < len;i++){
+        if(s[i] == s[i - 1]){
+            int m = i + 1;
+            int n = i - 2;
+            while(m < len && n >= 0 && s[m] == s[n]){
+                m++; n--;
+            }
+            m--; n++;
+            if(m - n + 1 > result.length())
+                result = s.substr(n, m - n + 1);
+        }
+        if(i >= 2 && s[i] == s[i - 2]){
+            int m = i + 1;
+            int n = i - 3;
+            while(m < len && n >= 0 && s[m] == s[n]){
+                m++; n--;
+            }
+            m--; n++;
+            if(m - n + 1 > result.length())
+                result = s.substr(n, m - n + 1);
+        }
+    }
+
+    return result;
+}
+```
+{% endtab %}
+
+{% tab title="动态规划" %}
+```
+
+```
+{% endtab %}
+
+{% tab title="Manacher" %}
+```
+
+```
+{% endtab %}
+{% endtabs %}
 

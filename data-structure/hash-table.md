@@ -67,6 +67,8 @@
 
 给定一个整数数组 `nums` 和一个目标值 target，请你在该数组中找出和为目标值的那 两个 整数，并返回他们的数组下标。可以假设每种输入只会对应一个答案。但是，数组中同一个元素不能使用两遍。
 
+{% tabs %}
+{% tab title="散列表" %}
 ```cpp
 vector<int> twoSum(vector<int>& nums, int target) {
     std::unordered_map<int, int> ihash;
@@ -81,6 +83,14 @@ vector<int> twoSum(vector<int>& nums, int target) {
     return std::vector<int>{};
 }
 ```
+{% endtab %}
+
+{% tab title="双指针" %}
+```
+
+```
+{% endtab %}
+{% endtabs %}
 
 \*\*\*\*[**3Sum**](https://leetcode-cn.com/problems/3sum/)\*\*\*\*
 
