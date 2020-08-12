@@ -108,5 +108,6 @@
 
 * [基础知识题](mian-shi-ti/basic-knowledge.md)
 * [设计题](mian-shi-ti/design-problems.md)
+* [经典的算法题](mian-shi-ti/classic-algorithm-problems.md)
 * [C++面试题总结](mian-shi-ti/cpp-interview-question.md)
 
