@@ -55,6 +55,8 @@ int minimumTotal(vector<vector<int>>& triangle) {
 >
 > **可以用二维数组，可以借助一维数组（长度为三角形的行数），也可以原地操作**
 
+{% tabs %}
+{% tab title="自底向上" %}
 ```cpp
 // 自底向上
 int minimumTotal(vector<vector<int>>& triangle) {
@@ -66,7 +68,8 @@ int minimumTotal(vector<vector<int>>& triangle) {
             if(i == len){
                 rHash.push_back(triangle[i][j]);
             }else{
-                rHash.push_back(min(hash[len - i - 1][j + 1], hash[len - i - 1][j]) + triangle[i][j]);
+                rHash.push_back(min(hash[len - i - 1][j + 1], 
+                        hash[len - i - 1][j]) + triangle[i][j]);
             }
         }
         hash.push_back(rHash);
@@ -75,6 +78,12 @@ int minimumTotal(vector<vector<int>>& triangle) {
     return hash[len][0];
 }
 // 自顶向下
+
+```
+{% endtab %}
+
+{% tab title="自顶向下" %}
+```cpp
 int minimumTotal(vector<vector<int>>& triangle) {
     vector<vector<int>> hash;
     vector<int> rHash;
@@ -88,7 +97,8 @@ int minimumTotal(vector<vector<int>>& triangle) {
             }else if(j == i){
                 rHash.push_back(hash[i - 1][j - 1] + triangle[i][j]);
             }else{
-                rHash.push_back(min(hash[i - 1][j - 1], hash[i - 1][j]) + triangle[i][j]);
+                rHash.push_back(min(hash[i - 1][j - 1], hash[i - 1][j]) 
+                 + triangle[i][j]);
             }
         }
         hash.push_back(rHash);
@@ -103,6 +113,8 @@ int minimumTotal(vector<vector<int>>& triangle) {
     return tmp;
 }
 ```
+{% endtab %}
+{% endtabs %}
 
 ### 🖌 递归与动规的关系
 
