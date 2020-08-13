@@ -36,6 +36,8 @@
 
 14、inline与define有什么区别？
 
+15、拷贝构造函数形参能否值传递？【[链接](../c-cpp/c++-syntax/constructor-destructor.md#2-kao-bei-gou-zao-han-shu-kao-bei-fu-zhi-yun-suan-fu)】
+
 ## STL
 
 1、vector 和 list 有什么区别？
