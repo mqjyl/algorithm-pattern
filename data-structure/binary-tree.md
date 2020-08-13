@@ -170,8 +170,9 @@ vector<int> inorderTraversal(TreeNode* root) {
 
 > 后序遍历在决定是否可以输出当前节点的值的时候，需要考虑其左右子树是否都已经遍历完成。这里采用的方法是**三次入栈出栈**的方法，即一个节点能不能被访问，取决于它的左右子树都已经入栈出栈完毕并被访问。还有一种**设置游标**的方法，是**一次入栈出栈**的过程。相对而言第二种方法更高效，除了压栈出栈的次数成倍减少外，还会减少对很多**左子树为空的结点的左子树**的判断。
 
+{% tabs %}
+{% tab title="三次出入栈" %}
 ```cpp
-// 三次入栈出栈
 vector<int> postorderTraversal(TreeNode* root) {
     vector<int> postorder;
     if(!root)
@@ -198,7 +199,11 @@ vector<int> postorderTraversal(TreeNode* root) {
     }
     return postorder;
 }
-// 一次入栈出栈
+```
+{% endtab %}
+
+{% tab title="一次出入栈" %}
+```cpp
 vector<int> postorderTraversal(TreeNode* root) {
     vector<int> postorder;
     if(!root)
@@ -224,6 +229,8 @@ vector<int> postorderTraversal(TreeNode* root) {
     return postorder;
 }
 ```
+{% endtab %}
+{% endtabs %}
 
 #### [层次遍历](https://leetcode-cn.com/problems/binary-tree-level-order-traversal/)
 
@@ -235,8 +242,9 @@ vector<int> postorderTraversal(TreeNode* root) {
 >
 > 思路：用一个队列记录一层的元素，然后扫描这一层元素添加下一层元素到队列（一个数进去出来一次，所以复杂度 O\(logN\)）
 
+{% tabs %}
+{% tab title="标记" %}
 ```cpp
-// 标记
 vector<vector<int>> levelOrder(TreeNode* root) {
     vector<vector<int>> result;
     if(!root)
@@ -264,7 +272,11 @@ vector<vector<int>> levelOrder(TreeNode* root) {
     result.push_back(level_val);
     return result;
 }
-// 变量
+```
+{% endtab %}
+
+{% tab title="变量" %}
+```cpp
 vector<vector<int>> levelOrder(TreeNode* root) {
     vector<vector<int>> result;
     if(!root)
@@ -297,6 +309,8 @@ vector<vector<int>> levelOrder(TreeNode* root) {
     return result;
 }
 ```
+{% endtab %}
+{% endtabs %}
 
 ## 二、应用
 

@@ -79,6 +79,8 @@ ListNode* deleteDuplicates(ListNode* head) {
 
 > 反转一个链表
 
+{% tabs %}
+{% tab title="迭代" %}
 ```cpp
 ListNode* reverseList(ListNode* head) {
     if(!(head && head->next))
@@ -95,8 +97,12 @@ ListNode* reverseList(ListNode* head) {
     head = newHead;
     return head;
 }
+```
+{% endtab %}
+
+{% tab title="递归" %}
+```cpp
 // 递归实现
-/*
 ListNode* reverseList(ListNode* head) {
     if(!(head && head->next))
         return head;
@@ -107,8 +113,9 @@ ListNode* reverseList(ListNode* head) {
     nextPtr->next = ptr;
     return subHead;
 }
-*/
 ```
+{% endtab %}
+{% endtabs %}
 
 ### [reverse-linked-list-ii](https://leetcode-cn.com/problems/reverse-linked-list-ii/)
 
@@ -234,8 +241,9 @@ ListNode* partition(ListNode* head, int x) {
 
 > 给定一个链表，两两交换其中相邻的节点，并返回交换后的链表。**不能只是单纯的改变节点内部的值**，而是需要实际的进行节点交换。
 
+{% tabs %}
+{% tab title="递归" %}
 ```cpp
-// 递归
 ListNode* swapOnePair(ListNode* pre_head){
     if(!(pre_head->next && pre_head->next->next))
         return pre_head;
@@ -257,7 +265,11 @@ ListNode* swapPairs(ListNode* head) {
     dummy->next = head;
     return swapOnePair(dummy);
 }
-// 迭代
+```
+{% endtab %}
+
+{% tab title="迭代" %}
+```cpp
 ListNode* swapPairs(ListNode* head) {
     if(!(head && head->next))
         return head;
@@ -278,6 +290,8 @@ ListNode* swapPairs(ListNode* head) {
     return dummy->next;*/
 }
 ```
+{% endtab %}
+{% endtabs %}
 
 ### [sort-list](https://leetcode-cn.com/problems/sort-list/)
 
@@ -329,8 +343,38 @@ ListNode* sortList(ListNode* head) {
 >
 > 方法三：深度递归。
 
+{% tabs %}
+{% tab title="方法二" %}
 ```cpp
-// 方法一
+void reorderList(ListNode* head) {
+    if(!head || !head->next)
+        return;
+    ListNode *quickptr=head->next, *slowptr=head;
+    while(quickptr && quickptr->next){
+        quickptr = quickptr->next->next;
+        slowptr = slowptr->next;
+    }
+    ListNode *rightHead = slowptr->next;
+    slowptr->next = NULL;
+    rightHead = reverseList(rightHead);
+    // 合并
+    ListNode *leftHead = head;
+    ListNode *tmpPtr = leftHead;
+    while(leftHead){
+        tmpPtr = leftHead;
+        leftHead = leftHead->next;
+        tmpPtr->next = rightHead;
+        if(rightHead){ // 奇数个的情况，所以需要判断
+            rightHead = rightHead->next;
+            tmpPtr->next->next = leftHead;
+        }
+    }
+}
+```
+{% endtab %}
+
+{% tab title="方法一" %}
+```cpp
 void reorderList(ListNode* head) {
     if(!head || !head->next)
         return;
@@ -361,32 +405,9 @@ void reorderList(ListNode* head) {
     }
     head = newHead;
 }
-// 方法二
-void reorderList(ListNode* head) {
-    if(!head || !head->next)
-        return;
-    ListNode *quickptr=head->next, *slowptr=head;
-    while(quickptr && quickptr->next){
-        quickptr = quickptr->next->next;
-        slowptr = slowptr->next;
-    }
-    ListNode *rightHead = slowptr->next;
-    slowptr->next = NULL;
-    rightHead = reverseList(rightHead);
-    // 合并
-    ListNode *leftHead = head;
-    ListNode *tmpPtr = leftHead;
-    while(leftHead){
-        tmpPtr = leftHead;
-        leftHead = leftHead->next;
-        tmpPtr->next = rightHead;
-        if(rightHead){ // 奇数个的情况，所以需要判断
-            rightHead = rightHead->next;
-            tmpPtr->next->next = leftHead;
-        }
-    }
-}
 ```
+{% endtab %}
+{% endtabs %}
 
 ### [linked-list-cycle](https://leetcode-cn.com/problems/linked-list-cycle/)
 
@@ -396,8 +417,9 @@ void reorderList(ListNode* head) {
 >
 > 方法二、哈希表法， **通过`hash`表来检测节点之前是否被访问过**，来判断链表是否成环。
 
+{% tabs %}
+{% tab title="快慢指针" %}
 ```cpp
-// 方法一
 bool hasCycle(ListNode *head) {
     if(!head || !head->next)
         return false;
@@ -411,7 +433,11 @@ bool hasCycle(ListNode *head) {
     }
     return false;
 }
-// 方法二
+```
+{% endtab %}
+
+{% tab title="哈希表" %}
+```cpp
 bool hasCycle(ListNode *head) {
     if(!head || !head->next)
         return false;
@@ -427,6 +453,8 @@ bool hasCycle(ListNode *head) {
     return false;
 }
 ```
+{% endtab %}
+{% endtabs %}
 
 ### [linked-list-cycle-ii](https://leetcode-cn.com/problems/linked-list-cycle-ii/)
 

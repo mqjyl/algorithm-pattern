@@ -72,8 +72,6 @@ int singleNumber(vector<int>& nums) {
     }
     return (tmpSum * 3 - sum) / 2;
 }
-
-
 ```
 
 > 方法二：使用位运算，可以在$$\mathcal{O}(N)$$ 的时间和 $$\mathcal{O}(1)$$ 的空间内解决。
