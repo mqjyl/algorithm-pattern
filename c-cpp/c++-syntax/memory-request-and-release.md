@@ -287,7 +287,7 @@ free的实现
 
 ### 🖋 2.5、new和delete的 重写 和 重载
 
-当我们在C++中使用new 和delete时，其实执行的是全局的`::operator new`和`::operator delete`。对于自定义类型来说，当我们使用new来进行构建对象时，首先会检查这个类是否重载了new运算符，如果这个类重载了new运算符那么就会调用类提供的new运算符来进行内存分配，而如果没有提供new运算符时就使用系统提供的全局new运算符来进行内存分配。内置类型则总是使用系统提供的全局new运算符来进行内存的分配。对象的内存销毁流程也是和分配一致的。new和delete运算符既支持全局的重载又支持类级别的函数重载。下面是这种运算符的定义的格式：
+当我们在C++中使用new 和delete时，其实执行的是全局的`::operator new`和`::operator delete`。对于自定义类型来说，当我们使用new来进行构建对象时，首先会检查这个类是否重载了new运算符，如果这个类重载了new运算符那么就会调用类提供的new运算符来进行内存分配，而如果没有重载new运算符时就使用系统提供的全局new运算符来进行内存分配。内置类型则总是使用系统提供的全局new运算符来进行内存的分配。对象的内存销毁流程也是和分配一致的。new和delete运算符既支持全局的重载又支持类级别的函数重载。下面是这种运算符的定义的格式：
 
 ```cpp
 //全局运算符定义格式
@@ -444,19 +444,19 @@ dtor.this=00AF5C60 id=0
 dtor.this=00AF5C3C id=0
 ```
 
-> 有一点需要注意，operator delete的自定义参数重载并不能手动调用。即`delete(std::nothrow) pf3;`是错误的。并且第65行在释放`pf2`时调用的是`operator delete(void* pdead, size_t size);`而不是`operator delete(void* pdead, const std::nothrow_t& nothrow_value)`，并且如果删除了`operator delete(void* pdead, size_t size);`则后面的delete会报错，也就是说正常情况下delete不能调用`operator delete(void* pdead, const std::nothrow_t& nothrow_value)`，这个重载函数只在一种情况下被调用：当new关键字抛出异常时。这里并不是因为第二个参数是引用，必须赋值，因为改成按值传参也不行，具体原因不太清楚，但是如果将`operator delete(void* pdead, size_t size);`改成`operator delete(void* pdead, size_t& size);`后面的delete也会报错。
+> 有一点需要注意，operator delete的自定义参数重载并不能手动调用。即`delete(std::nothrow) pf3;`是错误的。并且第65行在释放`pf2`时调用的是`operator delete(void* pdead, size_t size);`而不是`operator delete(void* pdead, const std::nothrow_t& nothrow_value)`，并且如果删除了`operator delete(void* pdead, size_t size);`则后面的delete会报错，也就是说正常情况下delete不能调用`operator delete(void* pdead, const std::nothrow_t& nothrow_value)`，这个重载函数只在一种情况下被调用：当new关键字抛出异常时。这里并不是因为第二个参数是引用，必须赋值，改成按值传参也不行，如果将`operator delete(void* pdead, size_t size);`改成`operator delete(void* pdead, size_t& size);`后面的delete也会报错。
 >
-> （**这里留一个疑问** ❓ ）
+> （**具体原因不太清楚**，**这里留一个疑问** ❓ ）
 
-对于new/delete运算符重载有如下规则：
+对于`new/delete`运算符重载有如下规则：
 
-* new和delete运算符重载必须成对出现
-* **new运算符的第一个参数必须是size\_t类型的，也就是指定分配内存的size尺寸；delete运算符的第一个参数必须是要销毁释放的内存对象。其他参数可以任意定义。**
-* 系统默认实现了new/delete、new\[\]/delete\[\]、 placement new 5个运算符（expression）。它们都有特定的意义。使用它们在底层调用对应的函数，可以是系统提供的，也可能是被重写或重载的。
-* 你可以重写默认实现的全局运算符，比如你想对内存的分配策略进行自定义管理或者你想监测堆内存的分配情况或者你想做堆内存的内存泄露监控等。**但是你重写的全局运算符一定要满足默认的规则定义。也可以重载全局运算符，但也必须符合默认的规则，即第一个参数不能变。**
-* 如果你想对某个类的堆内存分配的对象做特殊处理，那么你可以重载这个类的new/delete运算符。当重载这两个运算符时虽然没有带static属性，但是不管如何对类的new/delete运算符的重载总是被认为是静态成员函数。
-* **当delete运算符的参数&gt;=2个时，就需要自己负责对象析构函数的调用，并且以运算符函数的形式来调用delete运算符。**
-* 这里的重载遵循作用域覆盖原则，即在里向外寻找operator new的重载时，只要找到operator new\(\)函数就不再向外查找，如果参数符合则通过，如果参数不符合则报错，而不管全局是否还有相匹配的函数原型。比如如果这里只将Foo中`operator new(size_t, const std::nothrow_t&)`删除掉，就会在61行报错：
+1. new和delete运算符重载必须成对出现。
+2. **new运算符的第一个参数必须是size\_t类型的，也就是指定分配内存的size尺寸；delete运算符的第一个参数必须是要销毁释放的内存对象。其他参数可以任意定义。**
+3. 系统默认实现了new/delete、new\[\]/delete\[\]、 placement new 5个运算符（expression）。它们都有特定的意义。使用它们在底层调用对应的函数，可以是系统提供的，也可能是被重写或重载的。
+4. 你可以重写默认实现的全局运算符，比如你想对内存的分配策略进行自定义管理或者你想监测堆内存的分配情况或者你想做堆内存的内存泄露监控等。**但是你重写的全局运算符一定要满足默认的规则定义。也可以重载全局运算符，但也必须符合默认的规则，即第一个参数不能变。**
+5. 如果你想对某个类的堆内存分配的对象做特殊处理，那么你可以重载这个类的new/delete运算符。当重载这两个运算符时虽然没有带static属性，但是不管如何对类的new/delete运算符的重载总是被认为是静态成员函数。
+6. **当delete运算符的参数&gt;=2个时，就需要自己负责对象析构函数的调用，并且以运算符函数的形式来调用delete运算符。**
+7. 这里的重载遵循作用域覆盖原则，即在里向外寻找operator new的重载时，只要找到operator new\(\)函数就不再向外查找，如果参数符合则通过，如果参数不符合则报错，而不管全局是否还有相匹配的函数原型。比如如果这里只将Foo中`operator new(size_t, const std::nothrow_t&)`删除掉，就会在61行报错：
 
 ```cpp
 error C2660: “Foo::operator new”: 函数不接受 2 个参数。
@@ -523,13 +523,14 @@ int main()
 }
 ```
 
-* `placement new expression` 和 `placement operator new()` 通常被笼统的称作`placement new`。但两者概念不同： `placement operator new()`是标准`operator new()`的一个重载函数。 `placement new expression`，它属于c++语法，实际上底层是调用了`placement operator new()`，即`operator new(size_t, void*)`，`placement delete`表示`placement operator delete()`函数，因为根本不存在`placement delete expression`。即定位 new 运算符没有对应的 定位 delete ，因为 定位 new 运算符 没有申请内存空间。函数底层如下：
+* `placement new expression` 和 `placement operator new()` 通常被笼统的称作`placement new`。但两者概念不同： `placement operator new()`是标准`operator new()`的一个重载函数。 `placement new expression`，它属于c++语法，实际上底层是调用了`placement operator new()`，即`operator new(size_t, void*)`。`placement delete`表示`placement operator delete()`函数，不存在`placement delete expression`。即定位 new 运算符没有对应的 定位 delete ，因为 定位 new 运算符 没有申请内存空间。函数底层如下：
 
 ```cpp
 #ifndef __PLACEMENT_NEW_INLINE
 #define __PLACEMENT_NEW_INLINE
 inline void *__cdecl operator new(size_t, void *_P)
         {return (_P); }
+        
 #if     _MSC_VER >= 1200
 inline void __cdecl operator delete(void *, void *)
     {return; }
@@ -583,6 +584,8 @@ obj->~classname();
 delete[] buf;
 ```
 
+> 做一个总结，否则后面的内容看起来有点乱：重载运算符的本质的是重载底层的函数，而这些函数其实是可以显示调用的，而函数不管重写标准库提供的还是重载的函数，第一个参数必须是符合要求的。大于两个参数的new函数都可以叫做定位new，并且第二个参数为地址的定位new 是标准库提供的（可以叫做标准定位 new），标准库还提供了一组两参数的版本，即`nothrow`版。定位new函数都可以用定位new运算符调用，但是没有定位delete运算符。重载的大于等于两个参数的new和delete函数作用有限（标准定位 new 除外），也就是说大多数情况下是不需要重写和重载new和delete函数的。
+
 ### 🖋 2.7、对象的自动删除技术
 
 一般来说系统对new/delete的默认实现就能满足我们的需求，我们不需要再去重载这两个运算符。那为什么C++还提供对这两个运算符的重载支持呢？答案还是在运算符本身具有的缺陷所致。我们知道用new关键字来创建堆内存对象是分为了2步：1.是堆内存分配，2.是对象构造函数的调用。而这两步中的任何一步都有可能会产生异常。如果说是在第一步出现了问题导致内存分配失败则不会调用构造函数，这是没有问题的。如果说是在第二步构造函数执行过程中出现了异常而导致无法正常构造完成，那么就应该要将第一步中所分配的堆内存进行销毁。**C++中规定如果一个对象无法完全构造那么这个对象将是一个无效对象，也不会调用析构函数。为了保证对象的完整性，当通过new分配的堆内存对象在构造函数执行过程中出现异常时就会停止构造函数的执行并且自动调用对应的delete运算符来对已经分配的堆内存执行销毁处理，这就是所谓的对象的自动删除技术**。正是因为有了对象的自动删除技术才能解决对象构造不完整时会造成内存泄露的问题。
@@ -598,6 +601,7 @@ operator new的重载是可以有自定义参数的，那么我们如何利用�
 那么如何获取当前语句所在文件名和行号呢，windows提供两个宏：`__FILE__`和`__LINE__`。利用它们可以直接获取到文件名和行号，也就是 `new(__FILE__, __LINE__)` 由于这些都是不变的，因此可以再定义一个宏：`#define new new(__FILE__, __LINE__)`。这样我们就只需要定义这个宏，然后重载operator new即可。源代码如下，这里只是简单输出new的文件名和行号：
 
 ```cpp
+// A.h
 class A
 {
 public:
@@ -616,6 +620,8 @@ public:
     }
 };
 
+// main.cpp
+#include "A.h"
 #define new new(__FILE__, __LINE__)
 
 int main()
@@ -626,7 +632,7 @@ int main()
 }
 ```
 
-注意：需要将类的声明实现与new的使用隔离开来。并且将类头文件放在宏定义之前。否则在类A中的operator new重载中的new会被宏替换，整个函数就变成了：`void* operator new(__FILE__, __LINE__)(size_t size, char* file, int line)`，编译器自然会报错。（VS C++下并没有报错）
+注意：类定义应该放在宏定义之前。否则在类A中的operator new重载中的new会被宏替换，整个函数就变成了：`void* operator new(__FILE__, __LINE__)(size_t size, char* file, int line)`，编译器自然会报错。
 
 #### \*\*\*\*💎 2.8.**2、内存池优化**
 
