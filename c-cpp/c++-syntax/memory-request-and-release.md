@@ -105,6 +105,14 @@ free(n);  // 释放时，从OS维护的表中查找到空间长度，会一并�
 ```cpp
 int* p = new int;     // 申请单个空间
 int* q = new int[10]; // 申请连续空间
+
+int* a = new int(5)
+int* b = new int[5]{1,2,3,4,5}
+
+struct Pos {
+    double x; double y; double z;
+};
+Pos *one = new Pos{2.5 ，5.3, 7.2};
 ```
 
 new 在申请基本类型空间时，主要会经历两个过程：
@@ -143,12 +151,318 @@ p->classname::classname(); // 调用类的构造函数，用户不允许这样�
 // ====== 申请object数组空间 ======
 classname* q = new classname[N];
 // 执行上面的语句实际的过程是下面的条语句
-void* tmp = operator new[](sizeof(classname) * N); // 调用 operator new[](size_t) 申请空间
-classname* q = static_cast<classname*>(tmp); // 进行强制类型转换
+void* tmp = operator new[](sizeof(classname) * N + 4); // 调用 operator new[](size_t) 申请空间
+classname* q = static_cast<classname*>(tmp + 4); // 进行强制类型转换
 q->classname::classname(); // 调用 N次 构造函数
 ```
 
-#### 💎 2.1.1、定位\(placement\) new 运算符
+注意：申请的空间大小为：
+
+```cpp
+sizeof(classname) * N + 4
+```
+
+前4个字节写入数组大小，最后调用N次构造函数。
+
+这里为什么要写入数组大小呢？释放内存之前会调用每个对象的析构函数。但是编译器并不知道 q 实际所指对象的大小。如果没有储存数组大小，编译器如何知道该把p所指的内存分为几次来调用析构函数呢？
+
+new\[\] 调用的是operator new\[\]，计算出数组总大小之后调用operator new。值得一提的是，可以通过\(\)初始化数组为零值，实例：
+
+```cpp
+char* p = new char[32]();
+```
+
+等同于：
+
+```cpp
+char *p = new char[32];
+memset(p, 32, 0);
+```
+
+### 🖋 2.2、new的底层
+
+**`operator new(size_t)`** 是系统提供的全局函数，其 **底层是由 `malloc` 实现的：**
+
+```cpp
+/*
+operator new：该函数实际通过malloc来申请空间，当malloc申请空间成功时直接返回；申请空间失败，尝试
+执行空 间不足应对措施，如果改应对措施用户设置了，则继续申请，否则抛异常。
+*/
+void *__CRTDECL operator new(size_t size) _THROW1(_STD bad_alloc)
+{
+    // try to allocate size bytes
+    void *p;
+    while ((p = malloc(size)) == 0)
+        if (_callnewh(size) == 0)
+        {
+            // report no memory
+            // 如果申请内存失败了，这里会抛出bad_alloc 类型异常
+            static const std::bad_alloc nomem;
+            _RAISE(nomem);
+        }
+    return (p);
+}
+```
+
+### 🖋 2.3、delete的使用
+
+```cpp
+delete p;
+delete[] q;
+```
+
+delete 的过程与 new 很相似，会调用 `operator delete(void*)` 或 `operator delete[] (void*)` 释放内存。
+
+```cpp
+delete p;
+// 执行上面的代码实际过程是下面的语句
+operator delete(p); // 调用 operator delete(void*); 释放空间
+
+delete[] q;
+// 执行上面的代码实际过程是下面的语句
+operator delete[](q); // 调用 operator delete[](q); 释放空间
+```
+
+**针对简单类型，delete 和 delete\[\] 等同。**
+
+delete 释放 object 空间
+
+1. 调用类的析构函数
+2. 调用 `operator delete(void*)` 或 `operator delete[] (void*)` 释放内存
+
+```cpp
+delete obj;
+// 执行上面的语句实际过程是下面的语句
+obj->~classname(); // 首先调用类的析构函数
+operator delete(obj);   // 调用 operator delete(void*); 释放 object 内存空间
+
+delete[] obj1;
+// 执行上面的语句实际过程是下面的语句
+obj->~classname(); // 调用 N次 类的析构函数
+operator delete[](obj1); // 调用 operator delete[](void*); 释放 object 内存空间
+```
+
+new\[\]分配的内存只能由delete\[\]释放。如果由delete释放会崩溃，假设指针`obj1`指向new\[\]分配的内存，因为要4字节存储数组大小，实际分配的内存地址为`obj1-4`，系统记录的也是这个地址。`delete[]` 实际释放的就是`obj1-4`指向的内存。而`delete`会直接释放`obj1`指向的内存，这个内存根本没有被系统记录，所以会崩溃。
+
+### 🖋 2.4、delete的底层
+
+```cpp
+/*
+operator delete: 该函数最终是通过free来释放空间的
+*/
+void operator delete(void *pUserData)
+{
+	_CrtMemBlockHeader * pHead;
+	
+	RTCCALLBACK(_RTC_Free_hook, (pUserData, 0));
+	
+	if (pUserData == NULL)
+		return;
+	
+	_mlock(_HEAP_LOCK); /* block other threads */
+	__TRY
+		/* get a pointer to memory block header */
+		pHead = pHdr(pUserData);
+		
+		/* verify block type */
+		_ASSERTE(_BLOCK_TYPE_IS_VALID(pHead->nBlockUse));
+		
+		 _free_dbg( pUserData, pHead->nBlockUse );
+		
+	__FINALLY
+		_munlock(_HEAP_LOCK); /* release other threads */
+	__END_TRY_FINALLY
+	
+	 return;
+}
+/*
+free的实现
+*/
+#define free(p) _free_dbg(p, _NORMAL_BLOCK)
+```
+
+1. 在 new 一个数组时，与 `malloc` 相似OS会维护一张记录数组头指针和数组长度的表；
+2. 释放基本数据类型的指针时，数组的头指针最终会被 free\(q\)释放，所以不论是 delete q或者 delete\[\] q最终的结果都是调用 free\(q\) 释放内存；
+3. 释放 object 数组空间时，如果有空间需要在析构函数中释放，直接调用 delete obj 只会调用一次析构函数，然后就执行 free\(obj\) 没有调用其他数组元素的析构函数很容易导致内存泄漏，所以在释放 object 数组时，一定要用 delete\[\] obj 释放内存。
+
+### 🖋 2.5、new和delete的 重写 和 重载
+
+当我们在C++中使用new 和delete时，其实执行的是全局的`::operator new`和`::operator delete`。对于自定义类型来说，当我们使用new来进行构建对象时，首先会检查这个类是否重载了new运算符，如果这个类重载了new运算符那么就会调用类提供的new运算符来进行内存分配，而如果没有提供new运算符时就使用系统提供的全局new运算符来进行内存分配。内置类型则总是使用系统提供的全局new运算符来进行内存的分配。对象的内存销毁流程也是和分配一致的。new和delete运算符既支持全局的重载又支持类级别的函数重载。下面是这种运算符的定义的格式：
+
+```cpp
+//全局运算符定义格式
+void* operator new(size_t size [, param1, param2,....]);
+void operator delete(void *p [, param1, param2, ...]);
+
+//类内运算符定义格式
+class CA
+{
+    void* operator new(size_t size [, param1, param2,....]);
+    void operator delete(void *p [, param1, param2, ...]);
+};
+```
+
+标准库提供的全局的 operator new\( 函数 \) 有六种重载形式，operator delete也有六种重载形式：
+
+```cpp
+// =======================new=========================//
+void *operator new(std::size_t count)
+    throw(std::bad_alloc);              // 一般的版本
+void *operator new[](std::size_t count)  
+    throw(std::bad_alloc);
+    
+void *operator new(std::size_t count,   // 兼容早版本的 new
+    const std::nothrow_t const&) throw();     // 内存分配失败不会抛出异常
+void *operator new[](std::size_t count,  
+    const std::nothrow_t const&) throw();
+    
+void *operator new(std::size_t count, void *ptr) throw();  // placement 版本
+void *operator new[](std::size_t count, void *ptr) throw();
+
+// ======================delete========================//
+void * operator delete(void *) noexcept;
+void * operator delete[](void *) noexcept;
+ 
+void * operator delete(void *, std::nothrow_t const&) noexcept;
+void * operator delete[](void *, std::nothrow_t const&) noexcept;
+
+void * operator delete(void *, void *) noexcept;
+void * operator delete[](void *, void *) noexcept;
+
+// VS C++下还有两个，GCC下不确定
+void * operator delete(void *, size_t) noexcept;
+void * operator delete[](void *, size_t) noexcept;
+```
+
+重载的例子：
+
+```cpp
+class Foo
+{
+public:
+    int _id;
+    long _data;
+    string _str;
+public:
+    Foo() :_id(0) { cout << "default ctor.this=" << this << " id=" << _id << endl; }
+    Foo(int i) :_id(i) { cout << "ctor.this=" << this << " id=" << _id << endl; }
+    ~Foo() { cout << "dtor.this=" << this << " id=" << _id << endl; }
+    static void* operator new(size_t size);
+    static void operator delete(void* pdead, size_t size);
+    static void* operator new[](size_t size);
+    static void operator delete[](void* pdead, size_t size);
+
+    static void* operator new(size_t size, const std::nothrow_t& nothrow_value);
+    static void operator delete(void* pdead, const std::nothrow_t& nothrow_value);
+};
+
+void* Foo::operator new(size_t size)
+{
+    Foo* p = (Foo*)malloc(size);
+    cout << "调用了Foo::operator new" << endl;
+    return p;
+}
+
+void Foo::operator delete(void* pdead, size_t size)
+{
+    cout << "调用了Foo::operator delete" << endl;
+    free(pdead);
+}
+
+void* Foo::operator new[](size_t size)
+{
+    Foo* p = (Foo*)malloc(size);
+    cout << "调用了Foo::operator new[]" << endl;
+    return p;
+}
+
+void Foo::operator delete[](void* pdead, size_t size)
+{
+    cout << "调用了Foo::operator delete[]" << endl;
+    free(pdead);
+}
+
+void* Foo::operator new(size_t size, const std::nothrow_t& nothrow_value)
+{
+    std::cout << "调用了Foo::operator new nothrow" << std::endl;
+    return malloc(size);
+}
+
+void Foo::operator delete(void* pdead, const std::nothrow_t& nothrow_value)
+{
+    std::cout << "调用了Foo::operator delete nothrow" << std::endl;
+    free(pdead);
+}
+
+int main()
+{
+    Foo* pf = new Foo(5);
+    Foo* pf1 = new Foo[3];
+    Foo* pf2 = new(std::nothrow) Foo;
+    Foo* pf3 = new(std::nothrow) Foo;
+    delete pf;
+    delete[] pf1;
+    delete pf2; 
+    Foo::operator delete(pf3, std::nothrow);
+
+    cout << "=======================" << endl;
+
+    Foo* pf4 = ::new Foo(5);
+    Foo* pf5 = ::new Foo[3];
+    ::delete pf4;
+    ::delete[] pf5;
+}
+
+// 输出
+调用了Foo::operator new
+ctor.this=00B00640 id=5
+调用了Foo::operator new[]
+default ctor.this=00AF5C3C id=0
+default ctor.this=00AF5C60 id=0
+default ctor.this=00AF5C84 id=0
+调用了Foo::operator new nothrow
+default ctor.this=00B00730 id=0
+调用了Foo::operator new nothrow
+default ctor.this=00B00550 id=0
+dtor.this=00B00640 id=5
+调用了Foo::operator delete
+dtor.this=00AF5C84 id=0
+dtor.this=00AF5C60 id=0
+dtor.this=00AF5C3C id=0
+调用了Foo::operator delete[]
+dtor.this=00B00730 id=0
+调用了Foo::operator delete
+调用了Foo::operator delete nothrow
+=======================
+ctor.this=00B00050 id=5
+default ctor.this=00AF5C3C id=0
+default ctor.this=00AF5C60 id=0
+default ctor.this=00AF5C84 id=0
+dtor.this=00B00050 id=5
+dtor.this=00AF5C84 id=0
+dtor.this=00AF5C60 id=0
+dtor.this=00AF5C3C id=0
+```
+
+> 有一点需要注意，operator delete的自定义参数重载并不能手动调用。即`delete(std::nothrow) pf3;`是错误的。并且第65行在释放`pf2`时调用的是`operator delete(void* pdead, size_t size);`而不是`operator delete(void* pdead, const std::nothrow_t& nothrow_value)`，并且如果删除了`operator delete(void* pdead, size_t size);`则后面的delete会报错，也就是说正常情况下delete不能调用`operator delete(void* pdead, const std::nothrow_t& nothrow_value)`，这个重载函数只在一种情况下被调用：当new关键字抛出异常时。这里并不是因为第二个参数是引用，必须赋值，因为改成按值传参也不行，具体原因不太清楚，但是如果将`operator delete(void* pdead, size_t size);`改成`operator delete(void* pdead, size_t& size);`后面的delete也会报错。
+>
+> （**这里留一个疑问** ❓ ）
+
+对于new/delete运算符重载有如下规则：
+
+* new和delete运算符重载必须成对出现
+* **new运算符的第一个参数必须是size\_t类型的，也就是指定分配内存的size尺寸；delete运算符的第一个参数必须是要销毁释放的内存对象。其他参数可以任意定义。**
+* 系统默认实现了new/delete、new\[\]/delete\[\]、 placement new 5个运算符（expression）。它们都有特定的意义。使用它们在底层调用对应的函数，可以是系统提供的，也可能是被重写或重载的。
+* 你可以重写默认实现的全局运算符，比如你想对内存的分配策略进行自定义管理或者你想监测堆内存的分配情况或者你想做堆内存的内存泄露监控等。**但是你重写的全局运算符一定要满足默认的规则定义。也可以重载全局运算符，但也必须符合默认的规则，即第一个参数不能变。**
+* 如果你想对某个类的堆内存分配的对象做特殊处理，那么你可以重载这个类的new/delete运算符。当重载这两个运算符时虽然没有带static属性，但是不管如何对类的new/delete运算符的重载总是被认为是静态成员函数。
+* **当delete运算符的参数&gt;=2个时，就需要自己负责对象析构函数的调用，并且以运算符函数的形式来调用delete运算符。**
+* 这里的重载遵循作用域覆盖原则，即在里向外寻找operator new的重载时，只要找到operator new\(\)函数就不再向外查找，如果参数符合则通过，如果参数不符合则报错，而不管全局是否还有相匹配的函数原型。比如如果这里只将Foo中`operator new(size_t, const std::nothrow_t&)`删除掉，就会在61行报错：
+
+```cpp
+error C2660: “Foo::operator new”: 函数不接受 2 个参数。
+```
+
+### 🖋 2.6、placement new & placement delete 运算符
 
 new 负责在堆（heap）中找到一个足够满足要求的内存块。new 操作符还有另一种变体，称为定位（placement）new 操作符，它能够让你指定要使用的位置。程序员可能使用这种特性来设置其内存管理规程或处理需要通过特定地址进行访问的硬件。
 
@@ -209,9 +523,22 @@ int main()
 }
 ```
 
-* 定位 new 运算符允许我们将 object 或基本类型的数据创建在已申请的内存中，不管它是否已经被使用，而且可以看到新值直接覆盖在旧值上面。
-* 并且 定位new 运算符没有对应的 定位 delete ，因为 定位 new 运算符 没有申请内存空间。关于是否使用 delete 来释放内存。本例中 buffer 指定的内存是静态内存，而 delete 只能用于指向常规 new 操作符分配的内存，也就是说 buffer 数组位于 delete 管辖区之外。此时，使用 delete 将引发运行阶段错误。但是，如果 buffer 是使用常规 new 操作符创建的，便可以使用常规 new 操作符来释放整个内存块。
-* 定位 new 实际上底层是调用了 `operator new(size_t, void*)`，我们也可以自定义 placement new 比如：`operator new(size_t, long)` 等。
+* `placement new expression` 和 `placement operator new()` 通常被笼统的称作`placement new`。但两者概念不同： `placement operator new()`是标准`operator new()`的一个重载函数。 `placement new expression`，它属于c++语法，实际上底层是调用了`placement operator new()`，即`operator new(size_t, void*)`，`placement delete`表示`placement operator delete()`函数，因为根本不存在`placement delete expression`。即定位 new 运算符没有对应的 定位 delete ，因为 定位 new 运算符 没有申请内存空间。函数底层如下：
+
+```cpp
+#ifndef __PLACEMENT_NEW_INLINE
+#define __PLACEMENT_NEW_INLINE
+inline void *__cdecl operator new(size_t, void *_P)
+        {return (_P); }
+#if     _MSC_VER >= 1200
+inline void __cdecl operator delete(void *, void *)
+    {return; }
+#endif
+#endif
+```
+
+* 定位\(placement\) new 运算符允许我们将 object 或基本类型的数据创建在已申请的内存中，不管它是否已经被使用，而且可以看到新值直接覆盖在旧值上面。
+* 全局的定位 new 不能更改，但可以重载，其实参数**&gt;=2**的`operator new`重载函数都可以叫做`placement new` 函数，要求是`placement operator new()`的第一个函数参数必须是`std::size_t`，表示要申请的内存的大小；`placement delete()`的第一个函数参数必须是`void*`， 表示要释放的对象指针。`placement operator new()`都可以用`placement delete expression`来调用。`nothrow`版本的`new` 和 `delete`，也是c++标准，它们就是通过`placement new`和`placement delete`实现的。
 
 ```cpp
 char* buf1 = new char[40];
@@ -230,12 +557,12 @@ classname* p = new(buf2) classname; // 构造函数不需要传参
 // ====== 底层调用 ======
 void* tmp = operator new(sizeof(classname), buf); // 调用 operator new(size_t size, void* start); 在给定的地址上创建对象
 classname* p = static_cast<classname*>(tmp); // 进行强制类型转换
-p->classname::classname(); // 调用构造函数，如果是申请object数组空间对调用多次
+p->classname::classname(); // 调用构造函数，如果是申请object数组空间就调用多次
 // ======================
 
 classname* p = new(buf2) classname(type...); // 构造函数需要传参
 
-// 自定义 placement new
+// 自定义 placement new ，一般没啥意义
 long s = 10;
 classname* c = new(s) classname;
 // ====== 底层调用 ======
@@ -245,30 +572,69 @@ c->classname::classname(); // 调用构造函数，如果是申请object数组�
 // ======================
 ```
 
-### 🖋 2.2、new的底层
-
-**`operator new(size_t)`** 是系统提供的全局函数，其 **底层是由 `malloc` 实现的：**
+* 关于是否使用 delete 来释放内存。上面的例子中 buffer 指定的内存是静态内存，而 delete 只能用于指向常规 new 操作符分配的内存，也就是说 buffer 数组位于 delete 管辖区之外。此时，使用 delete 将引发运行阶段错误。但是，如果 buffer 是使用常规 new 操作符创建的，便可以使用常规 delete 操作符来释放整个内存块：
 
 ```cpp
-/*
-operator new：该函数实际通过malloc来申请空间，当malloc申请空间成功时直接返回；申请空间失败，尝试
-执行空 间不足应对措施，如果改应对措施用户设置了，则继续申请，否则抛异常。
-*/
-void *__CRTDECL operator new(size_t size) _THROW1(_STD bad_alloc)
+char* buf = new char[512];
+// 定位new 在指定位置创建一个 object
+classname *obj = new(buf) classname;
+// 程序员需要显式调用类的析构函数
+obj->~classname();
+delete[] buf;
+```
+
+### 🖋 2.7、对象的自动删除技术
+
+一般来说系统对new/delete的默认实现就能满足我们的需求，我们不需要再去重载这两个运算符。那为什么C++还提供对这两个运算符的重载支持呢？答案还是在运算符本身具有的缺陷所致。我们知道用new关键字来创建堆内存对象是分为了2步：1.是堆内存分配，2.是对象构造函数的调用。而这两步中的任何一步都有可能会产生异常。如果说是在第一步出现了问题导致内存分配失败则不会调用构造函数，这是没有问题的。如果说是在第二步构造函数执行过程中出现了异常而导致无法正常构造完成，那么就应该要将第一步中所分配的堆内存进行销毁。**C++中规定如果一个对象无法完全构造那么这个对象将是一个无效对象，也不会调用析构函数。为了保证对象的完整性，当通过new分配的堆内存对象在构造函数执行过程中出现异常时就会停止构造函数的执行并且自动调用对应的delete运算符来对已经分配的堆内存执行销毁处理，这就是所谓的对象的自动删除技术**。正是因为有了对象的自动删除技术才能解决对象构造不完整时会造成内存泄露的问题。
+
+**全局delete运算符函数所支持的对象的自动删除技术虽然能解决对象本身的内存泄露问题，但是却不能解决对象构造函数内部的数据成员的内存分配泄露问题，此时我们需要将析构函数中需要释放的数据成员的内存在重载的operator delete函数中进行释放。**
+
+### 🖋 **2.8、**operator new运用技巧
+
+#### \*\*\*\*💎 2.8.**1、operator new重载运用于调试：**
+
+operator new的重载是可以有自定义参数的，那么我们如何利用自定义参数获取更多的信息呢？这里一个很有用的做法就是给operator new添加两个参数：`char* file, int line`，这两个参数记录new关键字的位置，然后再在new时将文件名和行号传入，这样我们就能在分配内存失败时给出提示：输出文件名和行号。  
+  
+那么如何获取当前语句所在文件名和行号呢，windows提供两个宏：`__FILE__`和`__LINE__`。利用它们可以直接获取到文件名和行号，也就是 `new(__FILE__, __LINE__)` 由于这些都是不变的，因此可以再定义一个宏：`#define new new(__FILE__, __LINE__)`。这样我们就只需要定义这个宏，然后重载operator new即可。源代码如下，这里只是简单输出new的文件名和行号：
+
+```cpp
+class A
 {
-    // try to allocate size bytes
-    void *p;
-    while ((p = malloc(size)) == 0)
-        if (_callnewh(size) == 0)
-        {
-            // report no memory
-            // 如果申请内存失败了，这里会抛出bad_alloc 类型异常
-            static const std::bad_alloc nomem;
-            _RAISE(nomem);
-        }
-    return (p);
+public:
+    A(){
+        std::cout << "call A constructor" << std::endl;
+    }
+    ~A(){
+        std::cout << "call A destructor" << std::endl;
+    }
+
+    void* operator new(size_t size, const char* file, int line)
+    {
+        std::cout << "call A::operator new on file:" << file << "  line:" << line << std::endl;
+        return malloc(size);
+        return NULL;
+    }
+};
+
+#define new new(__FILE__, __LINE__)
+
+int main()
+{
+    A* p1 = new A;
+    delete p1;
+    return 0;
 }
 ```
+
+注意：需要将类的声明实现与new的使用隔离开来。并且将类头文件放在宏定义之前。否则在类A中的operator new重载中的new会被宏替换，整个函数就变成了：`void* operator new(__FILE__, __LINE__)(size_t size, char* file, int line)`，编译器自然会报错。（VS C++下并没有报错）
+
+#### \*\*\*\*💎 2.8.**2、内存池优化**
+
+operator new的另一个大用处就是内存池优化，内存池的一个常见策略就是一次性分配一块大的内存作为内存池\(buffer或pool\)，然后重复利用该内存块，每次分配都从内存池中取出，释放则将内存块放回内存池。在我们客户端调用的是new关键字，我们可以改写operator new函数，让它从内存池中取出\(当内存池不够时，再从系统堆中一次性分配一块大的\)，至于构造和析构则在取出的内存上进行，然后再重载operator delete，它将内存块放回内存池。
+
+#### \*\*\*\*💎 2.8.**3、`STL`中的new**
+
+在`SGI STL`源码中，`defalloc.h`和`stl_construct.h`中提供了最简单的空间配置器\(`allocator`\)封装。它将对象的空间分配和构造分离开来，虽然在`defalloc.h`中仅仅是对`::operator new`和`::operator delete`的一层封装，但是它仍然给`STL`容器提供了更加灵活的接口。`SGI STL`真正使用的并不是`defalloc.h`中的分配器，而是`stl_alloc.h`中的`SGI`精心打造的"双层级配置器"，它将内存池技术演绎得淋漓尽致，值得细细琢磨。顺便提一下，在`stl_alloc.h`中并没有使用`::operator new/delete` 而直接使用`malloc`和`free`。具体缘由均可参见《`STL`源码剖析》。
 
 ## ✏ 3、`new`和`malloc`的区别
 
@@ -332,20 +698,24 @@ operator new 的实现可以基于`malloc`，而`malloc`的实现不可以去调
 `opeartor new /operator delete`可以被重载。标准库是定义了operator new函数和operator delete函数的8个重载版本：
 
 ```cpp
-//这些版本可能抛出异常
+// 这些版本可能抛出异常
 void * operator new(size_t);
 void * operator new[](size_t);
 void * operator delete(void *) noexcept;
 void * operator delete[](void *) noexcept;
  
-//这些版本承诺不抛出异常
-void * operator new(size_t , nothrow_t&) noexcept;
-void * operator new[](size_t, nothrow_t&) noexcept;
-void * operator delete(void *, nothrow_t&) noexcept;
-void * operator delete[](void *0, nothrow_t&) noexcept
+// 这些版本承诺不抛出异常
+void * operator new(size_t, nothrow_t const&) noexcept;
+void * operator new[](size_t, nothrow_t const&) noexcept;
+void * operator delete(void *, nothrow_t const&) noexcept;
+void * operator delete[](void *, nothrow_t const&) noexcept
+
+// VS C++下还有两个，GCC下不确定
+void * operator delete(void *, size_t) noexcept;
+void * operator delete[](void *, size_t) noexcept;
 ```
 
-我们可以自定义上面函数版本中的任意一个，前提是自定义版本必须位于全局作用域或者类作用域中。总之，我们有足够的自由去重载operator new /operator delete ，以决定我们的new与delete如何为对象分配内存，如何回收对象。
+我们可以重载上面函数版本中的任意一个，前提是自定义版本必须位于全局作用域或者类作用域中。总之，我们有足够的自由去重载operator new /operator delete ，以决定我们的new与delete如何为对象分配内存，如何回收对象。
 
 而`malloc/free`并不允许重载。
 
