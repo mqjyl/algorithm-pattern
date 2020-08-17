@@ -26,6 +26,11 @@ description: 数据结构和算法基础知识学习和总结。
 * [c语言](c-cpp/c/)
 * [C++高级特性](c-cpp/advanced-c++/)
 * [STL基础](c-cpp/stl-basics/)
+* [C++标准库](c-cpp/cpp-standard-library/)
+* [STL深入源码](c-cpp/stl-source-analysis.md)
+* [第三方库](c-cpp/third-party-libraries/)
+* [QT Widgets](c-cpp/qt-widgets.md)
+* [QT Quick与QML](c-cpp/qt-quick-qml.md)
 
 ### 数据结构 🏀 
 
@@ -45,19 +50,22 @@ description: 数据结构和算法基础知识学习和总结。
 * [排序算法](algorithm/sort-algorithm.md)
 * [查找算法](algorithm/search-algorithm.md)
 * [并查集](algorithm/union-find.md)
-* [表达式求值](jing-dian-suan-fa-wen-ti/expression-evaluation.md)
+* [递归算法](algorithm/recursive-algorithm.md)
 * [主定理](algorithm/master-theorem.md)
 
 ### 算法设计思想 🥎 
 
-* [递归算法](algorithm/recursive-algorithm.md)
 * [滑动窗口思想](algorithm-thinking/sliding-window.md)
-* [博弈论]()
+* [BFS/DFS](algorithm-thinking/bfs-dfs.md)
 * [回溯法](algorithm-thinking/backtracking-algorithm.md)
 * [贪心算法](algorithm-thinking/greedy-algorithm.md)
 * [分治法](algorithm-thinking/divide-and-conquer-algorithm.md)
 * [动态规划](algorithm-thinking/dynamic-programming-algorithm.md)
 * [分支限界算法](algorithm-thinking/branch-and-bound.md)
+
+### LeetCode系列 🏈 
+
+* [表达式求值](jing-dian-suan-fa-wen-ti/expression-evaluation.md)
 
 ## 面试资源
 
@@ -72,6 +80,7 @@ description: 数据结构和算法基础知识学习和总结。
 2. 牛客网：[https://www.nowcoder.com/activity/oj](https://www.nowcoder.com/activity/oj)
 3. 洛谷：[https://www.luogu.com.cn/](https://www.luogu.com.cn/)
 4. Codewars：[https://www.codewars.com/](https://www.codewars.com/)
+5. Hihocoder：[http://hihocoder.com/problemset](http://hihocoder.com/problemset)
 
 ### 博客 🍍 
 
