@@ -130,8 +130,61 @@ Dijkstra单源最短路径算法，即计算从起点出发到每个点的最短
 3. 在集合 Q 中再次选择一个离源点 s 最近的顶点 v 加入到 P 中。并依据 v 为新的中心点，对每一条边进行松弛操作\(即 $$dst[j]=min\{dst[j], dst[v]+edge[v][j]\}$$ \)，并令 $$book[v]=1$$ ；
 4. 重复3，直至集合 Q 为空。（[题目链接](http://hihocoder.com/problemset/problem/1081#)）
 
-```text
+```cpp
+#include <vector>
+#include <iostream>
+using namespace std;
 
+const int MAX_LEN = 10001;
+
+// 最短路径长度 Dijkstra
+void Dijkstra(int N, int S, vector<int>& dst, vector<vector<int>>& graph){
+    vector<bool> book(N + 1, false);
+    book[S] = true;
+    for(int i = 1; i <= N; ++i)
+        dst[i] = graph[S][i];
+    dst[S] = 0;
+    // 迭代 N - 1 次
+    for(int i = 1; i < N ; ++i){
+        int u = S;
+        int tmp = MAX_LEN;
+        // 找 u
+        for(int j = 1; j <= N; ++j){
+            if(!book[j] && tmp > dst[j]){
+                tmp = dst[u = j];
+            }
+        }
+        if(tmp == MAX_LEN)
+			      break;	
+        // 松弛边
+        book[u] = true;
+        for(int j = 1; j <= N; ++j){
+            if(!book[j] && graph[u][j] != MAX_LEN){
+                int d = dst[u] + graph[u][j];
+                if(d < dst[j])
+                    dst[j] = d;
+            }
+        }
+    }
+}
+
+int main(void){
+    int N = 0, M = 0, S = 0, T = 0;
+    while(cin >> N >> M >> S >> T){
+        vector<int> dst(N + 1, MAX_LEN);
+        vector<vector<int>> graph(N + 1, vector<int>(N + 1, MAX_LEN));
+        int u, v, len;
+        while(M-- > 0){
+            cin >> u >> v >> len;
+            if(len < graph[u][v]){
+                graph[u][v] = graph[v][u] = len;
+            }
+        }
+        Dijkstra(N, S, dst, graph);
+        cout << dst[T] << endl;
+    }
+    return 0;
+}
 ```
 
 ### 🖋 2、`SPFA`（bellman-ford）
