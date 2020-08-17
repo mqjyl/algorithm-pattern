@@ -69,5 +69,7 @@ int BFS(Node start, Node target) {
 
 ### 题型
 
+#### \*\*\*\*[**Open the Lock**](https://leetcode-cn.com/problems/open-the-lock/)\*\*\*\*
+
 
 
