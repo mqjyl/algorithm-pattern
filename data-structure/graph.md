@@ -73,7 +73,7 @@
 
 边`e1`和`e2`等价，若`e1=e2`或者有一条环路既包含`e1`又包含`e2`，则称边`e1`和`e2`是等价的。
 
-假设 $$V_i$$ 是 $$E_i$$ 中各边都彼此连接的顶点集\(或者利用边的等价性来划分等价类\)，则每个图 $$G_i=(V_i, E_i)$$ 叫做 G 的一个`双连通分量`。
+假设 $$V_i$$ 是 $$E_i$$ 中各边都彼此连接的顶点集\(或者利用边的等价性来划分等价类\)，则每个图 $$G_i=(V_i, E_i)$$ 叫做 G 的一个**双连通分量**。
 
 * 双连通分量是双连通的；
 * 对所有的 $$i,j$$ \(不相等\)， $$V_i$$ 和 $$V_j$$ 最多一起包含一个顶点；
@@ -98,15 +98,15 @@
 
 ### 🖋 2、有向图的强连通分量
 
-有向图的一个强连通分量是该图中顶点的一个最大子集：其中的任意两个顶点 x 和 y，存在 x 到 y 的路径，也存在 y 到 x 的路径。令 $$G=(V,E)$$ 是一个有向图，将V分割成若干等价类 $$V_i(l<=i<=r)$$ ，使得 $$V_i$$ 中的 v 和 w 等价的充要条件是有一条路径从 v 到 w，也存在一条路径从 w 到 v。令 $$E_i(l\le i\le r)$$ 是头、尾均在 $$V_i$$ 的边集，则 $$G_i=(V_i, E_i)$$ 是 G 的`强连通分量`，简称强分量。把只具有一个强连通分量的有向图称为`强连通图`。
+有向图的一个强连通分量是该图中顶点的一个最大子集：其中的任意两个顶点 x 和 y，存在 x 到 y 的路径，也存在 y 到 x 的路径。令 $$G=(V,E)$$ 是一个有向图，将V分割成若干等价类 $$V_i(l<=i<=r)$$ ，使得 $$V_i$$ 中的 v 和 w 等价的充要条件是有一条路径从 v 到 w，也存在一条路径从 w 到 v。令 $$E_i(l\le i\le r)$$ 是头、尾均在 $$V_i$$ 的边集，则 $$G_i=(V_i, E_i)$$ 是 G 的**强连通分量**，简称强分量。把只具有一个强连通分量的有向图称为**强连通图**。
 
-连接两个强分量的边叫做`分支横边`。通过构造G的`归约图` ，可以展示各强分量间的联系。归约图中每个强分量用一个顶点表示，显然，归约图中不存在环路。
+连接两个强分量的边叫做`分支横边`。通过构造G的**归约图** ，可以展示各强分量间的联系。归约图中每个强分量用一个顶点表示，显然，归约图中不存在环路。
 
 ![image\_1be5jh3nv9jvhddi7ddo11v3t9.png-16.1kB](http://static.zybuluo.com/va-chester/rjc2kop20xg77izsd3elgvnf/image_1be5jh3nv9jvhddi7ddo11v3t9.png)
 
 `Kosaraju`算法步骤：
 
-* 对有向图 G 进行深度优先搜索并且对顶点进行`逆编号`\(即记录它们的离开时间\)。
+* 对有向图 G 进行深度优先搜索并且对顶点进行**逆编号**\(即记录它们的离开时间\)。
 * 将 G 中的每条边取反方向，构造一个新有向图 Gr。
 * 根据前面的编号，从编号最大的顶点开始对 G，进行一次深度优先搜索，凡是能到达的所有顶点，都形成一棵深度优先搜索树；若本次搜索没有到达所有顶点，从图中删除这些顶点及相连的边，继续重复该动作。
 * 在 Gr 的深度优先森林中，每棵树对应 G 的一个强连通分量。
@@ -203,8 +203,8 @@ bellman-ford算法的基本思想是，对图中除了源顶点 s 外的任意�
 
 最小生成树有两个经典算法：
 
-* Prim 算法
-* Kruskal 算法
+* `Prim` 算法
+* `Kruskal` 算法
 
 如果一幅图是非连通的，则只能用这个算法计算所有连通分量的最小生成树，合并在一起叫做**最小生成森林**。还有几点要注意的：
 
@@ -226,6 +226,64 @@ Prim算法能够得到任意加权无向图的最小生成树。每一步都会�
 Lazy实现：
 
 ![&#x8FD9;&#x91CC;&#x5199;&#x56FE;&#x7247;&#x63CF;&#x8FF0;](https://algs4.cs.princeton.edu/43mst/images/prim-lazy.png)
+
+* 首先初始化权重矩阵；
+* 初始化起始点到可达顶点的距离数组，并标记起始点已访问，找出起始点到可达结点的代价最小的边，将这个边加入 sum，这条边对应一个可达顶点，设置这个顶点已访问`visited[pos] = true`。
+* 再到 graph 中去找该顶点可达的顶点（未被访问且当前距离大于新的距离；`!visited[i] && distance[i] > G[pos][i]`），那么更新这个当前距离（因为要取代价小的边），否则不更新；
+* 由于除去起始点本身，所以循环 `N - 1` 次。（[题目链接](http://hihocoder.com/problemset/problem/1097?sid=1402285)）
+
+```cpp
+#include <iostream>
+#include <vector>
+using namespace std;
+
+const int MAX_LEN = 100001;
+
+int Prim(int N, std::vector<int>& dst, std::vector<std::vector<int>>& graph){
+    vector<bool> visited(N + 1, false);
+    visited[1] = true;
+    for(int i = 1; i <= N; ++i) {
+        dst[i] = graph[1][i];
+    }
+    int result = 0;
+    for(int i = 1; i < N; ++i){
+        int tmp = MAX_LEN;
+        int u = 1;
+        for(int j = 1; j <= N; ++j){
+            if(!visited[j] && tmp > dst[j]){
+                tmp = dst[u = j];
+            }
+        }
+        if(tmp == MAX_LEN)
+            break;
+        visited[u] = true;
+        result += tmp;
+        for(int j = 1; j <= N; ++j){
+            if(!visited[j] && dst[j] > graph[u][j]){
+                dst[j] = graph[u][j];
+            }
+        }
+    }
+    return result;
+}
+
+int main(){
+    int N = 0;
+    while(cin >> N){
+        int val = 0;
+        vector<vector<int>> graph(N + 1, vector<int>(N + 1, MAX_LEN));
+        for(int i = 1; i <= N; ++i){
+            for(int j = 1; j <= N; ++j){
+                cin >> val;
+                graph[i][j] = val;
+            }
+        }
+        vector<int> dst(N + 1, MAX_LEN);
+        cout << Prim(N, dst, graph) << endl;
+    }
+    return 0;
+}
+```
 
 Eager实现：
 
