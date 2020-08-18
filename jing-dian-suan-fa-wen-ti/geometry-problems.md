@@ -81,8 +81,6 @@ int main()
 
 ### \*\*\*\*[**Maximal Rectangle**](https://leetcode-cn.com/problems/maximal-rectangle/)\*\*\*\*
 
-### [接雨水系列](../leetcode-xi-lie/trapping-rain-water.md)
-
 
 
 ### \*\*\*\*

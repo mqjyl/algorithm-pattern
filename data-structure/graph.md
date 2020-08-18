@@ -295,6 +295,188 @@ Eager实现：
 
 ![&#x8FD9;&#x91CC;&#x5199;&#x56FE;&#x7247;&#x63CF;&#x8FF0;](https://algs4.cs.princeton.edu/43mst/images/kruskal.png)
 
+（[题目链接](http://hihocoder.com/problemset/problem/1098?sid=1584302)）
+
+{% tabs %}
+{% tab title="c++14" %}
+```cpp
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <functional>
+#include <memory>
+
+using namespace std;
+
+struct Edge{
+    int st;
+    int ed;
+    int cost;
+    Edge(int s, int e, int c) : st(s), ed(e), cost(c) {}
+};
+
+int Kruscal(std::vector<int>& trees, std::vector<Edge>& graph){
+    int result = 0;
+    auto recursiveFunc = 
+                  std::make_shared<std::unique_ptr< std::function<int(int)> >>();
+    *recursiveFunc = std::make_unique<std::function<int(int)>>(
+        [=, &trees] (int a){
+            return a == trees[a] ? a : (trees[a] = (**recursiveFunc)(trees[a]));
+        }
+    );
+    for(auto edge : graph){
+        if((**recursiveFunc)(edge.st) != (**recursiveFunc)(edge.ed)){
+            result += edge.cost;
+            trees[(**recursiveFunc)(edge.st)] = (**recursiveFunc)(edge.ed);
+        }
+    }
+    return result;
+}
+
+int main(){
+    int N = 0, M = 0;
+    int N1, N2, V;
+    while(cin >> N >> M){
+        vector<Edge> graph;
+        while(M-- > 0){
+            cin >> N1 >> N2 >> V;
+            Edge edge(N1, N2, V);
+            graph.push_back(edge);
+        }
+        // 排序
+        sort(graph.begin(), graph.end(), 
+             [](const Edge& a, const Edge& b)->bool {return a.cost < b.cost; });
+        vector<int> root(N + 1);
+        for(int i = 1; i <= N; ++i){
+            root[i] = i;
+        }
+        cout << Kruscal(root, graph) << endl;
+    }
+    return 0;
+}
+```
+{% endtab %}
+
+{% tab title="c++11" %}
+```cpp
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <functional>
+#include <memory>
+
+using namespace std;
+
+struct Edge{
+    int st;
+    int ed;
+    int cost;
+    Edge(int s, int e, int c) : st(s), ed(e), cost(c) {}
+};
+
+int Kruscal(std::vector<int>& trees, std::vector<Edge>& graph){
+    int result = 0;
+    auto recursiveFunc = std::shared_ptr<std::unique_ptr< std::function<int(int)> >>
+                         (new std::unique_ptr< std::function<int(int)> >());
+    *recursiveFunc = std::unique_ptr<std::function<int(int)>>( 
+        new std::function<int(int)>(
+            [=, &trees] (int a){
+                return a == trees[a] ? a : (trees[a] = (**recursiveFunc)(trees[a]));
+            }
+        )
+    );
+    for(auto edge : graph){
+        if((**recursiveFunc)(edge.st) != (**recursiveFunc)(edge.ed)){
+            result += edge.cost;
+            trees[(**recursiveFunc)(edge.st)] = (**recursiveFunc)(edge.ed);
+        }
+    }
+    return result;
+}
+
+int main(){
+    int N = 0, M = 0;
+    int N1, N2, V;
+    while(cin >> N >> M){
+        vector<Edge> graph;
+        while(M-- > 0){
+            cin >> N1 >> N2 >> V;
+            Edge edge(N1, N2, V);
+            graph.push_back(edge);
+        }
+        // 排序
+        sort(graph.begin(), graph.end(), 
+             [](const Edge& a, const Edge& b)->bool {return a.cost < b.cost; });
+        vector<int> root(N + 1);
+        for(int i = 1; i <= N; ++i){
+            root[i] = i;
+        }
+        cout << Kruscal(root, graph) << endl;
+    }
+    return 0;
+}
+```
+{% endtab %}
+
+{% tab title="常规操作" %}
+```cpp
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+struct Edge{
+    int st;
+    int ed;
+    int cost;
+    Edge(int s, int e, int c) : st(s), ed(e), cost(c) {}
+};
+
+int Find(std::vector<int>& pre, int x){
+    return x == pre[x] ? x : pre[x] = Find(pre, pre[x]);
+}
+
+void Union(std::vector<int>& pre, int x,int y){
+    pre[Find(pre, x)] = Find(pre, y);
+}
+
+int Kruscal(std::vector<int>& trees, std::vector<Edge>& graph){
+    int result = 0;
+    for(auto edge : graph){
+        if(Find(trees, edge.st) != Find(trees, edge.ed)){
+            result += edge.cost;
+            Union(trees, edge.st, edge.ed);
+        }
+    }
+    return result;
+}
+
+int main(){
+    int N = 0, M = 0;
+    int N1, N2, V;
+    while(cin >> N >> M){
+        vector<Edge> graph;
+        while(M-- > 0){
+            cin >> N1 >> N2 >> V;
+            Edge edge(N1, N2, V);
+            graph.push_back(edge);
+        }
+        // 排序
+        sort(graph.begin(), graph.end(), 
+             [](const Edge& a, const Edge& b)->bool {return a.cost < b.cost; });
+        vector<int> root(N + 1);
+        for(int i = 1; i <= N; ++i){
+            root[i] = i;
+        }
+        cout << Kruscal(root, graph) << endl;
+    }
+    return 0;
+}
+```
+{% endtab %}
+{% endtabs %}
+
 ## ✏ 六、例题
 
 ### [Clone Graph](http://blog.csdn.net/linhuanmars/article/details/22715747)
