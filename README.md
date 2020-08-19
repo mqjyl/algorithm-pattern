@@ -27,7 +27,7 @@ description: 数据结构和算法基础知识学习和总结。
 * [C++高级特性](c-cpp/advanced-c++/)
 * [STL基础](c-cpp/stl-basics/)
 * [C++标准库](c-cpp/cpp-standard-library/)
-* [STL深入源码](c-cpp/stl-source-analysis.md)
+* [STL深入源码](c-cpp/stl-source-analysis/)
 * [第三方库](c-cpp/third-party-libraries/)
 * [QT Widgets](c-cpp/qt-widgets.md)
 * [QT Quick与QML](c-cpp/qt-quick-qml.md)
