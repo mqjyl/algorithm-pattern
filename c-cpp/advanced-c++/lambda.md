@@ -342,7 +342,19 @@ const auto& f = [](const int& n) {
 };
 ```
 
-发现编译无法通过。因为
+发现编译无法通过。
 
+### 🖋 2.1、使用std::function
 
+std::function可以把lambda包装起来，相当于赋予了其一个函数名，在通过引用捕获并实现递归调用，实现如下：
+
+```cpp
+const auto& sum1 = [](const int& n) {
+	std::function<int(const int&)>s;
+	s = [&](const int& n) {
+		return n == 1 ? 1 : n + s(n - 1);
+	};
+	return s(n);
+};
+```
 
