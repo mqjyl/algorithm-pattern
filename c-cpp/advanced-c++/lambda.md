@@ -349,12 +349,88 @@ const auto& f = [](const int& n) {
 std::function可以把lambda包装起来，相当于赋予了其一个函数名，在通过引用捕获并实现递归调用，实现如下：
 
 ```cpp
-const auto& sum1 = [](const int& n) {
-	std::function<int(const int&)>s;
-	s = [&](const int& n) {
-		return n == 1 ? 1 : n + s(n - 1);
-	};
-	return s(n);
+const auto& sum = [](const int& n) {
+		std::function<int(const int&)> s;
+		s = [&](const int& n) {
+			  return n == 1 ? 1 : n + s(n - 1);
+		};
+		return s(n);
 };
+
+std::cout << sum(100);
+```
+
+### 🖋 2.2、将lambda作为参数
+
+```cpp
+const auto& sum = [](const int& n) {
+		const auto& s = [&](auto&& self, const int& x) -> int {
+			  return x == 1 ? 1 : x + self(self, x - 1);
+		};
+		return s(s, n);
+};
+
+std::cout << sum(100);
+```
+
+### 🖋 2.3、函数指针
+
+{% tabs %}
+{% tab title="C++14" %}
+```cpp
+auto sum = std::make_shared<std::unique_ptr< std::function<int(int)> >>();
+*sum = std::make_unique<std::function<int(int)>>(
+    [=](int n) {
+        return n == 1 ? 1 : n + (**sum)(n - 1);
+    }
+);
+
+std::cout << (**sum)(100);
+```
+{% endtab %}
+
+{% tab title="C++11" %}
+```cpp
+auto sum = std::shared_ptr<std::unique_ptr< std::function<int(int)> >>
+    (new std::unique_ptr< std::function<int(int)> >());
+*sum = std::unique_ptr<std::function<int(int)>>(
+    new std::function<int(int)>(
+        [=](int n) {
+            return n == 1 ? 1 : n + (**sum)(n - 1);
+        }
+    )
+);
+
+std::cout << (**sum)(100);
+```
+{% endtab %}
+{% endtabs %}
+
+### 🖋 2.4、使用Y组合子
+
+构造一个Y组合子如下：
+
+```cpp
+const auto& y = [](const auto& f) {
+	  return [&](const auto& x) {
+		    return x(x);
+	  }([&](const auto& x) -> std::function<int(int)> {
+		    return f([&](const int& n) {
+			      return x(x)(n);
+		    });
+	  });
+};
+```
+
+再实现一个求和函数的高阶函数，然后连接即可：
+
+```cpp
+const auto& sum = [](const auto& f) {
+		return [=](const int& n) {
+			  return n == 1 ? 1 : n + f(n - 1);
+		};
+};
+
+std::cout << y(sum)(100);
 ```
 
