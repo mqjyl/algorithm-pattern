@@ -11,6 +11,7 @@
   * [C标准库之string](c-cpp/c/clib-string.md)
   * [C标准库之errno](c-cpp/c/clib-errno.md)
   * [C标准库之stdarg](c-cpp/c/clib-stdarg.md)
+  * [C标准库之regex](c-cpp/c/clib-regex.md)
 * [C++基础语法](c-cpp/c++-syntax/README.md)
   * [自增\(++\) & 自减\(--\)](c-cpp/c++-syntax/auto-increment-attenuation.md)
   * [c语言到c++](c-cpp/c++-syntax/c-cpp.md)

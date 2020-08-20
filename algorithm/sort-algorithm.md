@@ -56,8 +56,14 @@ vector<int> bubbleSort(vector<int>& nums) {
 > * 重新排序数列，所有元素比基准值小的摆放在基准前面，所有元素比基准值大的摆在基准的后面（相同的数可以到任一边）。在这个分区退出之后，该基准就处于数列的中间位置。这个称为分区（partition）操作；
 > * 递归地（recursive）把小于基准值元素的子数列和大于基准值元素的子数列排序。
 
-> #### 递归实现：
+> #### 迭代实现：
+>
+> 递归转化为迭代算法的关键是传递每次划分的`start`和`stop`。很容易想到`stack`和`pair`。
 
+> 注意点：快排由于是原地交换所以没有合并过程 传入的索引是存在的索引（如：0、length-1 等），越界可能导致崩溃
+
+{% tabs %}
+{% tab title="递归" %}
 ```cpp
 int partition(std::vector<int>& nums, int start, int stop){
     int idx = start + 1;
@@ -86,16 +92,14 @@ vector<int> sortArray(vector<int>& nums) {
     return nums;
 }
 ```
+{% endtab %}
 
-> #### 迭代实现：
->
-> 递归转化为迭代算法的关键是传递每次划分的`start`和`stop`。很容易想到`stack`和`pair`。
-
-```cpp
-
+{% tab title="迭代" %}
 ```
 
-> 注意点：快排由于是原地交换所以没有合并过程 传入的索引是存在的索引（如：0、length-1 等），越界可能导致崩溃
+```
+{% endtab %}
+{% endtabs %}
 
 ### 🖋 3.3、简单插入排序
 
@@ -135,14 +139,29 @@ vector<int> insertionSort(vector<int>& nums){
 > 选择排序的思想其实和冒泡排序有点类似，都是在一次排序后把最小的元素放到最前面，或者将最大值放在最后面。但是过程不同，冒泡排序是通过相邻的比较和交换。而选择排序是通过对整体的选择，每一趟从前往后查找出无序区最小值，将最小值交换至无序区最前面的位置。
 
 ```cpp
-
+std::vector<int> selectionSort(std::vector<int>& nums){
+    int len = nums.size();
+    for(int i = 0;i < len; i++){
+        int tmp = nums[i];
+        int k = i;
+        for(int j = i + 1; j < len; ++j){
+            if(tmp > nums[j]){
+                tmp = nums[j];
+                k = j;
+            }
+        }
+        nums[k] = nums[i];
+        nums[i] = tmp;
+    }
+    return nums;
+}
 ```
 
 ### 🖋 3.6、堆排序
 
-> **堆是具有以下性质的完全二叉树：每个结点的值都大于或等于其左右孩子结点的值，称为大顶堆；或者每个结点的值都小于或等于其左右孩子结点的值，称为小顶堆。**
+> **堆**是具有以下性质的**完全二叉树**：每个结点的值都大于或等于其左右孩子结点的值，称为大顶堆；或者每个结点的值都小于或等于其左右孩子结点的值，称为小顶堆。 一般升序采用大顶堆，降序采用小顶堆。
 >
->  **堆排序的基本思想是：将待排序序列构造成一个大顶堆，此时，整个序列的最大值就是堆顶的根节点。将其与末尾元素进行交换，此时末尾就为最大值。然后将剩余n-1个元素重新构造成一个堆，这样会得到n个元素的次小值。如此反复执行，便能得到一个有序序列。**
+> 堆排序的基本思想是：将待排序序列构造成一个大顶堆，此时，整个序列的最大值就是堆顶的根节点。将其与末尾元素进行交换，此时末尾就为最大值。然后将剩余n-1个元素重新构造成一个堆，这样会得到n个元素的次小值。如此反复执行，便能得到一个有序序列。
 
 ```cpp
 
@@ -158,8 +177,8 @@ vector<int> insertionSort(vector<int>& nums){
 * **解决（Conquer）**：用合并排序法对两个子序列递归的排序。
 * **合并（Combine）**：合并两个已排序的子序列已得到排序结果。
 
-> #### 递归实现：
-
+{% tabs %}
+{% tab title="递归" %}
 ```cpp
 void merge_sort(std::vector<int>& nums, int start, int stop){
     if(stop >= nums.size() || stop - start <= 0)
@@ -193,12 +212,14 @@ vector<int> sortArray(vector<int>& nums) {
     return nums;
 }
 ```
+{% endtab %}
 
-> #### 迭代实现：
-
-```cpp
+{% tab title="迭代" %}
+```
 
 ```
+{% endtab %}
+{% endtabs %}
 
 ### 🖋 3.8、桶排序
 
