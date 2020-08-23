@@ -6,6 +6,7 @@
 
 * [C语言](c-cpp/c/README.md)
   * [指针 & 数组](c-cpp/c/pointer-array.md)
+  * [柔性数组](c-cpp/c/flexible-array.md)
   * [函数指针 & 回调函数](c-cpp/c/function-pointer-callback-function.md)
   * [C标准库之stdio](c-cpp/c/clib-stdio.md)
   * [C标准库之string](c-cpp/c/clib-string.md)
@@ -33,6 +34,7 @@
   * [C++的锁](c-cpp/c++-syntax/locks.md)
   * [并发与多线程](c-cpp/c++-syntax/concurrency-and-multithreading.md)
   * [异常](c-cpp/c++-syntax/exception.md)
+  * [再谈函数指针](c-cpp/c++-syntax/retalk-function-pointer.md)
 * [C++高级特性](c-cpp/advanced-c++/README.md)
   * [函数对象](c-cpp/advanced-c++/function-object.md)
   * [移动语义 & 完美转发](c-cpp/advanced-c++/mobile-semantic-perfect-forward.md)
