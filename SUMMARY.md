@@ -49,7 +49,7 @@
   * [deque/stack/queue](c-cpp/stl-basics/deque-stack-queue.md)
   * [set/map](c-cpp/stl-basics/set-map.md)
   * [unordered\_set/unordered\_map](c-cpp/stl-basics/unordered_set-unordered_map.md)
-  * [algorithm](c-cpp/stl-basics/algorithm.md)
+  * [algorithm\_1](c-cpp/stl-basics/algorithm-1.md)
   * [functional](c-cpp/stl-basics/functional.md)
   * [allocator](c-cpp/stl-basics/allocator.md)
 * [C++标准库](c-cpp/cpp-standard-library/README.md)

@@ -19,11 +19,51 @@ description: 二叉搜索树和平衡二叉搜索树的相关概念和算法实�
 
 > 思路 1：中序遍历，检查结果列表是否已经有序
 >
-> 思路 2：分治法，判断 **左 MAX &lt; 根 &lt; 右 MIN**
+> 思路 2：分治法，判断 **左 MAX &lt; 根 &lt; 右 MIN，**如果该二叉树的左子树不为空，则左子树上所有节点的值均小于它的根节点的值； 若它的右子树不空，则右子树上所有节点的值均大于它的根节点的值；它的左右子树也为二叉搜索树。
 
-```text
-
+{% tabs %}
+{% tab title="中序遍历" %}
+```cpp
+bool isValidBST(TreeNode* root){
+    if(root && !root->left && !root->right)
+        return true;
+    stack<TreeNode *> istack;
+    TreeNode *ptr = root;
+    long long last_val = (long long)INT_MIN - 1;  // 扩大int的范围，考虑边界值
+    while(ptr || !istack.empty()){
+        while(ptr) {
+            istack.push(ptr);
+            ptr = ptr->left;
+        }
+        TreeNode *curr_ptr = istack.top();
+        if(curr_ptr->val <= last_val)
+            return false;
+        last_val = curr_ptr->val;
+        istack.pop();
+        ptr = curr_ptr->right;
+    }
+    return true;
+}
 ```
+{% endtab %}
+
+{% tab title="递归" %}
+```cpp
+bool helper(TreeNode* root, long long lower, long long upper) {
+    if(root == NULL)
+        return true;
+    if(root->val <= lower || root->val >= upper)
+        return false;
+    return helper(root->left, lower, root->val) 
+                  && helper(root->right, root->val, upper);
+}
+
+bool isValidBST(TreeNode* root){
+    return helper(root, LONG_MIN, LONG_MAX);
+}
+```
+{% endtab %}
+{% endtabs %}
 
 #### [balanced-binary-tree](https://leetcode-cn.com/problems/balanced-binary-tree/)
 
@@ -108,4 +148,22 @@ bool isBalanced(TreeNode* root) {
 一颗高度为n的平衡二叉树，需要的最少节点数为：F\(n\) = F\(n - 1\) + F \(n - 2\) + 1，F\(1\) = 1，F\(2\) = 2。
 
 ### 🖋 2、红黑树
+
+R-B Tree，全称是Red-Black Tree，又称为“红黑树”，它一种特殊的二叉查找树。红黑树的每个节点上都有存储位表示节点的颜色，可以是红\(Red\)或黑\(Black\)。
+
+**红黑树的特性**:
+
+1. 每个节点或者是黑色，或者是红色。
+2. 根节点是黑色。
+3. 每个叶子节点（NIL）是黑色。 \[注意：这里叶子节点，是指为空\(NIL或NULL\)的叶子节点！\]
+4. 如果一个节点是红色的，则它的子节点必须是黑色的。
+5. 从一个节点到该节点的子孙节点的所有路径上包含相同数目的黑节点。确保没有一条路径会比其他路径长出俩倍。因而，红黑树是相对是接近平衡的二叉树。
+
+从性质5又可以推出：
+
+* 性质5.1：如果一个结点存在黑子结点，那么该结点肯定有两个子结点
+
+![](../.gitbook/assets/image%20%2850%29.png)
+
+ 定理：**一棵含有n个节点的红黑树的高度至多为** $$2log_2(n+1)$$ **。**
 
