@@ -40,7 +40,6 @@ description: 数据结构和算法基础知识学习和总结。
 * [二叉树](data-structure/binary-tree.md)
 * [平衡二叉树](data-structure/balanced-binary-tree.md)
 * [平衡多路搜索树](data-structure/balanced-multipath-search-tree.md)
-* [堆和优先队列](data-structure/heap-and-priority-queues.md)
 * [图](data-structure/graph.md)
 * [二进制](data-structure/binary-system.md)
 * [散列表](data-structure/hash-table.md)

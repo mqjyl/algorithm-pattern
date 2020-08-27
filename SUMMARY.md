@@ -46,7 +46,7 @@
 * [STL基础](c-cpp/stl-basics/README.md)
   * [String](c-cpp/stl-basics/string-class.md)
   * [array/vector/list](c-cpp/stl-basics/array-vector-list.md)
-  * [deque/stack/queue](c-cpp/stl-basics/deque-stack-queue.md)
+  * [deque/priority\_queue](c-cpp/stl-basics/deque-priority_queue.md)
   * [set/map](c-cpp/stl-basics/set-map.md)
   * [unordered\_set/unordered\_map](c-cpp/stl-basics/unordered_set-unordered_map.md)
   * [algorithm\_1](c-cpp/stl-basics/algorithm-1.md)
@@ -75,7 +75,6 @@
 * [二叉树](data-structure/binary-tree.md)
 * [平衡二叉树](data-structure/balanced-binary-tree.md)
 * [平衡多路搜索树](data-structure/balanced-multipath-search-tree.md)
-* [堆和优先队列](data-structure/heap-and-priority-queues.md)
 * [图](data-structure/graph.md)
 * [二进制](data-structure/binary-system.md)
 * [散列表](data-structure/hash-table.md)
@@ -97,6 +96,7 @@
 * [分治法](algorithm-thinking/divide-and-conquer-algorithm.md)
 * [动态规划](algorithm-thinking/dynamic-programming-algorithm.md)
 * [分支限界算法](algorithm-thinking/branch-and-bound.md)
+* [有限状态机（FSM）](algorithm-thinking/finite-state-machine.md)
 
 ## LeetCode系列
 
@@ -104,6 +104,7 @@
 * [接雨水问题](leetcode-xi-lie/trapping-rain-water.md)
 * [股票买卖问题](leetcode-xi-lie/stockjobbing.md)
 * [打家劫舍问题](leetcode-xi-lie/robbery.md)
+* [跳跃游戏问题](leetcode-xi-lie/jump-game.md)
 
 ## 经典算法问题
 

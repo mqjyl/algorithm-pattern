@@ -281,3 +281,7 @@ for(遍历这个数组)
 
 #### \*\*\*\*[**Largest Rectangle in Histogram**](https://leetcode-cn.com/problems/largest-rectangle-in-histogram/)\*\*\*\*
 
+\*\*\*\*
+
+## ✏ **3、优先队列**
+
