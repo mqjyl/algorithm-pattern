@@ -211,3 +211,121 @@ int maxProfit_k_inf(int[] prices) {
 }
 ```
 
+### **第三题，`k = +infinity with cooldown`**
+
+每次 sell 之后要等一天才能继续交易。只要把这个特点融入上一题的状态转移方程即可：
+
+```cpp
+dp[i][0] = max(dp[i-1][0], dp[i-1][1] + prices[i])
+dp[i][1] = max(dp[i-1][1], dp[i-2][0] - prices[i])
+解释：第 i 天选择 buy 的时候，要从 i-2 的状态转移，而不是 i-1 。
+```
+
+翻译成代码：
+
+```cpp
+int maxProfit_with_cool(int[] prices) {
+    int n = prices.length;
+    int dp_i_0 = 0, dp_i_1 = Integer.MIN_VALUE;
+    int dp_pre_0 = 0; // 代表 dp[i-2][0]
+    for (int i = 0; i < n; i++) {
+        int temp = dp_i_0;
+        dp_i_0 = Math.max(dp_i_0, dp_i_1 + prices[i]);
+        dp_i_1 = Math.max(dp_i_1, dp_pre_0 - prices[i]);
+        dp_pre_0 = temp;
+    }
+    return dp_i_0;
+}
+```
+
+### **第四题，k = +infinity with fee**
+
+每次交易要支付手续费，只要把手续费从利润中减去即可。改写方程：
+
+```cpp
+dp[i][0] = max(dp[i-1][0], dp[i-1][1] + prices[i])
+dp[i][1] = max(dp[i-1][1], dp[i-1][0] - prices[i] - fee)
+解释：相当于买入股票的价格升高了。在第一个式子里减也是一样的，相当于卖出股票的价格减小了。
+```
+
+直接翻译成代码：
+
+```cpp
+int maxProfit_with_fee(int[] prices, int fee) {
+    int n = prices.length;
+    int dp_i_0 = 0, dp_i_1 = Integer.MIN_VALUE;
+    for (int i = 0; i < n; i++) {
+        int temp = dp_i_0;
+        dp_i_0 = Math.max(dp_i_0, dp_i_1 + prices[i]);
+        dp_i_1 = Math.max(dp_i_1, temp - prices[i] - fee);
+    }
+    return dp_i_0;
+}
+```
+
+### **第五题，k = 2**
+
+k = 2 和前面题目的情况稍微不同，因为上面的情况都和 k 的关系不太大。要么 k 是正无穷，状态转移和 k 没关系了；要么 k = 1，跟 k = 0 这个 base case 挨得近，最后也没有存在感。这道题 k = 2 和后面要讲的 k 是任意正整数的情况中，对 k 的处理就凸显出来了。这道题由于没有消掉 k 的影响，所以必须要对 k 进行穷举：
+
+```cpp
+int max_k = 2;
+int[][][] dp = new int[n][max_k + 1][2];
+for (int i = 0; i < n; i++) {
+    for (int k = max_k; k >= 1; k--) {
+        if (i - 1 == -1) { /*处理 base case */ }
+        dp[i][k][0] = max(dp[i-1][k][0], dp[i-1][k][1] + prices[i]);
+        dp[i][k][1] = max(dp[i-1][k][1], dp[i-1][k-1][0] - prices[i]);
+    }
+}
+// 穷举了 n × max_k × 2 个状态，正确。
+return dp[n - 1][max_k][0];
+```
+
+这里 k 取值范围比较小，所以可以不用 for 循环，直接把 k = 1 和 2 的情况全部列举出来也可以：
+
+```cpp
+dp[i][2][0] = max(dp[i-1][2][0], dp[i-1][2][1] + prices[i])
+dp[i][2][1] = max(dp[i-1][2][1], dp[i-1][1][0] - prices[i])
+dp[i][1][0] = max(dp[i-1][1][0], dp[i-1][1][1] + prices[i])
+dp[i][1][1] = max(dp[i-1][1][1], -prices[i])
+
+int maxProfit_k_2(int[] prices) {
+    int dp_i10 = 0, dp_i11 = Integer.MIN_VALUE;
+    int dp_i20 = 0, dp_i21 = Integer.MIN_VALUE;
+    for (int price : prices) {
+        dp_i20 = Math.max(dp_i20, dp_i21 + price);
+        dp_i21 = Math.max(dp_i21, dp_i10 - price);
+        dp_i10 = Math.max(dp_i10, dp_i11 + price);
+        dp_i11 = Math.max(dp_i11, -price);
+    }
+    return dp_i20;
+}
+```
+
+有状态转移方程和含义明确的变量名指导，很容易看懂。
+
+### **第六题，k = any integer**
+
+有了上一题 k = 2 的铺垫，这题应该和上一题的第一个解法没啥区别。但是出现了一个超内存的错误，原来是传入的 k 值会非常大，`dp` 数组太大了。现在想想，交易次数 k 最多有多大呢？一次交易由买入和卖出构成，至少需要两天。所以说有效的限制 k 应该不超过 n/2，如果超过，就没有约束作用了，相当于 k = +infinity。这种情况是之前解决过的。直接把之前的代码重用：
+
+```cpp
+int maxProfit_k_any(int max_k, int[] prices) {
+    int n = prices.length;
+    if (max_k > n / 2) 
+        return maxProfit_k_inf(prices);
+
+    int[][][] dp = new int[n][max_k + 1][2];
+    for (int i = 0; i < n; i++) 
+        for (int k = max_k; k >= 1; k--) {
+            if (i - 1 == -1) { /* 处理 base case */ }
+            dp[i][k][0] = max(dp[i-1][k][0], dp[i-1][k][1] + prices[i]);
+            dp[i][k][1] = max(dp[i-1][k][1], dp[i-1][k-1][0] - prices[i]);     
+        }
+    return dp[n - 1][max_k][0];
+}
+```
+
+### **总结**
+
+**动态规划**关键就在于列举出所有可能的「状态」，然后想想怎么穷举更新这些「状态」。一般用一个多维 `dp` 数组储存这些状态，从 base case 开始向后推进，推进到最后的状态，就是我们想要的答案。具体到股票买卖问题，我们发现了三个状态，使用了一个三维数组，然后是确定每个状态下的选择，总共有三种选择，所以动态规划无非还是穷举（状态） + （选择）更新。
+
