@@ -22,7 +22,7 @@
 
 第一题是只进行一次交易，相当于 `k = 1`；第二题是不限交易次数，相当于 `k = +infinity`（正无穷）；第三题是只进行 2 次交易，相当于 `k = 2`；剩下两道也是不限次数，但是加了交易「冷冻期」和「手续费」的额外条件，其实就是第二题的变种。
 
-## 一、穷举框架（DP是穷举+记忆化搜索）
+## 一、状态穷举框架
 
 利用「状态」进行穷举。我们具体到每一天，看看总共有几种可能的「状态」，再找出每个「状态」对应的「选择」。我们要穷举所有「状态」，穷举的目的是根据对应的「选择」更新状态：
 
@@ -55,5 +55,159 @@ for 0 <= i < n:
 
 ## 二、状态转移框架
 
+上面完成了「状态」的穷举，我们开始思考每种「状态」有哪些「选择」，应该如何更新「状态」。只看「持有状态」，可以画个状态转移图。
 
+![](../.gitbook/assets/2.png)
+
+通过这个图可以很清楚地看到，每种状态（0 和 1）是如何转移而来的。根据这个图，我们来写一下状态转移方程：
+
+```cpp
+dp[i][k][0] = max(dp[i-1][k][0], dp[i-1][k][1] + prices[i])
+              max( 选择 rest    ,     选择 sell )
+
+解释：今天我没有持有股票，有两种可能：
+要么是我昨天就没有持有，然后今天选择 rest，所以我今天还是没有持有；
+要么是我昨天持有股票，但是今天我 sell 了，所以我今天没有持有股票了。
+
+dp[i][k][1] = max(dp[i-1][k][1], dp[i-1][k-1][0] - prices[i])
+              max( 选择 rest    ,     选择 buy  )
+
+解释：今天我持有着股票，有两种可能：
+要么我昨天就持有着股票，然后今天选择 rest，所以我今天还持有着股票；
+要么我昨天本没有持有，但今天我选择 buy，所以今天我就持有股票了。
+```
+
+如果 buy，就要从利润中减去 `prices[i]`，如果 sell，就要给利润增加 `prices[i]`。今天的最大利润就是这两种可能选择中较大的那个。而且注意 k 的限制，我们在选择 buy 的时候，把 k 减小了 1，很好理解吧，当然你也可以在 sell 的时候减 1，一样的。
+
+现在，我们已经有了：状态转移方程。还差最后一点点，就是定义 base case，即最简单的情况：
+
+```cpp
+// i 从 0 开始
+dp[-1][k][0] = 0
+解释：因为 i 是从 0 开始的，所以 i = -1 意味着还没有开始，这时候的利润当然是 0 。
+dp[-1][k][1] = -infinity
+解释：还没开始的时候，是不可能持有股票的，用负无穷表示这种不可能。
+
+// k 从 1 开始
+dp[i][0][0] = 0
+解释：因为 k 是从 1 开始的，所以 k = 0 意味着根本不允许交易，这时候利润当然是 0 。
+dp[i][0][1] = -infinity
+解释：不允许交易的情况下，是不可能持有股票的，用负无穷表示这种不可能。
+```
+
+把上面的状态转移方程总结一下：
+
+```cpp
+base case:
+dp[-1][k][0] = dp[i][0][0] = 0
+dp[-1][k][1] = dp[i][0][1] = -infinity
+
+状态转移方程：
+dp[i][k][0] = max(dp[i-1][k][0], dp[i-1][k][1] + prices[i])
+dp[i][k][1] = max(dp[i-1][k][1], dp[i-1][k-1][0] - prices[i])
+```
+
+这个数组索引是 -1 怎么编程表示出来呢，负无穷怎么表示呢？这都是细节问题，有很多方法实现。
+
+## 三、秒杀题目
+
+### 第一题，k = 1
+
+直接套状态转移方程：
+
+```cpp
+base case:
+dp[-1][1][0] = dp[i][0][0] = 0
+dp[-1][1][1] = dp[i][0][1] = -infinity
+
+状态转移方程：
+dp[i][1][0] = max(dp[i-1][1][0], dp[i-1][1][1] + prices[i])
+dp[i][1][1] = max(dp[i-1][1][1], dp[i-1][0][0] - prices[i]) 
+            = max(dp[i-1][1][1], -prices[i])
+解释：k = 0 的 base case，所以 dp[i-1][0][0] = 0。
+```
+
+现在发现`k`都是`1`，不会改变，即`k`对状态转移已经没有影响了。可以进一步化简去掉所有 `k`：
+
+```cpp
+dp[i][0] = max(dp[i-1][0], dp[i-1][1] + prices[i])
+dp[i][1] = max(dp[i-1][1], -prices[i])
+```
+
+对 `i` 的 base case 进行处理。可以直接写出代码：
+
+```cpp
+int n = prices.length;
+int[][] dp = new int[n][2];
+
+for (int i = 0; i < n; i++) {
+    if (i - 1 == -1) {
+        dp[i][0] = 0;
+        // 解释：
+        //   dp[i][0] 
+        // = max(dp[-1][0], dp[-1][1] + prices[i])
+        // = max(0, -infinity + prices[i]) = 0
+        dp[i][1] = -prices[i];
+        //解释：
+        //   dp[i][1] 
+        // = max(dp[-1][1], dp[-1][0] - prices[i])
+        // = max(-infinity, 0 - prices[i]) 
+        // = -prices[i]
+        continue;
+    }
+    dp[i][0] = Math.max(dp[i-1][0], dp[i-1][1] + prices[i]);
+    dp[i][1] = Math.max(dp[i-1][1], -prices[i]);
+}
+return dp[n - 1][0];
+```
+
+第一题就解决了，但是这样处理 `base case` 很麻烦，而且注意一下状态转移方程，新状态只和相邻的一个状态有关，其实不用整个 `dp` 数组，只需要一个变量储存相邻的那个状态就足够了，这样可以把空间复杂度降到 $$O(1)$$ ：
+
+```cpp
+// k == 1
+int maxProfit_k_1(int[] prices) {
+    int n = prices.length;
+    // base case: dp[-1][0] = 0, dp[-1][1] = -infinity
+    int dp_i_0 = 0, dp_i_1 = Integer.MIN_VALUE;
+    for (int i = 0; i < n; i++) {
+        // dp[i][0] = max(dp[i-1][0], dp[i-1][1] + prices[i])
+        dp_i_0 = Math.max(dp_i_0, dp_i_1 + prices[i]);
+        // dp[i][1] = max(dp[i-1][1], -prices[i])
+        dp_i_1 = Math.max(dp_i_1, -prices[i]);
+    }
+    return dp_i_0;
+}
+```
+
+### **第二题，k = +infinity**
+
+如果 k 为正无穷，那么就可以认为 k 和 k - 1 是一样的。可以这样改写框架：
+
+```cpp
+dp[i][k][0] = max(dp[i-1][k][0], dp[i-1][k][1] + prices[i])
+dp[i][k][1] = max(dp[i-1][k][1], dp[i-1][k-1][0] - prices[i])
+            = max(dp[i-1][k][1], dp[i-1][k][0] - prices[i])
+```
+
+我们发现数组中的 k 已经不会改变了，也就是说不需要记录 k 这个状态了，进一步化简去掉所有 `k`：：
+
+```cpp
+dp[i][0] = max(dp[i-1][0], dp[i-1][1] + prices[i])
+dp[i][1] = max(dp[i-1][1], dp[i-1][0] - prices[i])
+```
+
+直接翻译成代码：
+
+```cpp
+int maxProfit_k_inf(int[] prices) {
+    int n = prices.length;
+    int dp_i_0 = 0, dp_i_1 = Integer.MIN_VALUE;
+    for (int i = 0; i < n; i++) {
+        int temp = dp_i_0;
+        dp_i_0 = Math.max(dp_i_0, dp_i_1 + prices[i]);
+        dp_i_1 = Math.max(dp_i_1, temp - prices[i]);
+    }
+    return dp_i_0;
+}
+```
 
