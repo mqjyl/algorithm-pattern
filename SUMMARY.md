@@ -75,6 +75,7 @@
 * [二叉树](data-structure/binary-tree.md)
 * [平衡二叉树](data-structure/balanced-binary-tree.md)
 * [平衡多路搜索树](data-structure/balanced-multipath-search-tree.md)
+* [树结构的延申](data-structure/tree-extension.md)
 * [图](data-structure/graph.md)
 * [二进制](data-structure/binary-system.md)
 * [散列表](data-structure/hash-table.md)
