@@ -2,17 +2,17 @@
 
 膜拜东哥：[https://labuladong.gitbook.io/algo/dong-tai-gui-hua-xi-lie/tuan-mie-gu-piao-wen-ti](https://labuladong.gitbook.io/algo/dong-tai-gui-hua-xi-lie/tuan-mie-gu-piao-wen-ti)
 
-[买卖股票的最佳时机](https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock/solution/)
+[121.买卖股票的最佳时机](https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock/)
 
-[买卖股票的最佳时机 II](https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-ii/)
+[122.买卖股票的最佳时机 II](https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-ii/)
 
-[买卖股票的最佳时机 III](https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-iii/)
+[123.买卖股票的最佳时机 III](https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-iii/)
 
-[买卖股票的最佳时机 IV](https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-iv/)
+[188.买卖股票的最佳时机 I](https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-iv/)
 
-[最佳买卖股票时机含冷冻期](https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-with-cooldown/)
+[309.最佳买卖股票时机含冷冻期](https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-with-cooldown/)
 
-[买卖股票的最佳时机含手续费](https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-with-transaction-fee/)
+[714.买卖股票的最佳时机含手续费](https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-with-transaction-fee/)
 
 该系列题目是动态规划的热点考题，采用状态机的方式做。这 6 道题目是有共性的，以第 4 道题目为例，因为这道题是一个最泛化的形式，其他的问题都是这个形式的简化，看下题目：
 
@@ -137,43 +137,42 @@ dp[i][1] = max(dp[i-1][1], -prices[i])
 对 `i` 的 base case 进行处理。可以直接写出代码：
 
 ```cpp
-int n = prices.length;
-int[][] dp = new int[n][2];
+int maxProfit(vector<int>& prices) {
+    int len = prices.size();
+    vector<vector<int>> dp(len, vector<int>(2));
 
-for (int i = 0; i < n; i++) {
-    if (i - 1 == -1) {
-        dp[i][0] = 0;
-        // 解释：
-        //   dp[i][0] 
-        // = max(dp[-1][0], dp[-1][1] + prices[i])
-        // = max(0, -infinity + prices[i]) = 0
-        dp[i][1] = -prices[i];
-        //解释：
-        //   dp[i][1] 
-        // = max(dp[-1][1], dp[-1][0] - prices[i])
-        // = max(-infinity, 0 - prices[i]) 
-        // = -prices[i]
-        continue;
+    for (int i = 0; i < len; i++) {
+        if (i - 1 == -1) {
+            dp[i][0] = 0;
+            // 解释：
+            //   dp[i][0]
+            // = max(dp[-1][0], dp[-1][1] + prices[i])
+            // = max(0, -infinity + prices[i]) = 0
+            dp[i][1] = -prices[i];
+            //解释：
+            //   dp[i][1] 
+            // = max(dp[-1][1], dp[-1][0] - prices[i])
+            // = max(-infinity, 0 - prices[i])
+            // = -prices[i]
+            continue;
+        }
+        dp[i][0] = max(dp[i-1][0], dp[i-1][1] + prices[i]);
+        dp[i][1] = max(dp[i-1][1], -prices[i]);
     }
-    dp[i][0] = Math.max(dp[i-1][0], dp[i-1][1] + prices[i]);
-    dp[i][1] = Math.max(dp[i-1][1], -prices[i]);
+    return len > 0 ? dp[len - 1][0] : 0;
 }
-return dp[n - 1][0];
 ```
 
 第一题就解决了，但是这样处理 `base case` 很麻烦，而且注意一下状态转移方程，新状态只和相邻的一个状态有关，其实不用整个 `dp` 数组，只需要一个变量储存相邻的那个状态就足够了，这样可以把空间复杂度降到 $$O(1)$$ ：
 
 ```cpp
 // k == 1
-int maxProfit_k_1(int[] prices) {
-    int n = prices.length;
-    // base case: dp[-1][0] = 0, dp[-1][1] = -infinity
-    int dp_i_0 = 0, dp_i_1 = Integer.MIN_VALUE;
-    for (int i = 0; i < n; i++) {
-        // dp[i][0] = max(dp[i-1][0], dp[i-1][1] + prices[i])
-        dp_i_0 = Math.max(dp_i_0, dp_i_1 + prices[i]);
-        // dp[i][1] = max(dp[i-1][1], -prices[i])
-        dp_i_1 = Math.max(dp_i_1, -prices[i]);
+int maxProfit(std::vector<int>& prices){
+    int len = prices.size();
+    int dp_i_0 = 0, dp_i_1 = INT_MIN;  // i = -1
+    for(int i = 0; i < len; i++){
+        dp_i_0 = max(dp_i_0, dp_i_1 + prices[i]);
+        dp_i_1 = max(dp_i_1, -prices[i]);
     }
     return dp_i_0;
 }
@@ -199,13 +198,14 @@ dp[i][1] = max(dp[i-1][1], dp[i-1][0] - prices[i])
 直接翻译成代码：
 
 ```cpp
-int maxProfit_k_inf(int[] prices) {
-    int n = prices.length;
-    int dp_i_0 = 0, dp_i_1 = Integer.MIN_VALUE;
-    for (int i = 0; i < n; i++) {
+// k = +infinity
+int maxProfit(vector<int>& prices) {
+    int len = prices.size();
+    int dp_i_0 = 0, dp_i_1 = INT_MIN;  // i = -1
+    for(int i = 0; i < len; ++i){
         int temp = dp_i_0;
-        dp_i_0 = Math.max(dp_i_0, dp_i_1 + prices[i]);
-        dp_i_1 = Math.max(dp_i_1, temp - prices[i]);
+        dp_i_0 = max(dp_i_0, dp_i_1 + prices[i]);
+        dp_i_1 = max(dp_i_1, temp - prices[i]);
     }
     return dp_i_0;
 }
@@ -224,15 +224,16 @@ dp[i][1] = max(dp[i-1][1], dp[i-2][0] - prices[i])
 翻译成代码：
 
 ```cpp
-int maxProfit_with_cool(int[] prices) {
-    int n = prices.length;
-    int dp_i_0 = 0, dp_i_1 = Integer.MIN_VALUE;
-    int dp_pre_0 = 0; // 代表 dp[i-2][0]
-    for (int i = 0; i < n; i++) {
+// k = +infinity with cooldown
+int maxProfit(vector<int>& prices) {
+    int len = prices.size();
+    int dp_i_0 = 0, dp_i_1 = INT_MIN;
+    int dp_i_pre = 0;
+    for(int i = 0; i < len; ++i){
         int temp = dp_i_0;
-        dp_i_0 = Math.max(dp_i_0, dp_i_1 + prices[i]);
-        dp_i_1 = Math.max(dp_i_1, dp_pre_0 - prices[i]);
-        dp_pre_0 = temp;
+        dp_i_0 = max(dp_i_0, dp_i_1 + prices[i]);
+        dp_i_1 = max(dp_i_1, dp_i_pre - prices[i]);
+        dp_i_pre = temp;
     }
     return dp_i_0;
 }
@@ -240,7 +241,7 @@ int maxProfit_with_cool(int[] prices) {
 
 ### **第四题，k = +infinity with fee**
 
-每次交易要支付手续费，只要把手续费从利润中减去即可。改写方程：
+每次交易要支付手续费 fee，只要把手续费从利润中减去即可。改写方程：
 
 ```cpp
 dp[i][0] = max(dp[i-1][0], dp[i-1][1] + prices[i])
@@ -251,13 +252,14 @@ dp[i][1] = max(dp[i-1][1], dp[i-1][0] - prices[i] - fee)
 直接翻译成代码：
 
 ```cpp
-int maxProfit_with_fee(int[] prices, int fee) {
-    int n = prices.length;
-    int dp_i_0 = 0, dp_i_1 = Integer.MIN_VALUE;
-    for (int i = 0; i < n; i++) {
+// k = +infinity with fee
+int maxProfit(vector<int>& prices, int fee) {
+    int len = prices.size();
+    int dp_i_0 = 0, dp_i_1 = INT_MIN;  // i = -1
+    for(int i = 0; i < len; ++i){
         int temp = dp_i_0;
-        dp_i_0 = Math.max(dp_i_0, dp_i_1 + prices[i]);
-        dp_i_1 = Math.max(dp_i_1, temp - prices[i] - fee);
+        dp_i_0 = max(dp_i_0, dp_i_1 + prices[i]);
+        dp_i_1 = max(dp_i_1, temp - prices[i] - fee);
     }
     return dp_i_0;
 }
@@ -268,17 +270,22 @@ int maxProfit_with_fee(int[] prices, int fee) {
 k = 2 和前面题目的情况稍微不同，因为上面的情况都和 k 的关系不太大。要么 k 是正无穷，状态转移和 k 没关系了；要么 k = 1，跟 k = 0 这个 base case 挨得近，最后也没有存在感。这道题 k = 2 和后面要讲的 k 是任意正整数的情况中，对 k 的处理就凸显出来了。这道题由于没有消掉 k 的影响，所以必须要对 k 进行穷举：
 
 ```cpp
-int max_k = 2;
-int[][][] dp = new int[n][max_k + 1][2];
-for (int i = 0; i < n; i++) {
-    for (int k = max_k; k >= 1; k--) {
-        if (i - 1 == -1) { /*处理 base case */ }
-        dp[i][k][0] = max(dp[i-1][k][0], dp[i-1][k][1] + prices[i]);
-        dp[i][k][1] = max(dp[i-1][k][1], dp[i-1][k-1][0] - prices[i]);
+int maxProfit(vector<int>& prices) {
+    int len = prices.size();
+    int dp_0[3], dp_1[3];
+    // base case
+    for(int k = 0; k < 3; ++k){
+        dp_0[k] = 0, dp_1[k] = INT_MIN;
     }
+    for(int i = 0; i < len; ++i){
+        for(int j = 1; j <= 2; ++j){
+            dp_0[j] = max(dp_0[j], dp_1[j] + prices[i]);
+            dp_1[j] = max(dp_1[j], dp_0[j - 1] - prices[i]);
+        }
+    }
+    // 穷举了 n × max_k × 2 个状态，正确。
+    return dp_0[2];
 }
-// 穷举了 n × max_k × 2 个状态，正确。
-return dp[n - 1][max_k][0];
 ```
 
 这里 k 取值范围比较小，所以可以不用 for 循环，直接把 k = 1 和 2 的情况全部列举出来也可以：
@@ -289,14 +296,15 @@ dp[i][2][1] = max(dp[i-1][2][1], dp[i-1][1][0] - prices[i])
 dp[i][1][0] = max(dp[i-1][1][0], dp[i-1][1][1] + prices[i])
 dp[i][1][1] = max(dp[i-1][1][1], -prices[i])
 
-int maxProfit_k_2(int[] prices) {
-    int dp_i10 = 0, dp_i11 = Integer.MIN_VALUE;
-    int dp_i20 = 0, dp_i21 = Integer.MIN_VALUE;
-    for (int price : prices) {
-        dp_i20 = Math.max(dp_i20, dp_i21 + price);
-        dp_i21 = Math.max(dp_i21, dp_i10 - price);
-        dp_i10 = Math.max(dp_i10, dp_i11 + price);
-        dp_i11 = Math.max(dp_i11, -price);
+int maxProfit(vector<int>& prices) {
+    int dp_i10 = 0, dp_i11 = INT_MIN;
+    int dp_i20 = 0, dp_i21 = INT_MIN;
+
+    for(int price : prices){
+        dp_i10 = max(dp_i10, dp_i11 + price);
+        dp_i11 = max(dp_i11, -price);
+        dp_i20 = max(dp_i20, dp_i21 + price);
+        dp_i21 = max(dp_i21, dp_i10 - price);
     }
     return dp_i20;
 }
