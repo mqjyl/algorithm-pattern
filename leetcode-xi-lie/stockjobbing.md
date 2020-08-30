@@ -317,19 +317,33 @@ int maxProfit(vector<int>& prices) {
 有了上一题 k = 2 的铺垫，这题应该和上一题的第一个解法没啥区别。但是出现了一个超内存的错误，原来是传入的 k 值会非常大，`dp` 数组太大了。现在想想，交易次数 k 最多有多大呢？一次交易由买入和卖出构成，至少需要两天。所以说有效的限制 k 应该不超过 n/2，如果超过，就没有约束作用了，相当于 k = +infinity。这种情况是之前解决过的。直接把之前的代码重用：
 
 ```cpp
-int maxProfit_k_any(int max_k, int[] prices) {
-    int n = prices.length;
-    if (max_k > n / 2) 
-        return maxProfit_k_inf(prices);
+int maxProfit_infinity(std::vector<int>& prices){
+    int len = prices.size();
+    int dp_i_0 = 0, dp_i_1 = INT_MIN;  // i = -1
+    for(int i = 0; i < len; ++i){
+        int temp = dp_i_0;
+        dp_i_0 = max(dp_i_0, dp_i_1 + prices[i]);
+        dp_i_1 = max(dp_i_1, temp - prices[i]);
+    }
+    return dp_i_0;
+}
 
-    int[][][] dp = new int[n][max_k + 1][2];
-    for (int i = 0; i < n; i++) 
-        for (int k = max_k; k >= 1; k--) {
-            if (i - 1 == -1) { /* 处理 base case */ }
-            dp[i][k][0] = max(dp[i-1][k][0], dp[i-1][k][1] + prices[i]);
-            dp[i][k][1] = max(dp[i-1][k][1], dp[i-1][k-1][0] - prices[i]);     
+int maxProfit(int k, vector<int>& prices) {
+    int len = prices.size();
+    if(k > len / 2)
+        return maxProfit_infinity(prices);
+    int dp_0[k + 1], dp_1[k + 1];
+    // base case
+    for(int t = 0; t <= k; ++t){
+        dp_0[t] = 0, dp_1[t] = INT_MIN;
+    }
+    for(int i = 0; i < len; ++i){
+        for(int j = 1; j <= k; ++j){
+            dp_0[j] = max(dp_0[j], dp_1[j] + prices[i]);
+            dp_1[j] = max(dp_1[j], dp_0[j - 1] - prices[i]);
         }
-    return dp[n - 1][max_k][0];
+    }
+    return dp_0[k];
 }
 ```
 
