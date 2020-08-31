@@ -395,6 +395,8 @@ vector<vector<int>> levelOrderBottom(TreeNode* root) {
 
 ![DFS&#xFF08;&#x6DF1;&#x5EA6;&#x4F18;&#x5148;&#x904D;&#x5386;&#xFF09; &#x590D;&#x6742;&#x5EA6;&#x5206;&#x6790;](../.gitbook/assets/444.png)
 
+{% tabs %}
+{% tab title="双端队列" %}
 ```cpp
 vector<vector<int>> zigzagLevelOrder(TreeNode* root) {
     std::vector<std::vector<int>> result;
@@ -443,6 +445,14 @@ vector<vector<int>> zigzagLevelOrder(TreeNode* root) {
     return result;
 }
 ```
+{% endtab %}
+
+{% tab title="队列" %}
+```
+
+```
+{% endtab %}
+{% endtabs %}
 
 ### 🖋 2、常见示例
 

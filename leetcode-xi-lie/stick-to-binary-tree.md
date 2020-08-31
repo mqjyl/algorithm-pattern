@@ -84,9 +84,15 @@ bool hasPathSum(TreeNode* root, int sum){
 
 ```
 
-## ✏ 3、其他
+## ✏ 3、[序列化和反序列化](https://leetcode-cn.com/problems/serialize-and-deserialize-binary-tree/)
+
+
+
+## ✏ 4、其他
 
 ### 1、逆时针打印完全二叉树的边界节点
+
+完全二叉树用数组存储，从根节点开始逆时针打印完全二叉树的边界节点。
 
 ```cpp
 vector<int> BinaryTree::getSeq(int n, vector<int>& tree){

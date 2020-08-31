@@ -327,11 +327,46 @@ for(遍历这个数组)
 
 ### 🖋 2.5、题型
 
-#### \*\*\*\*[**Trapping Rain Water**](https://leetcode-cn.com/problems/trapping-rain-water/)\*\*\*\*
+#### 1、[保留最大的数](https://www.nowcoder.com/questionTerminal/7f26bfeccfa44a17b6b269621304dd4a?toCommentId=653322)
 
-#### \*\*\*\*[**Largest Rectangle in Histogram**](https://leetcode-cn.com/problems/largest-rectangle-in-histogram/)\*\*\*\*
+给定一个十进制的正整数number，选择从里面去掉一部分数字，希望保留下来的数字组成的正整数最大。
 
-\*\*\*\*
+**输入描述：**输入为两行内容，第一行是正整数number，`1 ≤ length(number) ≤ 50000`。第二行是希望去掉的数字数量`cnt 1 ≤ cnt < length(number)`。
+
+```cpp
+std::string getMaxStr(const std::string & str, int K){
+    if(K == 0){
+        return str;
+    }else{
+        int idx = 0;
+        string result;
+        while(K > 0 && idx < str.size()){
+            if(result.empty() || result.back() >= str[idx]){
+                result.push_back(str[idx++]);
+            }else{
+                while(K > 0  && !result.empty() && result.back() < str[idx]){
+                    result.pop_back();
+                    K--;
+                }
+                result.push_back(str[idx++]);
+            }
+        }
+        if(K > 0)
+            result = result.substr(0, result.size() - K);
+        if(idx < str.size())
+            result = result.append(str.substr(idx, str.size()));
+        idx = 0;
+        while(idx < result.size() && result[idx++] == '0');
+        return result.substr(idx - 1, result.size());
+    }
+}
+```
+
+#### **2、**[**Trapping Rain Water**](https://leetcode-cn.com/problems/trapping-rain-water/)\*\*\*\*
+
+#### **3、**[**Largest Rectangle in Histogram**](https://leetcode-cn.com/problems/largest-rectangle-in-histogram/)\*\*\*\*
+
+
 
 ## ✏ **3、优先队列**
 
