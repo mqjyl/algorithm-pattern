@@ -84,5 +84,41 @@ bool hasPathSum(TreeNode* root, int sum){
 
 ```
 
+## ✏ 3、其他
 
+### 1、逆时针打印完全二叉树的边界节点
+
+```cpp
+vector<int> BinaryTree::getSeq(int n, vector<int>& tree){
+    vector<int> ans;
+    if(n == 1){
+        ans.push_back(tree[0]);
+        return ans;
+    }
+    // 左边界
+    int i = 1;
+    while(i - 1 < n){
+        ans.push_back(tree[i - 1]);
+        i *= 2;
+    }
+    ans.pop_back();
+    // 叶节点
+    int j = i / 2 - 2;
+    i = i / 2 / 2 - 1;
+    for(int k = i; k >= 0 && k < n && k <= j; ++k){
+        if(k * 2 + 1 < n)
+            ans.push_back(tree[k * 2 + 1]);
+        if(k * 2 + 2 < n)
+            ans.push_back(tree[k * 2 + 2]);
+        if(k * 2 + 1 >= n)
+            ans.push_back(tree[k]);
+    }
+    // 右边界
+    while(j > 0){
+        ans.push_back(tree[j]);
+        j = (j - 2) / 2;
+    }
+    return ans;
+}
+```
 

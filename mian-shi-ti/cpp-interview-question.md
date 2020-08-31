@@ -12,11 +12,11 @@
 
 3、为什么 C 语言不支持重载， C++支持重载呢？【[链接](../c-cpp/c++-syntax/c-cpp.md#2-han-shu-zhong-zai)】
 
-4、`struct{ char a; int b; }p;sizeof(p)` 是多大？
+4、`struct{ char a; int b; }p; sizeof(p)` 是多大？【[链接](../c-cpp/c/clib-stdarg.md#2-nei-cun-dui-qi)】
 
 5、public 、private、 和保护。【链接】
 
-6、delete 和 delete\[\] 什么区别。【链接】
+6、delete 和 delete\[\] 什么区别。【[链接](../c-cpp/c++-syntax/memory-request-and-release.md#2-new-and-delete)】
 
 7、malloc 和 realloc。【链接】
 
@@ -28,7 +28,7 @@
 
 10、如何封装一个库？
 
-11、包含警告：遇到过头文件include多次的问题吗，怎么解决？（\#ifndef）
+11、包含警告：遇到过头文件`include`多次的问题吗，怎么解决？（`#ifndef`）
 
 12、多态和继承的关系。
 
@@ -47,6 +47,10 @@
 3、hash\_map 和 map 有什么区别？
 
 4、deque的扩容机制。
+
+5、vector的2倍扩容机制相对于1.5倍扩容机制来说有什么缺陷？
+
+> 答：以 2 倍的方式扩容，下一次申请的内存会大于之前分配内存的总和（ $$2^k > \sum_{i = 0}^{k - 1} 2^i$$ ），导致之前释放的内存不能再次被使用。
 
 
 

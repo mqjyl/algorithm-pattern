@@ -283,11 +283,13 @@ bool canJump(vector<int>& nums) {
 }
 ```
 
-```cpp
-#include <iostream>
-#include <vector>
-using namespace std;
+#### 3、[机器人达到指定位置方法数](https://www.nowcoder.com/questionTerminal/54679e44604f44d48d1bcadb1fe6eb61)
 
+假设有排成一行的N个位置，记为1~N，开始时机器人在M位置，机器人可以往左或者往右走，如果机器人在1位置，那么下一步机器人只能走到2位置，如果机器人在N位置，那么下一步机器人只能走到N-1位置。规定机器人只能走k步，最终能来到P位置的方法有多少种。由于方案数可能比较大，所以答案需要对`1e9+7`取模。
+
+{% tabs %}
+{% tab title="状态穷举" %}
+```cpp
 const int prime = 1e9 + 7;
 
 long long getSolutions(int n, int m, int k, int p) {
@@ -305,13 +307,31 @@ long long getSolutions(int n, int m, int k, int p) {
 	}
 	return solutions[k][p];
 }
-int main()
-{
-    int n, m, k ,p;
-    cin >> n >>m >> k >> p;
-    cout << getSolutions(n,m,k,p) << endl;
+```
+{% endtab %}
 
-	return 0; 
+{% tab title="优化" %}
+```cpp
+long long getSolutions(int n, int m, int k, int p) {
+    vector<long long> curr(n + 2);
+    vector<long long> last(n + 2);
+    // base case
+    for (int i = 0; i < n + 2; ++i) {
+        last[i] = 0;
+    }
+    last[m] = 1;
+    for (int i = 1; i < k + 1; ++i) {
+        for (int j = 1; j < n + 1; ++j) {
+            curr[j] = last[j - 1] + last[j + 1];
+            curr[j] %= prime;
+        }
+        for (int j = 1; j < n + 1; ++j) {
+            last[j] = curr[j];
+        }
+    }
+    return curr[p];
 }
 ```
+{% endtab %}
+{% endtabs %}
 
