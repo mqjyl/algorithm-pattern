@@ -38,6 +38,8 @@
 
 15、拷贝构造函数形参能否值传递？【[链接](../c-cpp/c++-syntax/constructor-destructor.md#2-kao-bei-gou-zao-han-shu-kao-bei-fu-zhi-yun-suan-fu)】
 
+16、熟悉`grpc`不，`protobuf`介绍一下？
+
 ## STL
 
 1、vector 和 list 有什么区别？
@@ -52,5 +54,5 @@
 
 > 答：以 2 倍的方式扩容，下一次申请的内存会大于之前分配内存的总和（ $$2^k > \sum_{i = 0}^{k - 1} 2^i$$ ），导致之前释放的内存不能再次被使用。
 
-
+6、vector的容量能不能缩小？怎么做？
 
