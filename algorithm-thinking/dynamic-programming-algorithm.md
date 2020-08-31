@@ -283,3 +283,35 @@ bool canJump(vector<int>& nums) {
 }
 ```
 
+```cpp
+#include <iostream>
+#include <vector>
+using namespace std;
+
+const int prime = 1e9 + 7;
+
+long long getSolutions(int n, int m, int k, int p) {
+	vector<vector<long long>> solutions(k + 1, vector<long long>(n + 2));
+	// base case
+	for (int i = 0; i < n + 2; ++i) {
+		solutions[0][i] = 0;
+	}
+	solutions[0][m] = 1;
+	for (int i = 1; i < k + 1; ++i) {
+		for (int j = 1; j < n + 1; ++j) {
+			solutions[i][j] = solutions[i - 1][j - 1] + solutions[i - 1][j + 1];
+			solutions[i][j] %= prime;
+		}
+	}
+	return solutions[k][p];
+}
+int main()
+{
+    int n, m, k ,p;
+    cin >> n >>m >> k >> p;
+    cout << getSolutions(n,m,k,p) << endl;
+
+	return 0; 
+}
+```
+
