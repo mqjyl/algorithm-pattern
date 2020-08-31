@@ -78,8 +78,9 @@ description: 数据结构和算法基础知识学习和总结。
 1. `Leetcode`：[https://leetcode-cn.com/problemset/all/](https://leetcode-cn.com/problemset/all/)
 2. 牛客网：[https://www.nowcoder.com/activity/oj](https://www.nowcoder.com/activity/oj)
 3. 洛谷：[https://www.luogu.com.cn/](https://www.luogu.com.cn/)
-4. Codewars：[https://www.codewars.com/](https://www.codewars.com/)
-5. Hihocoder：[http://hihocoder.com/problemset](http://hihocoder.com/problemset)
+4. `Codewars`：[https://www.codewars.com/](https://www.codewars.com/)
+5. `Hihocoder`：[http://hihocoder.com/problemset](http://hihocoder.com/problemset)
+6. `Lintcode`：[https://www.lintcode.com/](https://www.lintcode.com/)
 
 ### 博客 🍍 
 
