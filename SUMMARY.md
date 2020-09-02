@@ -107,6 +107,7 @@
 * [股票买卖问题](leetcode-xi-lie/stockjobbing.md)
 * [打家劫舍问题](leetcode-xi-lie/robbery.md)
 * [跳跃游戏问题](leetcode-xi-lie/jump-game.md)
+* [子序列问题](leetcode-xi-lie/subsequences.md)
 * [数 & 数组 & 矩阵](leetcode-xi-lie/figure-array-matrix.md)
 
 ## 经典算法问题
@@ -114,6 +115,7 @@
 * [几何问题](jing-dian-suan-fa-wen-ti/geometry-problems.md)
 * [区间问题](jing-dian-suan-fa-wen-ti/interval-questions.md)
 * [背包问题](jing-dian-suan-fa-wen-ti/backpack-questions.md)
+* [石子堆问题](jing-dian-suan-fa-wen-ti/gravel-pile.md)
 * [表达式求值](jing-dian-suan-fa-wen-ti/expression-evaluation.md)
 
 ## 面试题
