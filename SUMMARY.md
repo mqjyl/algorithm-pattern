@@ -44,6 +44,8 @@
   * [RAII技术](c-cpp/advanced-c++/raii.md)
   * [智能指针](c-cpp/advanced-c++/smart-pointer.md)
   * [模板的特化](c-cpp/advanced-c++/template-specialization.md)
+  * [C++静态库和动态库](c-cpp/advanced-c++/static-and-dynamic-libraries.md)
+  * [内存溢出和内存泄漏](c-cpp/advanced-c++/memory-overflow--and-leak.md)
 * [STL基础](c-cpp/stl-basics/README.md)
   * [String](c-cpp/stl-basics/string-class.md)
   * [array/vector/list](c-cpp/stl-basics/array-vector-list.md)

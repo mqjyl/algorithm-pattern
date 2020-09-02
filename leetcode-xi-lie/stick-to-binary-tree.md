@@ -88,9 +88,13 @@ bool hasPathSum(TreeNode* root, int sum){
 
 
 
-## ✏ 4、其他
+## ✏ 4、二叉树遍历之Morris算法
 
-### 1、逆时针打印完全二叉树的边界节点
+
+
+## ✏ 5、其他
+
+### 5.1、逆时针打印完全二叉树的边界节点
 
 完全二叉树用数组存储，从根节点开始逆时针打印完全二叉树的边界节点。
 
@@ -127,4 +131,10 @@ vector<int> BinaryTree::getSeq(int n, vector<int>& tree){
     return ans;
 }
 ```
+
+### 5.2、判断二叉树是不是对称二叉树
+
+
+
+### 5.3、求X节点的个数
 
