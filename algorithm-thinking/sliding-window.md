@@ -15,9 +15,260 @@
 * left 右移
 * 求结果
 
+## ✏ 左右指针
+
+左右指针在数组中实际是指两个索引值，一般初始化为 `left = 0, right = nums.length - 1` 。
+
+### 🖋  1、[二分查找](../algorithm/search-algorithm.md#2-er-fen-cha-zhao)
+
+### 🖋  2、[两数之和](https://leetcode-cn.com/problems/two-sum-ii-input-array-is-sorted/)
+
+```cpp
+vector<int> twoSum(vector<int>& numbers, int target) {
+    int lo = 0, hi = numbers.size() - 1;
+    while(lo < hi){
+        int tmp = numbers[lo] + numbers[hi];
+        if(tmp == target){
+            return std::vector<int>{lo + 1, hi + 1};
+        }else if(tmp > target){
+            hi--;
+        }else{
+            lo++;
+        }
+    }
+    return std::vector<int>{};
+}
+```
+
+把这个题目变得更泛化，更困难一点：
+
+**`nums` 中可能有多对儿元素之和都等于 `target`，请你的算法返回所有和为`target` 的元素对儿，其中不能出现重复**。
+
+函数签名如下：
+
+```cpp
+vector<vector<int>> twoSumTarget(vector<int>& nums, int target);
+```
+
+比如说输入为 `nums = [1,3,1,2,2,3], target = 4`，那么算法返回的结果就是：`[[1,3],[2,2]]`。对于修改后的问题，关键难点是现在可能有多个和为 `target` 的数对儿，还不能重复，比如上述例子中 `[1,3]` 和 `[3,1]` 就算重复，只能算一次。这种情况下使用上述的代码会造成重复的结果，比如说 `nums = [1,1,1,2,2,3,3], target = 4`，得到的结果中 `[1,3]` 肯定会重复。
+
+出问题的地方在于 `sum == target` 条件的 if 分支，当给 `res` 加入一次结果后，`lo` 和 `hi` 不应该改变 1 的同时，还应该跳过所有重复的元素：
+
+![](../.gitbook/assets/22.jpg)
+
+所以，可以对双指针的 while 循环做出如下修改：
+
+```cpp
+vector<vector<int>> twoSumTarget(vector<int>& nums, int target) {
+    // nums 数组必须有序
+    // sort(nums.begin(), nums.end()); // 如果无序，则排序
+    int lo = 0, hi = nums.size() - 1;
+    vector<vector<int>> res;
+    while (lo < hi) {
+        int sum = nums[lo] + nums[hi];
+        int left = nums[lo], right = nums[hi];
+        if (sum < target) {
+            while (lo < hi && nums[lo] == left) lo++;
+        } else if (sum > target) {
+            while (lo < hi && nums[hi] == right) hi--;
+        } else {
+            res.push_back({left, right});
+            while (lo < hi && nums[lo] == left) lo++;
+            while (lo < hi && nums[hi] == right) hi--;
+        }
+    }
+    return res;
+}
+```
+
+这样，一个通用化的 `twoSum` 函数就写出来了。这个函数的时间复杂度非常容易看出来，双指针操作的部分虽然有那么多 while 循环，但是时间复杂度还是 `O(N)`，而排序的时间复杂度是 `O(NlogN)`，所以这个函数的时间复杂度是 `O(NlogN)`。
+
+#### 1、[3Sum](https://leetcode-cn.com/problems/3sum/) 问题
+
+泛化一下题目，不要光和为 0 的三元组了，计算和为 `target` 的三元组吧，同上面的 `twoSum` 一样，也不允许重复的结果：
+
+```cpp
+vector<vector<int>> threeSum(vector<int>& nums) {
+    // 求和为 0 的三元组
+    return threeSumTarget(nums, 0);
+}
+
+vector<vector<int>> threeSumTarget(vector<int>& nums, int target) {
+    // 输入数组 nums，返回所有和为 target 的三元组
+}
+```
+
+现在我们想找和为 `target` 的三个数字，那么对于第一个数字，可能是什么？`nums` 中的每一个元素 `nums[i]` 都有可能！确定了第一个数字之后，剩下的两个数字可以是什么呢？其实就是和为`target - nums[i]` 的两个数字，那不就是 `twoSum` 函数解决的问题么，需要把 `twoSum` 函数稍作修改即可复用：
+
+```cpp
+vector<vector<int>> twoSumTarget(vector<int>& nums, int start, int target) {
+    // nums 数组必须有序
+    // sort(nums.begin(), nums.end()); // 如果无序，则排序
+    int lo = start, hi = nums.size() - 1;
+    vector<vector<int>> res;
+    while (lo < hi) {
+        int sum = nums[lo] + nums[hi];
+        int left = nums[lo], right = nums[hi];
+        if (sum < target) {
+            while (lo < hi && nums[lo] == left) lo++;
+        } else if (sum > target) {
+            while (lo < hi && nums[hi] == right) hi--;
+        } else {
+            res.push_back({left, right});
+            while (lo < hi && nums[lo] == left) lo++;
+            while (lo < hi && nums[hi] == right) hi--;
+        }
+    }
+    return res;
+}
+// 三数之和
+vector<vector<int>> threeSumTarget(vector<int>& nums, int target) {
+    // 输入数组 nums，返回所有和为 target 的三元组
+    sort(nums.begin(), nums.end());
+    int len = nums.size();
+    vector<vector<int>> res;
+    for(int i = 0; i < len; ++i){
+        vector<vector<int>> tuples = twoSumTarget(nums, i + 1, target - nums[i]);
+        for(vector<int> &tuple : tuples){
+            tuple.push_back(nums[i]);
+            res.push_back(tuple);
+        }
+        while(i < len - 1 && nums[i] == nums[i + 1]) i++;
+    }
+    return res;
+}
+vector<vector<int>> threeSum(vector<int>& nums) {
+    return threeSumTarget(nums, 0);
+}
+```
+
+需要注意的是，类似 `twoSum`，`3Sum` 的结果也可能重复，比如输入是 `nums = [1,1,1,2,3], target = 6`，结果就会重复。
+
+**关键点在于，不能让第一个数重复，至于后面的两个数，我们复用的 `twoSum` 函数会保证它们不重复**。所以代码中必须用一个 while 循环来保证 `3Sum` 中第一个元素不重复。
+
+至此，`3Sum` 问题就解决了，时间复杂度不难算，排序的复杂度为`O(NlogN)`，`twoSumTarget` 函数中的双指针操作为 `O(N)`，`threeSumTarget`函数在 for 循环中调用 `twoSumTarget` 所以总的时间复杂度就是 `O(NlogN + N^2) = O(N^2)`。
+
+### 🖋  3、反转数组和串
+
+```cpp
+void reverseString(vector<char>& s) {
+    //reverse(s.begin(), s.end());
+    int len = s.size();
+    char tmp;
+    for(int i = 0;i < len / 2;i ++){
+        tmp = s[i];
+        s[i] = s[len - 1 - i];
+        s[len - 1 - i] = tmp;
+    }
+}
+```
+
 ## ✏ 快慢指针
 
+快慢指针一般都初始化指向链表的头结点 head，前进时快指针 fast 在前，慢指针 slow 在后，相隔相同的距离同时向前移动，利用双指针解决的问题有：
 
+### 🖋 1、[判定链表中是否有环](https://leetcode-cn.com/problems/linked-list-cycle/)
+
+单链表的特点是每个节点只知道下一个节点，所以一个指针的话无法判断链表中是否含有环的。如果链表中不含环，那么这个指针最终会遇到空指针 null 表示链表到头了，因此可以判断该链表不含环。但是如果链表中含有环，那么这个指针就会陷入死循环，因为环形数组中没有 null 指针作为尾部节点。
+
+经典解法就是用两个指针，一个每次前进两步，一个每次前进一步。如果不含有环，跑得快的那个指针最终会遇到 null，说明链表不含环；如果含有环，快指针最终会超慢指针一圈，和慢指针相遇，说明链表含有环。
+
+```cpp
+bool hasCycle(ListNode *head) {
+    if(!head || !head->next)
+        return false;
+    ListNode *quickptr=head->next, *slowptr=head;
+    while(quickptr && quickptr->next){
+        if(quickptr == slowptr){
+            return true;
+        }
+        quickptr = quickptr->next->next;
+        slowptr = slowptr->next;
+    }
+    return false;
+}
+```
+
+> 慢指针每次移动一步，快指针移动每次多少步，检测不到环？
+>
+> 设环外有m个节点，环内有n个节点，则设快指针每次前进 $$n+1$$ 步，如果在环入口处不相遇，则以后也不会相遇，则检测不到环。在环入口处相遇的条件： $$n = k\times m$$ \(即n是m的倍数\)，如果在环入口处相遇，则两者以后一直同步向前。在这里有一个前提，即 $$n > 2$$ ，否则一定会相遇。
+
+### 🖋 2、[已知链表中有环，找环的入口](https://leetcode-cn.com/problems/linked-list-cycle-ii/)
+
+当快慢指针相遇时，让其中任一个指针重新指向头节点，然后让它俩以相同速度前进，再次相遇时所在的节点位置就是环开始的位置。这是为什么呢？第一次相遇时，假设慢指针 slow 走了 k 步，那么快指针 fast 一定走了 2k 步，也就是说比 slow 多走了 k 步（也就是环的长度）。
+
+设相遇点距环的起点的距离为 m，那么环的起点距头结点 head 的距离为 k - m，也就是说如果从 head 前进 k - m 步就能到达环起点。如果从相遇点继续前进 k - m 步，也恰好到达环起点。
+
+![](../.gitbook/assets/21.jpg)
+
+所以，只要我们把快慢指针中的任一个重新指向 head，然后两个指针同速前进，k - m 步后就会相遇，相遇之处就是环的起点了。
+
+```cpp
+ListNode *detectCycle(ListNode *head) {
+    if(!head || !head->next)
+        return NULL;
+    ListNode *quickptr=head->next, *slowptr=head;
+    while(quickptr && quickptr->next){
+        if(quickptr == slowptr){
+            quickptr = head;
+            slowptr = slowptr->next;
+            break;
+        }
+        quickptr = quickptr->next->next;
+        slowptr = slowptr->next;
+    }
+    if(quickptr == head){
+        while(quickptr != slowptr){
+            quickptr = quickptr->next;
+            slowptr = slowptr->next;
+        }
+        return quickptr;
+    }
+    return NULL;
+}
+```
+
+### 🖋 3、寻找链表的中点
+
+让快指针一次前进两步，慢指针一次前进一步，当快指针到达链表尽头时，慢指针就处于链表的中间位置。
+
+```cpp
+ListNode *midNode(ListNode *head) {
+    ListNode slow, fast;
+    slow = fast = head;
+    while (fast != null && fast.next != null) {
+        fast = fast.next.next;
+        slow = slow.next;
+    }
+    // slow 就在中间位置
+    return slow;
+}
+```
+
+当链表的长度是奇数时，slow 恰巧停在中点位置；如果长度是偶数，slow 最终的位置是中间偏右：
+
+![](../.gitbook/assets/2%20%281%29.png)
+
+寻找链表中点的一个重要作用是对链表进行归并排序。回想数组的归并排序：求中点索引递归地把数组二分，最后合并两个有序数组。对于链表，合并两个有序链表是很简单的，难点就在于二分。
+
+### 🖋 4、寻找链表的倒数第 k 个元素
+
+让快指针先走 k 步，然后快慢指针开始同速前进。这样当快指针走到链表末尾 null 时，慢指针所在的位置就是倒数第 k 个链表节点（为了简化，假设 k 不会超过链表长度）：
+
+```cpp
+ListNode *midNode(ListNode *head) {
+    ListNode slow, fast;
+    slow = fast = head;
+    while (k-- > 0) 
+        fast = fast.next;
+    
+    while (fast != null) {
+        slow = slow.next;
+        fast = fast.next;
+    }
+    return slow;
+}
+```
 
 ## ✏ 双指针题型
 
@@ -58,7 +309,7 @@ int maxArea(vector<int>& height) {
 }
 ```
 
-## ✏ 滑动窗口题目
+## ✏ 滑动窗口
 
 ### 模板 🍇 
 

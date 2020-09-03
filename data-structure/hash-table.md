@@ -84,12 +84,6 @@ vector<int> twoSum(vector<int>& nums, int target) {
 }
 ```
 {% endtab %}
-
-{% tab title="双指针" %}
-```
-
-```
-{% endtab %}
 {% endtabs %}
 
 \*\*\*\*[**3Sum**](https://leetcode-cn.com/problems/3sum/)\*\*\*\*

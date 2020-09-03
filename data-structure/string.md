@@ -200,3 +200,30 @@ string longestPalindrome(string s) {
 {% endtab %}
 {% endtabs %}
 
+### \*\*\*\*[**Reverse Words in a String**](https://leetcode-cn.com/problems/reverse-words-in-a-string/)\*\*\*\*
+
+```cpp
+string reverseWords(string s) {
+    string result;
+    int left = 0, right = s.size() - 1;
+    while(right >= 0){
+        while(right >= 0 && s[right] == ' ') right--;
+        if(right >= 0){
+            left = right;
+            while(left >= 0 && s[left] != ' ') left--;
+            left++;
+            if(left >= 0){
+                for(int i = left; i <=right; i++){
+                    result.push_back(s[i]);
+                }
+                result.push_back(' ');
+            }
+            right = left - 1;
+        }
+    }
+    if(!result.empty() && result.back() == ' ')
+        result.pop_back();
+    return result;
+}
+```
+

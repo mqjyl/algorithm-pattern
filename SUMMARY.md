@@ -121,7 +121,13 @@
 ## 面试题
 
 * [基础知识题](mian-shi-ti/basic-knowledge.md)
-* [设计题](mian-shi-ti/design-problems.md)
+* [设计题](mian-shi-ti/design-problems/README.md)
+  * [C++实现读写锁](mian-shi-ti/design-problems/cpp-rwlock.md)
+  * [实现阻塞队列](mian-shi-ti/design-problems/blocking-queue.md)
+  * [实现内存池](mian-shi-ti/design-problems/memory-pool.md)
+  * [生产者-消费者模型](mian-shi-ti/design-problems/producer-consumer.md)
+  * [实现线程池](mian-shi-ti/design-problems/thread-pool.md)
+  * [实现双线程交替打印](mian-shi-ti/design-problems/double-thread-alternate-printing.md)
 * [经典的算法题](mian-shi-ti/classic-algorithm-problems.md)
 * [C++面试题总结](mian-shi-ti/cpp-interview-question.md)
 
