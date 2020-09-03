@@ -148,6 +148,123 @@ vector<vector<int>> threeSum(vector<int>& nums) {
 
 至此，`3Sum` 问题就解决了，时间复杂度不难算，排序的复杂度为`O(NlogN)`，`twoSumTarget` 函数中的双指针操作为 `O(N)`，`threeSumTarget`函数在 for 循环中调用 `twoSumTarget` 所以总的时间复杂度就是 `O(NlogN + N^2) = O(N^2)`。
 
+#### 2、[4Sum](https://leetcode-cn.com/problems/4sum/)问题
+
+ `4Sum` 完全就可以用相同的思路：穷举第一个数字，然后调用`3Sum` 函数计算剩下三个数，最后组合出和为 `target` 的四元组。
+
+```cpp
+vector<vector<int>> twoSumTarget(vector<int>& nums, int start, int target) {
+    // nums 数组必须有序
+    // sort(nums.begin(), nums.end()); // 如果无序，则排序
+    int lo = start, hi = nums.size() - 1;
+    vector<vector<int>> res;
+    while (lo < hi) {
+        int sum = nums[lo] + nums[hi];
+        int left = nums[lo], right = nums[hi];
+        if (sum < target) {
+            while (lo < hi && nums[lo] == left) lo++;
+        } else if (sum > target) {
+            while (lo < hi && nums[hi] == right) hi--;
+        } else {
+            res.push_back({left, right});
+            while (lo < hi && nums[lo] == left) lo++;
+            while (lo < hi && nums[hi] == right) hi--;
+        }
+    }
+    return res;
+}
+vector<vector<int>> threeSumTarget(vector<int>& nums, int start, int target) {
+    // 输入数组 nums，返回所有和为 target 的三元组
+    sort(nums.begin(), nums.end());
+    int len = nums.size();
+    vector<vector<int>> res;
+    for(int i = start; i < len; ++i){
+        vector<vector<int>> tuples = twoSumTarget(nums, i + 1, target - nums[i]);
+        for(vector<int> &tuple : tuples){
+            tuple.push_back(nums[i]);
+            res.push_back(tuple);
+        }
+        while(i < len - 1 && nums[i] == nums[i + 1]) i++;
+    }
+    return res;
+}
+
+// 四数之和
+std::vector<std::vector<int>> fourSum(std::vector<int>& nums, int target){
+    // 数组需要排序
+    sort(nums.begin(), nums.end());
+    int n = nums.size();
+    vector<vector<int>> res;
+    // 穷举 fourSum 的第一个数
+    for (int i = 0; i < n; i++) {
+        // 对 target - nums[i] 计算 threeSum
+        vector<vector<int>>
+                triples = threeSumTarget(nums, i + 1, target - nums[i]);
+        // 如果存在满足条件的三元组，再加上 nums[i] 就是结果四元组
+        for (vector<int>& triple : triples) {
+            triple.push_back(nums[i]);
+            res.push_back(triple);
+        }
+        // fourSum 的第一个数不能重复
+        while (i < n - 1 && nums[i] == nums[i + 1]) i++;
+    }
+    return res;
+}
+```
+
+ 这样，按照相同的套路，`4Sum` 问题就解决了，时间复杂度的分析和之前类似，for 循环中调用了 `threeSumTarget` 函数，所以总的时间复杂度就是 `O(N^3)`。
+
+#### 3、nSum问题
+
+ 观察上面这些解法，统一出一个 `nSum` 函数：
+
+```cpp
+/* 注意：调用这个函数之前一定要先给 nums 排序 */
+vector<vector<int>> nSumTarget(
+    vector<int>& nums, int n, int start, int target) {
+
+    int sz = nums.size();
+    vector<vector<int>> res;
+    // 至少是 2Sum，且数组大小不应该小于 n
+    if (n < 2 || sz < n) return res;
+    // 2Sum 是 base case
+    if (n == 2) {
+        // 双指针那一套操作
+        int lo = start, hi = sz - 1;
+        while (lo < hi) {
+            int sum = nums[lo] + nums[hi];
+            int left = nums[lo], right = nums[hi];
+            if (sum < target) {
+                while (lo < hi && nums[lo] == left) lo++;
+            } else if (sum > target) {
+                while (lo < hi && nums[hi] == right) hi--;
+            } else {
+                res.push_back({left, right});
+                while (lo < hi && nums[lo] == left) lo++;
+                while (lo < hi && nums[hi] == right) hi--;
+            }
+        }
+    } else {
+        // n > 2 时，递归计算 (n-1)Sum 的结果
+        for (int i = start; i < sz; i++) {
+            vector<vector<int>> 
+                sub = nSumTarget(nums, n - 1, i + 1, target - nums[i]);
+            for (vector<int>& arr : sub) {
+                // (n-1)Sum 加上 nums[i] 就是 nSum
+                arr.push_back(nums[i]);
+                res.push_back(arr);
+            }
+            while (i < sz - 1 && nums[i] == nums[i + 1]) i++;
+        }
+    }
+    return res;
+}
+```
+
+看起来很长，实际上就是把之前的题目解法合并起来了，`n == 2` 时是`twoSum` 的双指针解法，`n > 2` 时就是穷举第一个数字，然后递归调用计算 `(n-1)Sum`，组装答案。
+
+**需要注意的是，调用这个 `nSum` 函数之前一定要先给 `nums` 数组排序**，因为`nSum` 是一个递归函数，如果在 `nSum` 函数里调用排序函数，那么每次递归都会进行没有必要的排序，效率会非常低。
+
 ### 🖋  3、反转数组和串
 
 ```cpp
