@@ -120,8 +120,8 @@
 
 ## 面试题
 
-* [基础知识题](mian-shi-ti/basic-knowledge.md)
-* [设计题](mian-shi-ti/design-problems/README.md)
+* [数据结构和算法基础](mian-shi-ti/basic-knowledge.md)
+* [程序设计题](mian-shi-ti/design-problems/README.md)
   * [C++实现读写锁](mian-shi-ti/design-problems/cpp-rwlock.md)
   * [实现阻塞队列](mian-shi-ti/design-problems/blocking-queue.md)
   * [实现内存池](mian-shi-ti/design-problems/memory-pool.md)

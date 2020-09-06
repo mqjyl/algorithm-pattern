@@ -4,7 +4,7 @@ description: 总结字符串相关的算法考点和题型。
 
 # 字符串
 
-## ✏ [模式匹配](https://leetcode-cn.com/problems/implement-strstr/)
+## ✏ 1、[模式匹配](https://leetcode-cn.com/problems/implement-strstr/)
 
 字符串 $$S=[s_1,s_2,\ldots,s_n]$$ ，模式串 $$P=[p_1,p_2,\ldots,p_m]$$ ， $$i$$ 和 $$j$$ 为两个游标，从`1`开始。
 
@@ -12,7 +12,7 @@ description: 总结字符串相关的算法考点和题型。
 
 朴素算法（`Naive Algorithm`）、`Rabin-Karp` 算法、有限自动机算法（`Finite Automation`）、 `Knuth-Morris-Pratt` 算法（即 `KMP Algorithm`）、`Boyer-Moore` 算法、`Simon` 算法、`Colussi` 算法、`Galil-Giancarlo` 算法、`Apostolico-Crochemore` 算法、`Horspool` 算法和 `Sunday` 算法等。
 
-### 🖋 1、`BF`算法
+### 🖋 1.1、`BF`算法
 
 普通模式匹配算法，其实现过程没有任何技巧，就是简单粗暴地拿一个串同另一个串中的字符一一比对，得到最终结果。
 
@@ -44,9 +44,9 @@ int strStr(string haystack, string needle) {
 
 如图所示在 $$p_7$$ 处产生失配时，朴素的算法会将 $$i$$ 退到的位置， $$j$$ 回到 $$1$$ 重新匹配，但我们发现 $$s_6\text{-}s_8$$ 与 $$p_2\text{-}p_4$$ 已经匹配，而 $$p_1$$ 与$$p_2\text{-}p_4$$ 皆不同，则与$$s_6\text{-}s_8$$ 匹配必然失败，又$$p_1p_2$$ 知$$p_5p_6$$ 与相同，则可知$$p_1p_2$$与$$p_9p_{10}$$一定匹配，由此可知，$$i$$ 不需要回退，$$j$$只需从 $$3$$ 开始继续匹配。
 
-### 🖋 2、`KMP`算法
+### 🖋 1.2、`KMP`算法
 
-#### 🏀 2.1、分析
+#### 🏀 1.2.1、分析
 
 1. 当模式串在 $$p_1$$ 时就产生失配，则将 $$i+1$$ ，再比较 $$s_i$$ 和 $$p_1$$ ，依次向后进行；
 2. 当匹配到 $$p_i$$ 时产生失配，
@@ -55,7 +55,7 @@ int strStr(string haystack, string needle) {
 
 此时，
 
-#### 🏀 2.2、求`next`数组
+#### 🏀 1.2.2、求`next`数组
 
 `next`数组的定义如下：
 
@@ -75,17 +75,17 @@ $$
 
 ```
 
-#### 🏀 2.3、根据`next`数组，可得`KMP`算法
+#### 🏀 1.2.3、根据`next`数组，可得`KMP`算法
 
 ```text
 
 ```
 
-#### 🏀 2.4、通用`next`数组求法
+#### 🏀 1.2.4、通用`next`数组求法
 
 
 
-### 🖋 3、题型
+### 🖋 1.3、题型
 
 #### \*\*\*\*[**Implement strStr\(\)**](https://leetcode-cn.com/problems/implement-strstr/)\*\*\*\*
 
@@ -95,9 +95,72 @@ $$
 
 给定一个非空的字符串，判断它是否可以由它的一个子串重复多次构成。给定的字符串只含有小写英文字母，并且长度不超过10000。
 
-## ✏ 字符串相关算法题
+## ✏ 2、回文字符串
+
+### 🖋 2.1、最长回文子串
+
+#### [**Longest Palindromic Substring**](https://leetcode-cn.com/problems/longest-palindromic-substring/)\*\*\*\*
+
+ 给定一个字符串 `s`，找到 `s` 中最长的回文子串。你可以假设 `s` 的最大长度为 1000。
+
+> 方法一、中心扩展，分为奇回文和偶回文，时间复杂度为 $$O(n^2)$$ 。
+>
+> 方法二、`Manacher`算法
+
+{% tabs %}
+{% tab title="中心扩展" %}
+```cpp
+string longestPalindrome(string s) {
+    string result = s.substr(0,1);
+    int len = s.length();
+    for(int i = 1;i < len;i++){
+        if(s[i] == s[i - 1]){
+            int m = i + 1;
+            int n = i - 2;
+            while(m < len && n >= 0 && s[m] == s[n]){
+                m++; n--;
+            }
+            m--; n++;
+            if(m - n + 1 > result.length())
+                result = s.substr(n, m - n + 1);
+        }
+        if(i >= 2 && s[i] == s[i - 2]){
+            int m = i + 1;
+            int n = i - 3;
+            while(m < len && n >= 0 && s[m] == s[n]){
+                m++; n--;
+            }
+            m--; n++;
+            if(m - n + 1 > result.length())
+                result = s.substr(n, m - n + 1);
+        }
+    }
+
+    return result;
+}
+```
+{% endtab %}
+
+{% tab title="Manacher" %}
+```
+
+```
+{% endtab %}
+{% endtabs %}
+
+### 🖋 2.2、扩展
+
+[**让字符串成为回文串的最少插入次数**](https://leetcode-cn.com/problems/minimum-insertion-steps-to-make-a-string-palindrome/)\*\*\*\*
 
 
+
+## ✏ 3、循环节问题
+
+
+
+
+
+## ✏ 4、其他题目
 
 ### \*\*\*\*[**Add Binary**](https://leetcode-cn.com/problems/add-binary/)\*\*\*\*
 
@@ -148,57 +211,6 @@ std::string StringHandler::replaceSpace(std::string s, const std::string p){
 ### \*\*\*\*[**First Unique Character in a String**](https://leetcode-cn.com/problems/first-unique-character-in-a-string/)\*\*\*\*
 
 给定一个字符串，找到它的第一个不重复的字符，并返回它的索引。如果不存在，则返回 `-1`。
-
-### \*\*\*\*[**Longest Palindromic Substring**](https://leetcode-cn.com/problems/longest-palindromic-substring/)\*\*\*\*
-
- 给定一个字符串 `s`，找到 `s` 中最长的回文子串。你可以假设 `s` 的最大长度为 1000。
-
-{% tabs %}
-{% tab title="中心扩展" %}
-```cpp
-string longestPalindrome(string s) {
-    string result = s.substr(0,1);
-    int len = s.length();
-    for(int i = 1;i < len;i++){
-        if(s[i] == s[i - 1]){
-            int m = i + 1;
-            int n = i - 2;
-            while(m < len && n >= 0 && s[m] == s[n]){
-                m++; n--;
-            }
-            m--; n++;
-            if(m - n + 1 > result.length())
-                result = s.substr(n, m - n + 1);
-        }
-        if(i >= 2 && s[i] == s[i - 2]){
-            int m = i + 1;
-            int n = i - 3;
-            while(m < len && n >= 0 && s[m] == s[n]){
-                m++; n--;
-            }
-            m--; n++;
-            if(m - n + 1 > result.length())
-                result = s.substr(n, m - n + 1);
-        }
-    }
-
-    return result;
-}
-```
-{% endtab %}
-
-{% tab title="动态规划" %}
-```
-
-```
-{% endtab %}
-
-{% tab title="Manacher" %}
-```
-
-```
-{% endtab %}
-{% endtabs %}
 
 ### \*\*\*\*[**Reverse Words in a String**](https://leetcode-cn.com/problems/reverse-words-in-a-string/)\*\*\*\*
 
