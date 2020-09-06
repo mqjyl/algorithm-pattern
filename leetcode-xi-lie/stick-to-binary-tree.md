@@ -86,7 +86,103 @@ bool hasPathSum(TreeNode* root, int sum){
 
 ## ✏ 3、[序列化和反序列化](https://leetcode-cn.com/problems/serialize-and-deserialize-binary-tree/)
 
+> 思路一：BFS 序列成对应的完全二叉树（超时，主要是字符串`split`耗时长）。
+>
+> 思路二：DFS前中后序都可以，递归实现。
+>
+> 思路三：改进的BFS，不是完全二叉树，而是扩展二叉树的叶子节点为NULL节点。
+>
+> 思路四：类似于[官方题解方法二](https://leetcode-cn.com/problems/serialize-and-deserialize-binary-tree/solution/er-cha-shu-de-xu-lie-hua-yu-fan-xu-lie-hua-by-le-2/)，用分隔符包装。
 
+{% tabs %}
+{% tab title="BFS 超时" %}
+```cpp
+// Encodes a tree to a single string.
+string serialize(TreeNode* root) {
+    string result;
+    if(!root)
+        return "[]";
+    queue<TreeNode *> pqueue;
+    pqueue.push(root);
+    while(true){
+        bool sign = true;
+        int len = pqueue.size();
+        for(int i = 0; i < len; i++) {
+            TreeNode *ptr = pqueue.front();
+            pqueue.pop();
+            if (ptr) {
+                result.append(to_string(ptr->val));
+                result.push_back(',');
+                if (ptr->left) {
+                    pqueue.push(ptr->left);
+                    sign = false;
+                } else {
+                    pqueue.push(NULL);
+                }
+                if (ptr->right) {
+                    pqueue.push(ptr->right);
+                    sign = false;
+                } else {
+                    pqueue.push(NULL);
+                }
+            } else {
+                result.append("X,");
+                pqueue.push(NULL);
+                pqueue.push(NULL);
+            }
+        }
+        if(sign)
+            break;
+    }
+    while(!result.empty() && (result.back() == ',' || result.back() == 'X'))
+        result.pop_back();
+    return "[" + result + "]";
+}
+
+// Decodes your encoded data to tree.
+TreeNode* deserialize(string data) {
+    if(data.size() <= 2)
+        return NULL;
+    vector<string> tokens;
+    string str;
+    for(int i = 1; i < data.size() - 1; ++i){
+        if(data[i] == 'X'){
+            tokens.push_back("X");
+            i++;
+        }else if(data[i] == ','){
+            tokens.push_back(str);
+            str.clear();
+        }else{
+            str.push_back(data[i]);
+        }
+    }
+    tokens.push_back(str);
+    int len = tokens.size();
+    if(tokens.empty())
+        return NULL;
+    queue<pair<TreeNode *, int> > iqueue;
+    TreeNode *root = new TreeNode(stoi(tokens[0]));
+    iqueue.push(make_pair(root, 0));
+    while(!iqueue.empty()){
+        auto ptr = iqueue.front();
+        iqueue.pop();
+        int idx = 2 * ptr.second;
+        if(idx + 1 < len && tokens[idx + 1] != "X"){
+            ptr.first->left = new TreeNode(stoi(tokens[idx + 1]));
+            if(2 * (idx + 1) + 1 < len)
+                iqueue.push(make_pair(ptr.first->left, idx + 1));
+        }
+        if(idx + 2 < len && tokens[idx + 2] != "X"){
+            ptr.first->right = new TreeNode(stoi(tokens[idx + 2]));
+            if(2 * (idx + 2) + 1 < len)
+                iqueue.push(make_pair(ptr.first->right, idx + 2));
+        }
+    }
+    return root;
+}
+```
+{% endtab %}
+{% endtabs %}
 
 ## ✏ 4、二叉树遍历之Morris算法
 

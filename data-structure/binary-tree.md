@@ -13,7 +13,7 @@ description: 二叉树相关的算法实现。
 
 ### 🖋 2、二叉树的创建
 
-> 唯一确定一颗二叉树的方法：中序加前序 或 中序加后序，此时必须假设树中没有重复的元素或者有唯一的结点编号。
+> 唯一确定一颗二叉树的方法：中序加前序 或 中序加后序，**此时必须假设树中没有重复的元素或者有唯一的结点编号。**
 
 #### [**Construct Binary Tree from Preorder and Inorder Traversal**](https://leetcode-cn.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/)\*\*\*\*
 
@@ -75,6 +75,35 @@ TreeNode* buildTree(vector<int>& inorder, vector<int>& postorder) {
         treeNode->right = buildTree(inorder_right, postorder_right);
     }
     return treeNode;
+}
+```
+
+#### 根据数组创建二叉树
+
+给出的数组存储二叉树对应的完全二叉树，空节点用`val`表示，创建二叉树
+
+```cpp
+TreeNode createTree(const vector<int> &nums, const int val){
+    int len = nums.size();
+    queue<pair<TreeNode *, int> > iqueue;
+    TreeNode *root = new TreeNode(nums[0]);
+    iqueue.push(make_pair(root, 0));
+    while(!iqueue.empty()){
+        auto &ptr = iqueue.front();
+        iqueue.pop();
+        int idx = ptr.second * 2;
+        if(idx + 1 < len && nums[idx + 1] != val){
+            ptr.first->left = new TreeNode(nums[idx + 1]);
+            if(2 * (idx + 1) + 1 < len)
+                iqueue.push(make_pair(ptr.first->left, idx + 1));
+        }
+        if(idx + 2 < len && nums[idx + 2] != val){
+            ptr.first->right = new TreeNode(nums[idx + 2]);
+            if(2 * (idx + 2) + 1 < len)
+                iqueue.push(make_pair(ptr.first->right, idx + 2));
+        }
+    }
+    return root;
 }
 ```
 
