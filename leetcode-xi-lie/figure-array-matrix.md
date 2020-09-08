@@ -242,3 +242,57 @@ vector<int> slashOrder(vector<vector<int> > &matrix) {
 }
 ```
 
+### 🖋 3、旋转矩阵
+
+> 方法一：原地旋转有两种思路：
+>
+> 1. 第一种是对于每一圈来说，遍历一边的元素，每个元素代表一个环，一个环中四个元素；
+> 2. 第二种对于整体矩阵来说可以分为四个部分，左上部分的每个元素可以构成一个环，每个环中有四个元素，分布在四个部分中，如下图：
+
+![](../.gitbook/assets/rotate.gif)
+
+> 方法二：用翻转代替旋转：先将其通过水平轴翻转，再根据主对角线 \ 翻转即可。
+
+{% tabs %}
+{% tab title="基于圈为单位旋转" %}
+```cpp
+void rotate(vector<vector<int>>& matrix) {
+    int n = matrix.size();
+    for(int i = 0; i < n / 2; ++i){
+        int count = n - i * 2;
+        for(int j = i; j < i + count - 1; ++j){
+            // 每次旋转四个
+            int tmp = matrix[i][j];
+            matrix[i][j] = matrix[n - 1 - j][i];
+            matrix[n - 1 - j][i] = matrix[n - 1 - i][n - 1 -j];
+            matrix[n - 1 - i][n - 1 -j] = matrix[j][n - 1 - i];
+            matrix[j][n - 1 - i] = tmp;
+        }
+    }
+}
+```
+{% endtab %}
+
+{% tab title="基于左上部分旋转" %}
+```cpp
+void rotate(vector<vector<int>>& matrix) {
+    int n = matrix.size();
+    for(int i = 0; i < n / 2; ++i){
+        for(int j = 0; j < (n + 1) / 2; ++j){ // (n + m - 1) / m 可以向上取整
+            // 每次旋转四个
+            int tmp = matrix[i][j];
+            matrix[i][j] = matrix[n - 1 - j][i];
+            matrix[n - 1 - j][i] = matrix[n - 1 - i][n - 1 -j];
+            matrix[n - 1 - i][n - 1 -j] = matrix[j][n - 1 - i];
+            matrix[j][n - 1 - i] = tmp;
+        }
+    }
+}
+```
+{% endtab %}
+{% endtabs %}
+
+### 🖋 4、[矩阵置零](https://leetcode-cn.com/problems/set-matrix-zeroes/)
+
+ 给定一个 $$m \times n$$ 的矩阵，如果一个元素为 0，则将其所在行和列的所有元素都设为 0。请使用**原地**算法**。**
+
