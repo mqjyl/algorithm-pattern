@@ -6,7 +6,7 @@
 
 ![](../../.gitbook/assets/image%20%2858%29.png)
 
-出队a1、a2，则front指针指向下标为2的位置，rear不变，如下图所示，再入队a5，此时front指针不变，rear指针移动到数组之外 ，造成假溢出的现象
+出队a1、a2，则front指针指向下标为2的位置，rear不变，如下图所示，再入队a5，此时front指针不变，rear指针移动到数组之外 ，造成假溢出的现象:
 
 ![](../../.gitbook/assets/image%20%2859%29.png)
 
