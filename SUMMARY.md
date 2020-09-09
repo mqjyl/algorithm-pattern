@@ -130,4 +130,5 @@
   * [实现双线程交替打印](mian-shi-ti/design-problems/double-thread-alternate-printing.md)
 * [经典的算法题](mian-shi-ti/classic-algorithm-problems.md)
 * [C++面试题总结](mian-shi-ti/cpp-interview-question.md)
+* [面试算法题总结](mian-shi-ti/interview-algorithm.md)
 

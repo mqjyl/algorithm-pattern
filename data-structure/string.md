@@ -91,10 +91,6 @@ $$
 
 实现 `strStr()` 函数。给定一个 `haystack` 字符串和一个 `needle` 字符串，在 `haystack` 字符串中找出 `needle` 字符串出现的第一个位置 \(从0开始\)。如果不存在，则返回 `-1`。 对于本题而言，当 `needle` 是空字符串时我们应当返回 0 。这与C语言的 `strstr()` 以及 Java的 `indexOf()` 定义相符。
 
-#### \*\*\*\*[**Repeated Substring Pattern**](https://leetcode-cn.com/problems/repeated-substring-pattern/)\*\*\*\*
-
-给定一个非空的字符串，判断它是否可以由它的一个子串重复多次构成。给定的字符串只含有小写英文字母，并且长度不超过10000。
-
 ## ✏ 2、回文字符串
 
 ### 🖋 2.1、最长回文子串
@@ -105,7 +101,7 @@ $$
 
 > 方法一、中心扩展，分为奇回文和偶回文，时间复杂度为 $$O(n^2)$$ 。
 >
-> 方法二、`Manacher`算法
+> 方法二、`Manacher`算法，见左神书：《程序员代码面试指南》。
 
 {% tabs %}
 {% tab title="中心扩展" %}
@@ -142,8 +138,46 @@ string longestPalindrome(string s) {
 {% endtab %}
 
 {% tab title="Manacher" %}
-```
-
+```cpp
+string longestPalindrome(string s) {
+    if(s.empty()){
+        return "";
+    }
+    string str(s.size() * 2 + 1, '#');
+    for(int i = 1, j = 0; i < str.size() && j < s.size(); i += 2, j++)
+        str[i] = s[j];
+    vector<int> pArr(str.size());
+    int index = -1;
+    int pR = -1;
+    int ans = INT_MIN;
+    int t = 0;
+    for(int i = 0; i < str.size(); i++){
+        pArr[i] = pR > i ? min(pArr[2 * index - i], pR - i) : 1;
+        while(i + pArr[i] < str.size() && i - pArr[i] > -1){
+            if(str[i + pArr[i]] == str[i - pArr[i]]){
+                pArr[i]++;
+            }else{
+                break;
+            }
+        }
+        if(i + pArr[i] > pR){
+            pR = i + pArr[i];
+            index = i;
+        }
+        if(ans < pArr[i]){
+            ans = pArr[i];
+            t = i;
+        }
+    }
+    // return ans - 1; // 最长回文字串长度
+    string result;
+    for(int i = t - ans + 1; i < t + ans; i++){
+        if(str[i] != '#'){
+            result.push_back(str[i]);
+        }
+    }
+    return result;
+}
 ```
 {% endtab %}
 {% endtabs %}
@@ -152,11 +186,17 @@ string longestPalindrome(string s) {
 
 [**让字符串成为回文串的最少插入次数**](https://leetcode-cn.com/problems/minimum-insertion-steps-to-make-a-string-palindrome/)\*\*\*\*
 
+\*\*\*\*
+
+\*\*\*\*
+
 
 
 ## ✏ 3、循环节问题
 
+#### [**Repeated Substring Pattern**](https://leetcode-cn.com/problems/repeated-substring-pattern/)\*\*\*\*
 
+给定一个非空的字符串，判断它是否可以由它的一个子串重复多次构成。给定的字符串只含有小写英文字母，并且长度不超过10000。
 
 
 
