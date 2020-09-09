@@ -21,6 +21,10 @@ description: 学习动态规划的算法思维，总结常见的题型。
 >    [6,5,7],                    [6,5,5,7]        (转换的二叉树)
 >   [4,1,8,3]                [4,1,1,8,1,8,8,3]
 > ]                        ]
+>
+> 搜索的路径是三角形转换而来二叉树的前序遍历。
+>
+> 自底向上方法中：当前的位置的最优值为它相邻的两个节点中的最优值
 > ```
 
 > 自顶向下的最小路径和为 11（即，2 + 3 + 5 + 1 = 11）。
@@ -46,7 +50,7 @@ int minimumTotal(vector<vector<int>>& triangle) {
 
 **方法二：记忆化搜索——优化 `DFS`，缓存已经被计算的值（空间换时间），本质上是动态规划**
 
-动态规划就是把大问题变成小问题，并解决了小问题重复计算的方法称为动态规划
+动态规划就是把大问题变成小问题，并解决了小问题重复计算的方法称为动态规划。
 
 > 动态规划和 `DFS` 区别
 >
@@ -67,7 +71,7 @@ int minimumTotal(vector<vector<int>>& triangle) {
         for(int j = 0; j < i + 1;j++){
             if(i == len){
                 rHash.push_back(triangle[i][j]);
-            }else{
+            }else{ // hash[len-i-1][j + 1], hash[len-i-1][j]这就是相邻的节点的坐标
                 rHash.push_back(min(hash[len - i - 1][j + 1], 
                         hash[len - i - 1][j]) + triangle[i][j]);
             }
@@ -77,8 +81,6 @@ int minimumTotal(vector<vector<int>>& triangle) {
     }
     return hash[len][0];
 }
-// 自顶向下
-
 ```
 {% endtab %}
 
