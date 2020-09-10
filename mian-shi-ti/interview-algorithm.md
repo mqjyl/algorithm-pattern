@@ -61,5 +61,78 @@ void delNode(ListNode *head, ListNode *target){
 
 由抽牌、换牌和插牌衍生出三种洗牌算法，其中抽牌和换牌分别对应`Fisher-Yates Shuffle`和`Knuth-Durstenfeld Shhuffle`算法。
 
-### 🖋 2.1、
+### 🖋 2.1、Fisher-Yates Shuffle
+
+最早提出这个洗牌方法的是 Ronald A. Fisher 和 Frank Yates，即 Fisher–Yates Shuffle，其基本思想就是从原始数组中随机取一个之前没取过的数字到新的数组中，具体如下：
+
+1. 初始化原始数组和新数组，原始数组长度为n\(已知\)；
+2. 从还没处理的数组（假如还剩k个）中，随机产生一个 $$[0, k)$$ 之间的数字p（假设数组从0开始）；
+3. 从剩下的k个数中把第p个数取出；
+4. 重复步骤2和3直到数字全部取完；
+5. 从步骤3取出的数字序列便是一个打乱了的数列。
+
+下面证明其随机性，即每个元素被放置在新数组中的第 $$i$$ 个位置是 $$1/n$$ （假设数组大小是n）。
+
+$$
+P=\frac{n - 1}{n}\times\frac{n - 2}{n - 1}\times \ldots \times \frac{n - i + 1}{n - i + 2}\times \frac{1}{n - i + 1}=\frac{1}{n}
+$$
+
+```cpp
+void Fisher_Yates_Shuffle(vector<int>& arr,vector<int>& res)
+{
+    int len = arr.size();
+    srand((unsigned)time(NULL));
+    for (int i = 0; i < len; ++i)
+    {
+        int k = rand() % arr.size();
+        res.push_back(arr[k]);
+        arr.erase(arr.begin() + k);
+    }
+}
+```
+
+### 🖋 2.2、Knuth-Durstenfeld Shuffle
+
+Knuth 和 Durstenfeld 在Fisher 等人的基础上对算法进行了改进，在原始数组上对数字进行交互，省去了额外 $$O(n)$$ 的空间。该算法的基本思想和 Fisher 类似，每次从未处理的数据中随机取出一个数字，然后把该数字放在数组的尾部，即数组尾部存放的是已经处理过的数字。
+
+该算法是经典洗牌算法。它的证明如下： 对于`arr[i]`洗牌后在第`n-1`个位置的概率是 $$1/n$$ （第一次交换的随机数为 $$i$$ ） 在`n-2`个位置概率是 $$[(n-1)/n]  [1/(n-1)] = 1/n$$，（第一次交换的随机数不为i，第二次为`arr[i]`所在的位置（注意，若i=n-1，第一交换arr\[n-1\]会被换到一个随机的位置）） 在第n-k个位置的概率是\[\(n-1\)/n\]  \[\(n-2\)/\(n-1\)\] _..._ \[\(n-k+1\)/\(n-k+2\)\] \*\[1/\(n-k+1\)\] = 1/n （第一个随机数不要为i，第二次不为arr\[i\]所在的位置\(随着交换有可能会变\)……第n-k次为arr\[i\]所在的位置）.
+
+```cpp
+void Knuth_Durstenfeld_Shuffle(vector<int> &arr)
+{
+    int len = arr.size();
+    srand((unsigned)time(NULL));
+    for (int i = len - 1; i >= 0; --i)
+    {
+        int k = rand() % (i + 1);
+        swap(arr[k], arr[i]);
+    }
+}
+```
+
+**间复杂度为** $$O(n)$$ ，**空间复杂度为** $$O(1)$$ ，**缺点必须知道数组长度** $$n$$ 。原始数组被修改了，这是一个原地打乱顺序的算法，算法时间复杂度也从Fisher算法的 $$O(n^2)$$ 提升到了 $$O(n)$$ 。由于是从后往前扫描，无法处理不知道长度或动态增长的数组。
+
+### 🖋 2.3、Inside-Out Algorithm
+
+Inside-Out Algorithm 算法的基本思思是从前向后扫描数据，把位置i的数据随机插入到前 $$i$$ 个（包括第i个）位置中（假设为 $$k$$ ），这个操作是在新数组中进行，然后把原始数据中位置 $$k$$ 的数字替换新数组位置 $$i$$ 的数字。其实效果相当于新数组中位置 $$k$$ 和位置 $$i$$ 的数字进行交互。
+
+证明如下： 原数组的第 i 个元素（随机到的数）在新数组的前 i 个位置的概率都是：\(1/i\)  _\[i/\(i+1\)\]_  \[\(i+1\)/\(i+2\)\] _..._ \[\(n-1\)/n\] = 1/n，（即第i次刚好随机放到了该位置，在后面的n-i 次选择中该数字不被选中）。 原数组的第 i 个元素（随机到的数）在新数组的 i+1 （包括i + 1）以后的位置（假设是第k个位置）的概率是：\(1/k\)  _\[k/\(k+1\)\]_  \[\(k+1\)/\(k+2\)\] _..._ \[\(n-1\)/n\] = 1/n（即第k次刚好随机放到了该位置，在后面的n-k次选择中该数字不被选中）。
+
+```cpp
+void Inside_Out_Shuffle(const vector<int>& arr, vector<int>& res)
+{
+    res.assign(arr.size(), 0);
+    copy(arr.begin(), arr.end(), res.begin());
+    srand((unsigned)time(NULL));
+    for (int i = 0; i < arr.size(); ++i)
+    {
+        int k = rand() % (i + 1);
+        swap(res[k], res[i]);
+    }
+}
+```
+
+### 🖋 2.4、蓄水池抽样
+
+ 从n个元素中随机等概率取出k个元素，n长度未知。它能够在 $$O(n)$$ 时间内对n个数据进行等概率随机抽取。**如果数据集合的量特别大或者还在增长（相当于未知数据集合总量），该算法依然可以等概率抽样**。
 

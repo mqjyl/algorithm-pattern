@@ -10,7 +10,7 @@
 
 ![](../../.gitbook/assets/image%20%2859%29.png)
 
-为了解决这个问题，引入了**循环队列**的概念．
+为了解决这个问题，引入了**循环队列**的概念。
 
 ### 循环队列原理图：
 
@@ -126,7 +126,7 @@ bool CircularQueue<T>::resize(){
     }
     m_front = 0;
     m_rear = count;
-    m_length *= 2;
+    m_length *= 1.5;
     delete[] m_data;
     m_data = tmp;
 }
