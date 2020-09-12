@@ -281,3 +281,39 @@ string reverseWords(string s) {
 }
 ```
 
+### \*\*\*\*[**字符串转换整数 \(atoi\)**](https://leetcode-cn.com/problems/string-to-integer-atoi/)\*\*\*\*
+
+ 实现一个 `atoi` 函数，使其能将字符串转换成整数。
+
+```cpp
+int myAtoi(string str) {
+    int idx = 0;
+    if(str.empty())
+        return 0;
+    long long result = 0;
+    int len = str.size();
+    bool flag = true;
+    while(idx < len && str[idx] == ' ')
+        idx++;
+    if(idx < len && (str[idx] == '-' || str[idx] == '+')){
+        if(str[idx] == '-')
+            flag = false;
+        idx++;
+    }
+    if(idx >= len || !(str[idx] <= '9' && str[idx] >= '0'))
+        return 0;
+    while(idx < len && str[idx] <= '9' && str[idx] >= '0'){
+        int num = str[idx] - '0';
+        result = result * 10 + num;
+        if(result >= long(INT_MAX) && flag){
+            return INT_MAX;
+        }
+        if(result >= long(INT_MAX) + 1 && !flag){
+            return INT_MIN;
+        }
+        idx++;
+    }
+    return flag ? result : -1 * result;
+}
+```
+
