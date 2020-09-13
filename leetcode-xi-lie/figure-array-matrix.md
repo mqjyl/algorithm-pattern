@@ -164,6 +164,26 @@ int findMin(std::vector<std::vector<int> > &arr){
 {% endtab %}
 {% endtabs %}
 
+### 4、整除k的最大子集合（网易笔试题）
+
+有一个整数集合，返回能被k整除的子集合的最大和，如果找不到则返回-1。如：{7, 3, 1, 4}，输出14=7+3+4。
+
+```cpp
+int maxSumDivSeven(vector<int>& nums, int k) {
+    vector<int> dp(k, INT_MIN);
+    dp[0] = 0;
+    for (auto a : nums) {
+        vector<int>dpNext(k, 0);
+        int mod = a % k;
+        for (int i = 0; i < k; ++i) {
+            dpNext[i] = max(dp[i], dp[(k + i - mod) % k] + a);
+        }
+        dp = dpNext;
+    }
+    return dp[0];
+}
+```
+
 ## ✏ 矩阵
 
 ### 🖋 1、[螺旋矩阵](https://leetcode-cn.com/problems/spiral-matrix/)

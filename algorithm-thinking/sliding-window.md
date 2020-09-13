@@ -824,6 +824,10 @@ int longestOnes(vector<int>& A, int K) {
 }
 ```
 
+#### [至多包含 K 个不同字符的最长子串](https://leetcode-cn.com/problems/longest-substring-with-at-most-k-distinct-characters/)
+
+ 给定一个字符串 **s** ，找出 **至多** 包含 k 个不同字符的最长子串 **T**。
+
 
 
 ### 
