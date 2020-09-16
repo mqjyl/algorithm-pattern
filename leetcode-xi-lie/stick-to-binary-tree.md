@@ -93,6 +93,45 @@ bool hasPathSum(TreeNode* root, int sum){
 {% tabs %}
 {% tab title="后序遍历" %}
 ```cpp
+void getAncestors(TreeNode *root, TreeNode* node, vector<TreeNode *> &astack){
+    const TreeNode *cur;
+    TreeNode *ptr = root;
+    const TreeNode *last = NULL;
+    while(ptr != NULL || !astack.empty()){
+        while(ptr != NULL){
+            astack.push_back(ptr);
+            if(ptr == node){
+                return;
+            }
+            ptr = ptr->left;
+        }
+        cur = astack.back();
+        if(cur->right == NULL || cur->right == last){
+            astack.pop_back();
+            last = cur;
+        }else{
+            ptr = cur->right;
+        }
+    }
+}
+TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+    vector<TreeNode *> astack1, astack2;
+    getAncestors(root, p, astack1);
+    getAncestors(root, q, astack2);
+    for(int i = astack1.size() - 1; i >= 0; --i){
+        for(int j = astack2.size() - 1; j >= 0; --j){
+            if(astack1[i] == astack2[j]){
+                return astack1[i];
+            }
+        }
+    }
+    return root;
+}
+```
+{% endtab %}
+
+{% tab title="递归" %}
+```
 
 ```
 {% endtab %}
