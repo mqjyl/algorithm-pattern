@@ -124,6 +124,7 @@
 * [数据结构和算法基础](mian-shi-ti/basic-knowledge.md)
 * [程序设计题](mian-shi-ti/design-problems/README.md)
   * [C++实现读写锁](mian-shi-ti/design-problems/cpp-rwlock.md)
+  * [原子操作实现读写锁](mian-shi-ti/design-problems/atomic-read-write-lock.md)
   * [实现阻塞队列](mian-shi-ti/design-problems/blocking-queue.md)
   * [实现环形队列](mian-shi-ti/design-problems/circle-queue.md)
   * [实现内存池](mian-shi-ti/design-problems/memory-pool.md)
