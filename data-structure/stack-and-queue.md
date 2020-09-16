@@ -368,7 +368,13 @@ std::string getMaxStr(const std::string & str, int K){
 
 #### **3、**[**Largest Rectangle in Histogram**](https://leetcode-cn.com/problems/largest-rectangle-in-histogram/)\*\*\*\*
 
-
+#### 4、视野总和（摩天大楼）
 
 ## ✏ **3、优先队列**
+
+### \*\*\*\*🖋 **3.1、优先队列**
+
+### \*\*\*\*🖋 **3.2、题型**
+
+#### [**Trapping Rain Water II**](https://leetcode-cn.com/problems/trapping-rain-water-ii/)\*\*\*\*
 

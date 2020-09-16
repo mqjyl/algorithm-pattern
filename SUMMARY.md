@@ -104,7 +104,6 @@
 ## LeetCode系列
 
 * [死磕二叉树](leetcode-xi-lie/stick-to-binary-tree.md)
-* [接雨水问题](leetcode-xi-lie/trapping-rain-water.md)
 * [股票买卖问题](leetcode-xi-lie/stockjobbing.md)
 * [打家劫舍问题](leetcode-xi-lie/robbery.md)
 * [跳跃游戏问题](leetcode-xi-lie/jump-game.md)

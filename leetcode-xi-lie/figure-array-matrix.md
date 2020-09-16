@@ -23,6 +23,8 @@ int trailingZeroes(int n) {
 
 大数阶乘（腾讯面试题）
 
+### 🖋 2、公约数问题
+
 ## ✏ 数组
 
 ### 🖋 1、[**数组中出现次数超过一半的数字**](https://leetcode-cn.com/problems/shu-zu-zhong-chu-xian-ci-shu-chao-guo-yi-ban-de-shu-zi-lcof/)\*\*\*\*

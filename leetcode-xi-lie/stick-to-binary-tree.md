@@ -241,11 +241,19 @@ TreeNode* deserialize(string data) {
 
 ## ✏ 4、二叉树遍历之Morris算法
 
+## ✏ 5、镜像问题
+
+### 5.1、[**二叉树的镜像**](https://leetcode-cn.com/problems/er-cha-shu-de-jing-xiang-lcof/)\*\*\*\*
+
+### 5.2、[判断二叉树是不是对称二叉树](https://leetcode-cn.com/problems/dui-cheng-de-er-cha-shu-lcof/)
+
+### 5.3、求X节点的个数（阿里面试题）
 
 
-## ✏ 5、其他
 
-### 5.1、逆时针打印完全二叉树的边界节点
+## ✏ 6、其他
+
+### 6.1、逆时针打印完全二叉树的边界节点
 
 完全二叉树用数组存储，从根节点开始逆时针打印完全二叉树的边界节点。
 
@@ -282,10 +290,4 @@ vector<int> BinaryTree::getSeq(int n, vector<int>& tree){
     return ans;
 }
 ```
-
-### 5.2、判断二叉树是不是对称二叉树
-
-
-
-### 5.3、求X节点的个数
 

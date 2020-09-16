@@ -484,6 +484,16 @@ vector<vector<int>> zigzagLevelOrder(TreeNode* root) {
 {% endtab %}
 {% endtabs %}
 
+#### \*\*\*\*[**Binary Tree Right Side View**](https://leetcode-cn.com/problems/binary-tree-right-side-view/) **（猿辅导面试题）**
+
+> 思路一：层序遍历
+>
+> 思路二：优先右子树的深度遍历
+
+
+
+#### \*\*\*\*
+
 ### 🖋 2、常见示例
 
 #### [maximum-depth-of-binary-tree](https://leetcode-cn.com/problems/maximum-depth-of-binary-tree/)
@@ -572,7 +582,7 @@ vector<double> averageOfLevels(TreeNode* root) {
 
 ### 🖋 3、堆
 
-堆 Heap, 一种特殊的树状数据结构。在堆中，对于任意节点都有其值恒大于等于或小于等于其子节点的值，前者称之为max heap最大堆，后者则称之为min heap最小堆。常见的堆有:二叉堆、多叉堆、斐波那契堆等。这里我们所使用的即是二叉堆，其在形式上是一个完全二叉树。
+堆 Heap, 一种特殊的树状数据结构。在堆中，对于任意节点都有其值恒大于等于或小于等于其子节点的值，前者称之为max heap最大堆，后者则称之为min heap最小堆。常见的堆有：二叉堆、多叉堆、斐波那契堆等。这里我们所使用的即是二叉堆，其在形式上是一个**完全二叉树**。
 
 一般地，我们通过数组来实现二叉堆，将堆中元素按从上到下、从左到右的层级顺序依次存储到数组中即可\(一般地为简便起见，通常从数组的第二个位置开始存储元素，不使用数组索引为0的位置。故大小为N的堆，所需数组的空间大小为N+1\)。
 
