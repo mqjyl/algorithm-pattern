@@ -63,7 +63,8 @@ void traverse(TreeNode root) {
 **只要在递归之前做出选择，在递归之后撤销刚才的选择**，就能正确得到每个节点的选择列表和路径。代码如下：
 
 ```cpp
-void backtrack(std::vector<std::vector<int>> &result, std::vector<int> &track, std::vector<int>& nums){
+void backtrack(std::vector<std::vector<int>> &result, 
+               std::vector<int> &track, std::vector<int>& nums){
     if(track.size() == nums.size()){
         result.push_back(track);
         return;
@@ -195,7 +196,9 @@ int totalNQueens(int n) {
 
 ### [copy-list-with-random-pointer](https://leetcode-cn.com/problems/copy-list-with-random-pointer/)
 
+```cpp
 
+```
 
 ## ✏ 3、回溯法与动态规划
 
