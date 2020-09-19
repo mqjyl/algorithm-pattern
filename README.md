@@ -31,8 +31,6 @@ description: 数据结构和算法基础知识学习和总结。
 * [C++标准库](c-cpp/cpp-standard-library/)
 * [STL深入源码](c-cpp/stl-source-analysis/)
 * [第三方库](c-cpp/third-party-libraries/)
-* [QT Widgets]()
-* [QT Quick与QML]()
 
 ### 数据结构 🏀 
 
@@ -83,6 +81,8 @@ description: 数据结构和算法基础知识学习和总结。
 4. `Codewars`：[https://www.codewars.com/](https://www.codewars.com/)
 5. `Hihocoder`：[http://hihocoder.com/problemset](http://hihocoder.com/problemset)
 6. `Lintcode`：[https://www.lintcode.com/](https://www.lintcode.com/)
+7. `Geeksforgeeks`：[https://www.geeksforgeeks.org/](https://www.geeksforgeeks.org/)
+8. `Acwing`：[https://www.acwing.com/](https://www.acwing.com/)
 
 ### 博客 🍍 
 

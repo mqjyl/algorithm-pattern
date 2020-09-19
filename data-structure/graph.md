@@ -477,7 +477,23 @@ int main(){
 {% endtab %}
 {% endtabs %}
 
-## ✏ 六、例题
+## ✏ 六、拓扑排序
+
+对一个有向无环图（`Directed Acyclic Graph`简称DAG）G进行拓扑排序，是将G中所有顶点排成一个线性序列，使得图中任意一对顶点u和v，若边 $$<u,v>∈E(G)$$ ，则u在线性序列中出现在v之前。通常，这样的线性序列称为满足拓扑次序（Topological Order）的序列，简称拓扑序列。简单的说，由某个集合上的一个偏序得到该集合上的一个全序，这个**操作称之为拓扑排序**。
+
+有向图的拓扑排序的基本思想是：首先在有向图中选取一个没有前驱的顶点，将其输出，从有向图中删除该顶点，并且删除以该顶点为尾的所有有向图的边。重复以上的步骤，直到图中的所有顶点均输出或是图中的顶点均没有前驱为止。对于后者，说明有向图中存在环，不能进行拓扑排序。
+
+【207】Course Schedule 
+
+【210】Course Schedule II 
+
+【269】Alien Dictionary 
+
+【329】Longest Increasing Path in a Matrix 
+
+【444】Sequence Reconstruction 
+
+## ✏ 七、例题
 
 ### [Clone Graph](http://blog.csdn.net/linhuanmars/article/details/22715747)
 
