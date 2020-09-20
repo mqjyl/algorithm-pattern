@@ -44,7 +44,7 @@ vector<int> preorderTraversal(TreeNode* root) {
 }  
 ```
 
-### 🖌 2、[大整数相乘](https://leetcode-cn.com/problems/multiply-strings/)
+### 🖌 2、[大整数相乘](https://leetcode-cn.com/problems/multiply-strings/) 【[牛客网链接](https://www.nowcoder.com/questionTerminal/0f0badf5f2204a6bb968b0955a82779e)】
 
 两个 $$n$$ 位的大整数相乘，按照基线乘法（也就是笔算乘法或竖式计算法），算法的时间复杂度是 $$O(n^2)$$ ，基线乘法在 $$O(n^2)$$ 的复杂度上进行计算和向上传递进位，每计算一次单精度乘法都要计算和传递进位，这样的话就使得嵌套循环的顺序性很强，难以并行展开和实现。有一种改进的 Comba 乘法，和普通的笔算乘法很类似，只是每一次单精度乘法只是单纯计算乘法，不计算进位，进位留到每一列累加后进行。所以原来需要 $$n^2$$ 次进位，现在最多只需要 $$2n$$ 次即可。
 
