@@ -86,6 +86,7 @@
 
 * [排序算法](algorithm/sort-algorithm.md)
 * [查找算法](algorithm/search-algorithm.md)
+* [数学问题](algorithm/mathematical-problems.md)
 * [并查集](algorithm/union-find.md)
 * [递归算法](algorithm/recursive-algorithm.md)
 * [附加——主定理](algorithm/master-theorem.md)
@@ -109,7 +110,7 @@
 * [跳跃游戏问题](leetcode-xi-lie/jump-game.md)
 * [括号匹配问题](leetcode-xi-lie/bracket-matching.md)
 * [子序列问题](leetcode-xi-lie/subsequences.md)
-* [数 & 数组 & 矩阵](leetcode-xi-lie/figure-array-matrix.md)
+* [数组 & 矩阵](leetcode-xi-lie/array-matrix.md)
 
 ## 经典算法问题
 

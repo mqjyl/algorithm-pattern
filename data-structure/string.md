@@ -358,7 +358,7 @@ int minDistance(string word1, string word2) {
 
 说明**：**s 可能为空，且只包含从 `a-z` 的小写字母。 p 可能为空，且只包含从 a-z 的小写字母，以及字符 ? 和 \*。
 
-### \*\*\*\*[**Word Break**](https://leetcode-cn.com/problems/word-break/)\*\*\*\*
+### \*\*\*\*[**Word Break**](https://leetcode-cn.com/problems/word-break/) **（最右面试）**
 
 给定一个非空字符串 s 和一个包含非空单词的列表 `wordDict`，判定 s 是否可以被空格拆分为一个或多个在字典中出现的单词。
 
