@@ -107,6 +107,7 @@
 * [股票买卖问题](leetcode-xi-lie/stockjobbing.md)
 * [打家劫舍问题](leetcode-xi-lie/robbery.md)
 * [跳跃游戏问题](leetcode-xi-lie/jump-game.md)
+* [括号匹配问题](leetcode-xi-lie/bracket-matching.md)
 * [子序列问题](leetcode-xi-lie/subsequences.md)
 * [数 & 数组 & 矩阵](leetcode-xi-lie/figure-array-matrix.md)
 
