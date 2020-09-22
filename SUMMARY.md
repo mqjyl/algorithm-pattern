@@ -95,6 +95,7 @@
 
 * [滑动窗口思想](algorithm-thinking/sliding-window.md)
 * [BFS/DFS](algorithm-thinking/bfs-dfs.md)
+* [二分法](algorithm-thinking/dichotomy.md)
 * [回溯法](algorithm-thinking/backtracking-algorithm.md)
 * [贪心算法](algorithm-thinking/greedy-algorithm.md)
 * [分治法](algorithm-thinking/divide-and-conquer-algorithm.md)
@@ -109,6 +110,7 @@
 * [打家劫舍问题](leetcode-xi-lie/robbery.md)
 * [跳跃游戏问题](leetcode-xi-lie/jump-game.md)
 * [括号匹配问题](leetcode-xi-lie/bracket-matching.md)
+* [石子游戏问题](leetcode-xi-lie/stone-game.md)
 * [子序列问题](leetcode-xi-lie/subsequences.md)
 * [数组 & 矩阵](leetcode-xi-lie/array-matrix.md)
 

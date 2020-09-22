@@ -291,3 +291,5 @@ vector<int> BinaryTree::getSeq(int n, vector<int>& tree){
 }
 ```
 
+### 6.2、[**Binary Tree Cameras**](https://leetcode-cn.com/problems/binary-tree-cameras/)\*\*\*\*
+

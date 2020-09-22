@@ -225,10 +225,58 @@ int main(){
 > 然后求 $$dp[i][n]$$ 的最小解， $$1\le i\le n$$ 。
 
 ```cpp
+int sum(std::vector<int> &nums, int i, int j){
+    int ans = 0;
+    for(; j > 0; j--, i++){
+        if(i > nums.size() - 1)
+            i %= (nums.size() - 1);
+        ans += nums[i];
+    }
+    return ans;
+}
+pair<int, int> DynamicProgramming::mergeStones_ii(std::vector<int> &nums){
+    int len = nums.size();
+    int dp_min[len][len];
+    int dp_max[len][len];
+    for(int i = 1; i < len; i++){
+        dp_min[i][1] = 0; // 没有合并则花费为0
+        dp_max[i][1] = 0;
+    }
+    for(int j = 2; j < len; ++j){
+        for(int i = 1; i < len; ++i){
+            dp_min[i][j] = INT_MAX;
+            dp_max[i][j] = INT_MIN;
+            for(int k = 1; k < j; k++){
+                dp_min[i][j] = min(dp_min[i][j], dp_min[i][k] + dp_min[(i + k - 1) 
+                               % (len - 1) + 1][j - k] + sum(nums, i, j));
+                dp_max[i][j] = max(dp_max[i][j], dp_max[i][k] + dp_max[(i + k - 1) 
+                               % (len - 1) + 1][j - k] + sum(nums, i, j));
+            }
+        }
+    }
+    int mini = INT_MAX;
+    int maxi = INT_MIN;
+    for(int i = 1; i < len; i++){//从第几堆石子开始结果最小
+        mini = min(mini, dp_min[i][len - 1]);
+        maxi = max(maxi, dp_max[i][len - 1]);
+    }
+    return make_pair(mini, maxi);
+}
 
+int main(){
+    int n;
+    cin >> n;
+    vector<int> nums(n + 1);
+    nums[0] = 0;
+    int i = 1;
+    while(i <= n){
+        cin >> nums[i];
+        i++;
+    }
+    pair<int, int> res = mergeStones(nums);
+    cout << res.first << endl;
+    cout << res.second << endl;
+    return 0;
+}
 ```
-
-## ✏ 4、分石子【[链接](https://www.nowcoder.com/questionTerminal/1ea5b4eaeff841a4918931791b000756)】
-
-有N堆石子，第 $$i$$ 堆一共有 $$a_i$$ 个石子。可以对任意一堆石子数量大于1的石子堆进行分裂操作，分裂成两堆新的石子数量都大于等于1的石子堆。现在需要通过分裂得到m堆石子，求这m堆石子的最小值最大可以是多少？
 

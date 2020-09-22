@@ -211,6 +211,10 @@ string getMaxNum(vector<int> &nums){
 }
 ```
 
+### 🖋 6、数组和差值最小（快手一面）
+
+有A、B两个数组，各有N个元素，任意交换两者中的元素，使得两个数组的元素之和差值最小。
+
 ## ✏ 矩阵
 
 ### 🖋 1、[螺旋矩阵](https://leetcode-cn.com/problems/spiral-matrix/)

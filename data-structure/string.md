@@ -188,19 +188,49 @@ string longestPalindrome(string s) {
 
 [**让字符串成为回文串的最少插入次数**](https://leetcode-cn.com/problems/minimum-insertion-steps-to-make-a-string-palindrome/)\*\*\*\*
 
-\*\*\*\*
-
-\*\*\*\*
-
-
-
 ## ✏ 3、循环节问题
+
+### 🖋 3.1、最小循环节
+
+如果字符串 s 有个循环节 son，n = \|s\| , x = \|son\|，字符数组下标从1开始，那么：
+
+1. x 一定是 n 的约数；
+2. 那么s\[1, n - x\] = s\[x, n\]；
+3. 字符串`str`的最短循环节长度为 `k = len(str) - next[len(str)]` 。
+
+证明：**反证法**
+
+1. 首先根据结论2，因为 s\[1, next\[n\] \] = s\[n - next\[n\] , n\]，所以必然存在长度为 x = n - next\[n\]的循环节，问题就在于它是不是最短的。
+2. 假设存在另一个循环节，长度为 y（y &lt; x） ，那么根据结论2，一定有： s\[1, n - y\] = s\[y , n\]；如此一来next\[n\] = n - y &gt; n - x，这和 next 数组定义矛盾，因此不存在y &lt; x。
+3. 综上所述，n - next\[n\] 一定为最短循环节的长度。
+
+```cpp
+void getNext(string &str, vector<int> &next){
+    int j, k;
+    j = 0; k = -1; next[0] = -1;
+    while(j < str.size())
+        if(k == -1 || str[j] == str[k])
+            next[++j] = ++k;
+        else
+            k = next[k];
+}
+int main(){
+    string str;
+    cin >> str;
+    vector<int> next(str.size() + 1);
+    getNext(str, next);
+    cout << str.substr(0, str.size() - next[str.size()]) << endl;
+    return 0;
+}
+```
+
+### 🖋 3.2、题型
 
 #### [**Repeated Substring Pattern**](https://leetcode-cn.com/problems/repeated-substring-pattern/)\*\*\*\*
 
 给定一个非空的字符串，判断它是否可以由它的一个子串重复多次构成。给定的字符串只含有小写英文字母，并且长度不超过10000。
 
-
+> 最小循环节的长度等于小于它本身的长度即可。
 
 ## ✏ 4、其他题目
 
