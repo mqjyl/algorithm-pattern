@@ -477,21 +477,178 @@ int main(){
 {% endtab %}
 {% endtabs %}
 
-## ✏ 六、拓扑排序
+## ✏ 六、拓扑排序【[链接](https://leetcode-cn.com/problems/course-schedule/)】
 
 对一个**有向无环图**（`Directed Acyclic Graph`简称DAG）G进行拓扑排序，是将G中所有顶点排成一个线性序列，使得图中任意一对顶点u和v，若边 $$<u,v>∈E(G)$$ ，则u在线性序列中出现在v之前。通常，这样的线性序列称为满足拓扑次序（Topological Order）的序列，简称拓扑序列。简单的说，由某个集合上的一个偏序得到该集合上的一个全序，这个**操作称之为拓扑排序**。
 
 有向图的拓扑排序的基本思想是：首先在有向图中选取一个没有前驱（入度为0）的顶点，将其输出，从有向图中删除该顶点，并且删除以该顶点为尾的所有有向图的边。重复以上的步骤，直到图中的所有顶点均输出或是图中的顶点均没有前驱为止。对于后者，说明有向图中存在环，不能进行拓扑排序。
 
-【207】Course Schedule 
+### 🖋 1、`BFS`
 
-【210】Course Schedule II 
+`BFS`算法又称`Kahn`算法，该算法需要维护一个入度为0的顶点的集合，每次从该集合中取出（没有特殊的取出规则，随机取出也行，使用队列/栈也行，下同）一个顶点，将该顶点放入结果序列中。紧接着循环遍历由该顶点引出的所有边，从图中移除这条边，同时获取该边的另外一个顶点，如果该顶点的入度在减去本条边之后为0，那么也将这个顶点放到入度为0的集合中。然后继续从集合中取出一个入度为0的顶点，重复上述的操作。当集合为空之后，检查图中是否还存在任何边，如果存在的话，说明图中至少存在一条环路。不存在的话则返回结果List，此List中的顺序就是对图进行拓扑排序的结果。
 
-【269】Alien Dictionary 
+```cpp
+std::vector<int> topologicalSort_bfs(int n, std::vector<std::pair<int, int> >& edges){
+    vector<int> res;
+    queue<int> iqueue;
+    int in_degree[n];
+    memset(in_degree, 0, sizeof in_degree);
+    for(auto edge : edges){
+        in_degree[edge.second]++;
+    }
+    for(int i = 0; i < n; ++i){
+        if(in_degree[i] == 0)
+            iqueue.push(i);
+    }
+    while(!iqueue.empty()){
+        int tmp = iqueue.front();
+        iqueue.pop();
+        res.push_back(tmp);
+        for(int i = 0; i < edges.size(); ++i){
+            if(edges[i].first == tmp){
+                in_degree[edges[i].second]--;
+                if(in_degree[edges[i].second] == 0)
+                    iqueue.push(edges[i].second);
+            }
+        }
+    }
+    return res.size() == n ? res : vector<int>();
+}
+```
 
-【329】Longest Increasing Path in a Matrix 
+### 🖋 2、`DFS`
 
-【444】Sequence Reconstruction 
+利用`DFS`实现拓扑排序，需要使用栈结构来维护一个出度为0的顶点的集合。添加顶点到结果集中的时机是在`DFS`方法即将退出之时，`DFS`方法本身是个递归方法，只要当前顶点还存在边指向其它任何顶点，它就会递归调用`DFS`方法，而不会退出。因此，退出`DFS`方法，意味着当前顶点没有指向其它顶点的边了，即当前顶点是一条路径上的最后一个顶点。
+
+```cpp
+void dfs(vector<vector<int> >&v, stack<int> &s, int *isVisited, int u, bool &isCircled){
+    if(isCircled)
+        return;
+    isVisited[u] = -1;
+    for(int i = 0; i < v[u].size(); ++i){
+        if (isVisited[v[u][i]] == 0) {
+            dfs(v, s, isVisited, v[u][i], isCircled);
+        }else if(isVisited[v[u][i]] == -1){
+            isCircled = true;
+            return;
+        }
+    }
+    isVisited[u] = 1;
+    s.push(u);
+}
+std::vector<int> topologicalSort_dfs(int n, std::vector<std::pair<int, int> >& edges){
+    vector<int> res;
+    stack<int> istack;
+    int isVisited[n]; // 0为未访问，1为已访问，-1为正在访问，当dfs搜索时遇到了
+                      // 一条边终止顶点对应的isVisited元素为-1时，就说明图中有环了
+    memset(isVisited, 0, sizeof isVisited);
+    vector<vector<int> > v_edges(n);
+    for(auto edge : edges) {
+        v_edges[edge.second].push_back(edge.first);
+    }
+    bool isCircled = false;
+    for(int i = 0; i < n; ++i){
+        if(!isVisited[i])
+            dfs(v_edges, istack, isVisited, i, isCircled);
+        if(isCircled)
+            break;
+    }
+    if (isCircled)
+        return vector<int>();
+    while(!istack.empty()){
+        res.push_back(istack.top());
+        istack.pop();
+    }
+    return res;
+}
+```
+
+#### **两种实现算法的总结：**
+
+这两种算法分别使用链表和栈来表示结果集。对于基于DFS的算法，加入结果集的条件是：顶点的出度为0。而Kahn算法中入度为0的顶点集合为结果集。一个是从入度的角度来构造结果集，另一个则是从出度的角度来构造。二者的复杂度均为 $$O(V+E)$$ 。
+
+#### **实现上的一些不同之处：**
+
+Kahn算法不需要检测图为DAG，如果图为DAG，那么在出度为0的集合为空之后，图中还存在没有被移除的边，这就说明了图中存在环路。而基于DFS的算法需要首先确定图为DAG，当然也能够做出适当调整，让环路的检测和拓扑排序同时进行，毕竟环路检测也能够在DFS的基础上进行。（上述代码也是这样做的）
+
+### 🖋 3、题型
+
+\*\*\*\*[**Course Schedule**](https://leetcode-cn.com/problems/course-schedule/)\*\*\*\*
+
+```cpp
+bool canFinish(int numCourses, vector<vector<int>>& prerequisites) {
+    vector<int> res;
+    queue<int> iqueue;
+    int in_degree[numCourses];
+    memset(in_degree, 0, sizeof in_degree);
+    for(auto edge : prerequisites){
+        in_degree[edge[1]]++;
+    }
+    for(int i = 0; i < numCourses; ++i){
+        if(in_degree[i] == 0)
+            iqueue.push(i);
+    }
+    while(!iqueue.empty()){
+        int tmp = iqueue.front();
+        iqueue.pop();
+        res.push_back(tmp);
+        for(int i = 0; i < prerequisites.size(); ++i){
+            if(prerequisites[i][0] == tmp){
+                in_degree[prerequisites[i][1]]--;
+                if(in_degree[prerequisites[i][1]] == 0)
+                    iqueue.push(prerequisites[i][1]);
+            }
+        }
+    }
+    return res.size() == numCourses ? true : false;
+}
+```
+
+#### [Course Schedule II](https://leetcode-cn.com/problems/course-schedule-ii/) 
+
+```cpp
+void dfs(vector<vector<int> >&v, stack<int> &s, int *isVisited, int u, bool &isCircled){
+    if(isCircled)
+        return;
+    isVisited[u] = -1;
+    for(int i = 0; i < v[u].size(); ++i){
+        if (isVisited[v[u][i]] == 0) {
+            dfs(v, s, isVisited, v[u][i], isCircled);
+        }else if(isVisited[v[u][i]] == -1){
+            isCircled = true;
+            return;
+        }
+    }
+    isVisited[u] = 1;
+    s.push(u);
+}
+vector<int> findOrder(int numCourses, vector<vector<int>>& prerequisites) {
+    vector<int> res;
+    stack<int> istack;
+    int isVisited[numCourses]; 
+    memset(isVisited, 0, sizeof isVisited);
+    vector<vector<int> > v_edges(numCourses);
+    for(auto edge : prerequisites) {
+        v_edges[edge[1]].push_back(edge[0]);
+    }
+    bool isCircled = false;
+    for(int i = 0; i < numCourses; ++i){
+        if(!isVisited[i])
+            dfs(v_edges, istack, isVisited, i, isCircled);
+        if(isCircled)
+            break;
+    }
+    if (isCircled)
+        return vector<int>();
+    while(!istack.empty()){
+        res.push_back(istack.top());
+        istack.pop();
+    }
+    return res;
+}
+```
+
+#### [Longest Increasing Path in a Matrix](https://leetcode-cn.com/problems/longest-increasing-path-in-a-matrix/)
 
 ## ✏ 七、例题
 

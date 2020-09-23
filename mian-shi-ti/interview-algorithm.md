@@ -61,7 +61,7 @@ void delNode(ListNode *head, ListNode *target){
 
 由抽牌、换牌和插牌衍生出三种洗牌算法，其中抽牌和换牌分别对应`Fisher-Yates Shuffle`和`Knuth-Durstenfeld Shhuffle`算法。
 
-### 🖋 2.1、Fisher-Yates Shuffle
+### 🖋 2.1、`Fisher-Yates Shuffle`
 
 最早提出这个洗牌方法的是 Ronald A. Fisher 和 Frank Yates，即 Fisher–Yates Shuffle，其基本思想就是从原始数组中随机取一个之前没取过的数字到新的数组中，具体如下：
 
@@ -91,7 +91,7 @@ void Fisher_Yates_Shuffle(vector<int>& arr,vector<int>& res)
 }
 ```
 
-### 🖋 2.2、Knuth-Durstenfeld Shuffle
+### 🖋 2.2、`Knuth-Durstenfeld Shuffle`
 
 Knuth 和 Durstenfeld 在Fisher 等人的基础上对算法进行了改进，在原始数组上对数字进行交互，省去了额外 $$O(n)$$ 的空间。该算法的基本思想和 Fisher 类似，每次从未处理的数据中随机取出一个数字，然后把该数字放在数组的尾部，即数组尾部存放的是已经处理过的数字。
 
@@ -116,7 +116,7 @@ void Knuth_Durstenfeld_Shuffle(vector<int> &arr)
 
 **间复杂度为** $$O(n)$$ ，**空间复杂度为** $$O(1)$$ ，**缺点必须知道数组长度** $$n$$ 。原始数组被修改了，这是一个原地打乱顺序的算法，算法时间复杂度也从Fisher算法的 $$O(n^2)$$ 提升到了 $$O(n)$$ 。由于是从后往前扫描，无法处理不知道长度或动态增长的数组。
 
-### 🖋 2.3、Inside-Out Algorithm
+### 🖋 2.3、`Inside-Out Algorithm`
 
 Inside-Out Algorithm 算法的基本思思是从前向后扫描数据，把位置i的数据随机插入到前 $$i$$ 个（包括第i个）位置中（假设为 $$k$$ ），这个操作是在新数组中进行，然后把原始数据中位置 $$k$$ 的数字替换新数组位置 $$i$$ 的数字。其实效果相当于新数组中位置 $$k$$ 和位置 $$i$$ 的数字进行交互。
 
@@ -140,15 +140,7 @@ void Inside_Out_Shuffle(const vector<int>& arr, vector<int>& res)
 }
 ```
 
-## ✏ 3、任务调度（旷视科）
+## ✏ 3、任务调度（旷视面试）
 
-有一个任务队列，共n个任务和k个处理机，当任务到来时进入任务队列，每次从队列头部取任务给编号最小的一个空闲的处理机执行，每个任务都有自己的处理时间和到达时间，问求每个任务对应的处理机的编号。
-
-## ✏ 4、海量数据排序（头条三面）
-
-### 🖋 4.1、1千万个整数排序
-
-### 🖋 4.2、有`5T`的浮点数排序
-
-共有大小为`5T`的浮点数，五台机器，每台机器8G内存，2T磁盘，将这5T的浮点数排序。
+有一个任务队列，共有n个任务和k个处理机，当任务到来时进入任务队列，每次从队列头部取任务给编号最小的一个空闲的处理机执行，每个任务都有自己的处理时间和到达时间，求每个任务对应的处理机的编号。
 
