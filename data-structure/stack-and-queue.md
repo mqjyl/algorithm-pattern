@@ -370,6 +370,12 @@ std::string getMaxStr(const std::string & str, int K){
 
 #### 4、视野总和（摩天大楼）
 
+#### 5、[**Next Greater Element I**](https://leetcode-cn.com/problems/next-greater-element-i/)\*\*\*\*
+
+#### **6、**[**Next Greater Element II**](https://leetcode-cn.com/problems/next-greater-element-ii/)\*\*\*\*
+
+#### **7、**[**Next Greater Element III**](https://leetcode-cn.com/problems/next-greater-element-iii/)\*\*\*\*
+
 ## ✏ **3、优先队列**
 
 ### \*\*\*\*🖋 **3.1、优先队列**
