@@ -376,6 +376,10 @@ std::string getMaxStr(const std::string & str, int K){
 
 #### **7、**[**Next Greater Element III**](https://leetcode-cn.com/problems/next-greater-element-iii/)\*\*\*\*
 
+#### **8、**[发射站](https://www.luogu.com.cn/problem/P1901)
+
+#### 9、[牛宫](https://www.luogu.com.cn/problem/P1565)
+
 ## ✏ **3、优先队列**
 
 ### \*\*\*\*🖋 **3.1、优先队列**

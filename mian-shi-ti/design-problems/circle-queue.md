@@ -47,7 +47,7 @@ public:
     int size();
 
 public:
-    bool resize();
+    void resize();
 
 private:
     T *m_data;
@@ -118,7 +118,7 @@ int CircularQueue<T>::size(){
 }
 
 template <class T>
-bool CircularQueue<T>::resize(){
+void CircularQueue<T>::resize(){
     int len = int(m_length * 1.5);
     T *tmp = new T[len];
     int count = 0;
@@ -130,7 +130,6 @@ bool CircularQueue<T>::resize(){
     m_length = len;
     delete[] m_data;
     m_data = tmp;
-    cout << m_data[2] << endl;
 }
 ```
 

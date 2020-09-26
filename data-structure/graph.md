@@ -650,6 +650,18 @@ vector<int> findOrder(int numCourses, vector<vector<int>>& prerequisites) {
 
 #### [Longest Increasing Path in a Matrix](https://leetcode-cn.com/problems/longest-increasing-path-in-a-matrix/)
 
+#### [P4017 最大食物链计数](https://www.luogu.org/problemnew/show/P4017)
+
+#### [P1038 神经网络](https://www.luogu.org/problemnew/show/P1038)
+
+#### [P1983 车站分级](https://www.luogu.org/problemnew/show/P1983)
+
+#### [P1137 旅行计划](https://www.luogu.org/problemnew/solution/P1137)
+
+#### [P3243 菜肴制作](https://www.luogu.org/problemnew/show/P3243)
+
+#### [P1113 杂务](https://www.luogu.com.cn/problem/P1113)
+
 ## ✏ 七、例题
 
 ### [Clone Graph](http://blog.csdn.net/linhuanmars/article/details/22715747)
