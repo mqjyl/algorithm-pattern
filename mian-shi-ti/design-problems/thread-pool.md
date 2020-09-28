@@ -99,10 +99,10 @@ void *thread_cb(void *arg){
 }
 
 // SDK
-int nThreadPoolCreate(nThreadPool *pool, int numWorders){
+int nThreadPoolCreate(nThreadPool *pool, int numWorkers){
 	// 参数判断
-	if(numWorders <= 0)
-		numWorders = 1;
+	if(numWorkers <= 0)
+		numWorkers = 1;
 	if(pool == NULL)
 		return -1;
 	memset(pool, 0, sizeof(nThreadPool));
@@ -115,7 +115,7 @@ int nThreadPoolCreate(nThreadPool *pool, int numWorders){
 
 	// workers
 	int i = 0;
-	for(i = 0; i < numWorders; i ++){
+	for(i = 0; i < numWorkers; i ++){
 		struct NWORKER *worker = (struct NWORKER*)malloc(sizeof(struct NWORKER));
 		if(worker == NULL)
 		{
