@@ -83,6 +83,7 @@ description: 数据结构和算法基础知识学习和总结。
 6. `Lintcode`：[https://www.lintcode.com/](https://www.lintcode.com/)
 7. `Geeksforgeeks`：[https://www.geeksforgeeks.org/](https://www.geeksforgeeks.org/)
 8. `Acwing`：[https://www.acwing.com/](https://www.acwing.com/)
+9. `HIT Online Judge`：[http://acm.hit.edu.cn/](http://acm.hit.edu.cn/)
 
 ### 博客 🍍 
 

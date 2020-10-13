@@ -10,6 +10,14 @@
 * 读-写不能共存
 * 写-写不能共存
 
+**实现方式：**
+
+1、使用互斥锁加条件变量实现
+
+2、使用原子操作实现
+
+{% tabs %}
+{% tab title="互斥锁" %}
 ```cpp
 // WfirstRWLock.h
 #ifndef ALGORITHM_PATTERN_CODE_WFIRSTRWLOCK_H
@@ -117,4 +125,12 @@ void testRWLock(){
 }
 #endif
 ```
+{% endtab %}
+
+{% tab title="原子锁" %}
+```
+
+```
+{% endtab %}
+{% endtabs %}
 
