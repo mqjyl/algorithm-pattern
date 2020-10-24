@@ -143,7 +143,7 @@ TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
 
 > 思路一：BFS 序列成对应的完全二叉树（超时，主要是字符串`split`耗时长）。
 >
-> 思路二：DFS前中后序都可以，递归实现。
+> 思路二：DFS 前中后序都可以，递归实现。
 >
 > 思路三：改进的BFS，不是完全二叉树，而是扩展二叉树的叶子节点为NULL节点。
 >
@@ -251,7 +251,31 @@ TreeNode* deserialize(string data) {
 
 ### 5.3、求X节点的个数（阿里面试题）
 
+### 5.4、判断两棵二叉树是否同构
 
+同构是指：两课树可以通过有限次变换左右子树变为同一棵树。如图：
+
+![](../.gitbook/assets/22.png)
+
+```cpp
+bool Isomorphic(TreeNode* t1, TreeNode* t2){
+    if(t1 == NULL && t2 == NULL)
+        return true;
+    if((t1 == NULL) && (t2 != NULL) || ((t1 != NULL) && (t2 == NULL)))
+        return false;
+    if(t1->val != t2->val)
+        return false;
+    if((t1->left == NULL) && (t2->left == NULL))
+        return Isomorphic(t1->right, t2->right);
+    if(((t1->left != NULL) && (t2->left != NULL))
+        &&(t1->left->val == t2->left->val))
+        //如果两个都不为空且左儿子相等，应该递归的找左对应左，右对应右
+        return Isomorphic(t1->left, t2->left) && Isomorphic(t1->right, t2->right);
+    else
+        //否则就是交换了，递归的判断左对应右，右对应左
+        return Isomorphic(t1->left, t2->right) && Isomorphic(t1->right, t2->left);
+}
+```
 
 ## ✏ 6、其他
 

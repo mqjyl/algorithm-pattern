@@ -114,6 +114,7 @@
 * [石子游戏问题](leetcode-xi-lie/stone-game.md)
 * [子序列问题](leetcode-xi-lie/subsequences.md)
 * [数组 & 矩阵](leetcode-xi-lie/array-matrix.md)
+* [排列 & 组合](leetcode-xi-lie/permutation-and-combination.md)
 
 ## 经典算法问题
 
