@@ -22,7 +22,7 @@ string getPermutation(int n, int k) {
     string ret;
     k --; // 从第 0 个开始
     for(int i = n - 1; i >= 0; i --){
-        auto it = std::begin(nums) + k / factorials[i];
+        auto it = nums.begin() + k / factorials[i];
         ret += ('0' + *it);
         nums.erase(it);
         k %= factorials[i];
