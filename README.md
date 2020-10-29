@@ -20,6 +20,8 @@ description: 数据结构和算法基础知识学习和总结。
 
 **推荐的刷题顺序：二叉树—&gt;线性表—&gt;排序算法—&gt;死磕二叉树—&gt;动态规划—&gt;滑动窗口—&gt;回溯法—&gt;其他类型（顺序随意）。一定要先刷二叉树，先刷二叉树，先刷二叉树，重要的事情说三遍。。。**
 
+（说一下本人的复习情况，供参考，本人从7月1日开始刷题，这套笔记也是从那时候开始创建，知道10月25号百度面试结束，其中十一开始没有再刷题，七到十月份三个月的时间里是边面试边刷题边复习基础知识的状态，自认为基础不错，什么样的基础呢，举个例子，就是第一次面试是7月22号，面字节跳动，刷题半个月，算法题2分钟就撸出来的水平，中等难度的题。。。所以建议基础不太好的人能够在七月份之前将这上面总结的估计150-200道题的至少60%能做一遍，基本就可以开始面试了，如果想参加提前批，那就提前一个月。）
+
 ## 文档目录
 
 ### C++基础 ⚽ 
@@ -27,6 +29,7 @@ description: 数据结构和算法基础知识学习和总结。
 * [C++基础语法](c-cpp/c++-syntax/)
 * [c语言](c-cpp/c/)
 * [C++高级特性](c-cpp/advanced-c++/)
+* [C++并发编程](c-cpp/cpp-concurrent-programming/#c-bing-fa-bian-cheng)
 * [STL基础](c-cpp/stl-basics/)
 * [C++标准库](c-cpp/cpp-standard-library/)
 * [STL深入源码](c-cpp/stl-source-analysis/)
@@ -48,6 +51,7 @@ description: 数据结构和算法基础知识学习和总结。
 
 * [排序算法](algorithm/sort-algorithm.md)
 * [查找算法](algorithm/search-algorithm.md)
+* [数学问题](algorithm/mathematical-problems.md)
 * [并查集](algorithm/union-find.md)
 * [递归算法](algorithm/recursive-algorithm.md)
 * [主定理](algorithm/master-theorem.md)
@@ -64,7 +68,13 @@ description: 数据结构和算法基础知识学习和总结。
 
 ### LeetCode系列 🏈 
 
+* [死磕二叉树](leetcode-xi-lie/stick-to-binary-tree.md)
+* [股票买卖问题](leetcode-xi-lie/stockjobbing.md)
+
+### 经典算法问题 🎾 
+
 * [表达式求值](jing-dian-suan-fa-wen-ti/expression-evaluation.md)
+* [背包问题](jing-dian-suan-fa-wen-ti/backpack-questions.md)
 
 ## 面试资源
 
@@ -99,3 +109,7 @@ description: 数据结构和算法基础知识学习和总结。
 
 ## 相关链接
 
+本人的其他笔记，博客等请移步下面的链接。。。
+
+* 后台开发：[https://mqjyl2012.gitbook.io/backend-development/](https://mqjyl2012.gitbook.io/backend-development/)
+* 
