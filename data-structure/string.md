@@ -394,5 +394,148 @@ int minDistance(string word1, string word2) {
 
 说明：拆分时可以重复使用字典中的单词。 你可以假设字典中没有重复的单词。
 
+#### 💎 1、`DFS`
+
+* "leetcode" 可以拆分为："l"是否是单词表的单词、剩余子串能否继续拆分，"le"是否是单词表的单词、剩余子串能否拆分……以此类推。 
+* 指针从左往右扫描： 
+  * 递归：如果指针的左侧部分是单词，则对右侧的剩余子串，递归考察。 
+  * 回溯：如果指针的左侧部分不是单词，回溯到上一步，考察别的分支。
+
+解空间树：`["leet", "code"]`
+
+![](../.gitbook/assets/85.png)
+
+**记忆化搜索**
+
+上述方法会超时，时间复杂度为 $$O(n^2)$$ ，相当于双重循环遍历字符串。增加一个 bool 数组表示当前位置之后的字符串是否遍历过了，如果遍历过了并且没有提前递归的返回 true 说明，这个位置后面的匹配是不会成功的，因此直接返回false，就不用进入重复的递归。
+
+#### 💎 2、`BFS`
+
+* 维护一个队列，依然用指针描述一个节点（一个子问题）。 
+* 如下图，起初，指针 0 入列，然后它出列，遍历考察指针 `1,2,3,4,...`，它们分别与指针 0 围出前缀子串，如果不是单词，对应的指针就不入列，否则入列，继续考察以它为起点的剩余子串。 
+* 节点（指针）出列，考察它的子节点，能入列的就入列、再出列……重复下去。 直到没有指针可入列，即指针越界了，如果前缀子串是单词，说明我们之前一直切出单词，返回 true。 如果整个`BFS`过程，始终没有返回 true，则返回 false。
+
+![](../.gitbook/assets/84.png)
+
+**记忆化搜索**
+
+未剪枝的DFS会重复遍历节点，BFS也一样。解决办法：用一个 visited 数组记录访问过的节点，作用其实和 memo 一样，下次遇到就跳过。出列考察一个指针时，将它存入 visited，索引存指针本身，值为 true。
+
+#### \*\*\*\*💎 **3、动态规划**
+
+* s 串能否分解为单词表的单词，即：前 s.length 个字符的 s 串能否分解为单词表单词。 
+* 将大问题分解为规模小一点的子问题， 前 i 个字符的子串能否分解成单词表单词 + 剩余子串是否为单个单词。 
+* `dp[i]`：长度为 i 的 s\[0:i-1\] 子串是否能拆分成单词，是一个 bool 值。
+
+**状态转移方程** 
+
+我们用指针 j 去划分这两部分，`s[0:i]` 子串的 `dp[i+1]` 是否为真（是否可拆分成单词），取决于两点： 
+
+* 它的前缀子串 `s[0:j-1]` 的 `dp[j]` ，是否为真。 
+* 剩余子串 s\[j:i\]，是否是一个独立的单词。
+
+**base case** 
+
+`dp[0] = true`。长度为 0 的s\[0:-1\]能拆分成单词表单词。 这不符合现实，但这只是为了让边界情况也能满足状态转移方程。当 j = 0 时，s\[0:i\] 子串的 `dp[i+1]`，取决于 s\[0:-1\] 的 `dp[0]` 和剩余子串 s\[0:i\] 是否是单词，即 j 划分的前缀串是空串。 只有让 `dp[0] = true`，`dp[i+1]` 才会只取决于 s\[0:i\] 子串是否为一个独立单词。
+
+{% tabs %}
+{% tab title="DFS" %}
+```cpp
+// 超时
+bool dfs(std::string &s, int start, std::vector<std::string>& wordDict){
+    if(start == s.size())
+        return true;
+    for(int i = start; i < s.size(); i++){
+        for(auto it = wordDict.begin(); it != wordDict.end(); it++){
+            if(*it == s.substr(start, i - start + 1)){
+                if(dfs(s, i + 1, wordDict))
+                    return true;
+            }
+        }
+    }
+    return false;
+}
+bool wordBreak(string s, vector<string>& wordDict) {
+    return dfs(s, 0, wordDict);
+}
+// ac : 记忆化搜索
+bool dfs(std::string &s, int start, vector<bool> &memo, std::vector<std::string>& wordDict){
+    if(start == s.size())
+        return true;
+    if(!memo[start])
+        return false;
+    for(int i = start; i < s.size(); i++){
+        for(auto it = wordDict.begin(); it != wordDict.end(); it++){
+            if(*it == s.substr(start, i - start + 1)){
+                if(dfs(s, i + 1, memo, wordDict)){
+                    return true;
+                }
+            }
+        }
+    }
+    memo[start] = false;
+    return false;
+}
+bool wordBreak(string s, vector<string>& wordDict) {
+    vector<bool> memo(s.size(), true);
+    return dfs(s, 0, memo, wordDict);
+}
+```
+{% endtab %}
+
+{% tab title="BFS" %}
+```cpp
+// 超时
+bool wordBreak(string s, vector<string>& wordDict) {
+    queue<int> idx_que;
+    idx_que.push(0);
+    while(!idx_que.empty()){
+        int start = idx_que.front();
+        idx_que.pop();
+        for(int i = start; i < s.size(); i++){
+            for(auto it = wordDict.begin(); it != wordDict.end(); it++){
+                if(*it == s.substr(start, i - start + 1)){
+                    if(i == s.size() - 1)
+                        return true;
+                    idx_que.push(i + 1);
+                }
+            }
+        }
+    }
+    return false;
+}
+// ac : 记忆化搜索
+bool wordBreak(string s, vector<string>& wordDict) {
+    queue<int> idx_que;
+    vector<bool> visited(s.size(), false);
+    idx_que.push(0);
+    while(!idx_que.empty()){
+        int start = idx_que.front();
+        idx_que.pop();
+        if(visited[start])
+            continue;
+        visited[start] = true;
+        for(int i = start; i < s.size(); i++){
+            for(auto it = wordDict.begin(); it != wordDict.end(); it++){
+                if(*it == s.substr(start, i - start + 1)){
+                    if(i == s.size() - 1)
+                        return true;
+                    idx_que.push(i + 1);
+                }
+            }
+        }
+    }
+    return false;
+}
+```
+{% endtab %}
+
+{% tab title="动态规划" %}
+```
+
+```
+{% endtab %}
+{% endtabs %}
+
 ### \*\*\*\*[**Word Break II**](https://leetcode-cn.com/problems/word-break-ii/)\*\*\*\*
 
