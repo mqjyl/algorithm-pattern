@@ -531,8 +531,26 @@ bool wordBreak(string s, vector<string>& wordDict) {
 {% endtab %}
 
 {% tab title="动态规划" %}
-```
-
+```cpp
+bool wordBreak(string s, vector<string>& wordDict) {
+    vector<bool> dp(s.size() + 1, false);
+    dp[0] = true;
+    for(int i = 0; i < s.size(); i ++){
+        if(dp[i + 1])
+            continue;
+        for(int j = 0; j <= i; j++){
+            if(dp[j]){
+                for(auto it = wordDict.begin(); it != wordDict.end(); it++){
+                    if(*it == s.substr(j, i - j + 1)){
+                        dp[i + 1] = true;
+                        break;
+                    }
+                }
+            }
+        }
+    }
+    return dp[s.size()];
+}
 ```
 {% endtab %}
 {% endtabs %}
