@@ -91,6 +91,7 @@
 * [并查集](algorithm/union-find.md)
 * [递归算法](algorithm/recursive-algorithm.md)
 * [附加——主定理](algorithm/master-theorem.md)
+* [Catalan数](algorithm/catalan.md)
 
 ## 算法设计思想 <a id="algorithm-thinking"></a>
 
