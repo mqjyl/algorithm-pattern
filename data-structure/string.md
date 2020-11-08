@@ -186,7 +186,9 @@ string longestPalindrome(string s) {
 
 ### 🖋 2.2、扩展
 
-[**让字符串成为回文串的最少插入次数**](https://leetcode-cn.com/problems/minimum-insertion-steps-to-make-a-string-palindrome/)\*\*\*\*
+#### [**让字符串成为回文串的最少插入次数**](https://leetcode-cn.com/problems/minimum-insertion-steps-to-make-a-string-palindrome/)\*\*\*\*
+
+#### [添加最少的字符让字符串变成回文串）](https://www.nowcoder.com/questionTerminal/239d332c9eb741ae9e41d32b40684530)2（
 
 ## ✏ 3、循环节问题
 
