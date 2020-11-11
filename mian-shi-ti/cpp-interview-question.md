@@ -1,5 +1,7 @@
 # C++面试题总结
 
+## C++语言
+
 1、形参和实参的区别：
 
 1. 形参变量只有在被调用时才分配内存单元，在调用结束时， 即刻释放所分配的内存单元。因此， 形参只有在函数内部有效。 函数调用结束返回 主调函数后则不能再使用该形参变量。
@@ -18,7 +20,7 @@
 
 6、delete 和 delete\[\] 什么区别。【[链接](../c-cpp/c++-syntax/memory-request-and-release.md#2-new-and-delete)】
 
-7、malloc 和 realloc。【链接】
+7、`malloc` 和 `realloc`。【链接】
 
 8、static 修饰有什么作用？【链接】
 
@@ -40,11 +42,13 @@
 
 16、熟悉`grpc`不，`protobuf`介绍一下？
 
-17、new和malloc的区别是什么？
+17、new和`malloc`的区别是什么？
 
 18、new失败了会怎样？（抛异常）抛出来的异常能捕获到吗？
 
-## STL
+19、new可以在栈上申请内存吗？
+
+## `STL`
 
 1、vector 和 list 有什么区别？
 
@@ -52,7 +56,7 @@
 
 3、hash\_map 和 map 有什么区别？
 
-4、deque的扩容机制。
+4、`deque`的扩容机制。
 
 5、vector的2倍扩容机制相对于1.5倍扩容机制来说有什么缺陷？
 

@@ -1,14 +1,12 @@
 # 设计定时器
 
-## ✏ 1、小顶堆
+## ✏ 1、升序链表
 
-## ✏ 2、环形队列
+## ✏ 2、小顶堆（`Libevent2.0`）
 
-## ✏ 3、红黑树 Nginx
+## ✏ 3、环形队列
 
-## ✏ 4、定时轮
+## ✏ 4、红黑树（`Nginx`）
 
-{% embed url="https://www.cnblogs.com/lujiango/p/9378669.html" %}
-
-[https://blog.csdn.net/weixin\_42588665/article/details/81865156](https://blog.csdn.net/weixin_42588665/article/details/81865156)
+## ✏ 5、定时轮（`Netty`）
 
