@@ -263,5 +263,12 @@ extern "C"{
 #endif /* __cplusplus */ 
 ```
 
+如果该头文件是别人写好，则无法修改。这个时候就要定义C++自己的头文件，文件名为"CStack.h"：
 
+```cpp
+// CStack.h
+extern "C" {
+    #include "Stack.h";
+}
+```
 
