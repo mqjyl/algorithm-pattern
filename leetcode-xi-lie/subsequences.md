@@ -239,6 +239,8 @@ int lengthOfLIS(vector<int>& nums) {
 
 ### \*\*\*\*🖋 2.2、[**递增子序列**](https://leetcode-cn.com/problems/increasing-subsequences/)\*\*\*\*
 
+给定一个整型数组**，**找到所有该数组的递增子序列，递增子序列的长度至少是2。
+
 ### 🖋 2.3、[最长回文子序列](https://leetcode-cn.com/problems/longest-palindromic-subsequence/) <a id="activity-name"></a>
 
  给定一个字符串 `s` ，找到其中最长的回文子序列，并返回该序列的长度。可以假设 `s` 的最大长度为 `1000` 。
@@ -248,6 +250,10 @@ int lengthOfLIS(vector<int>& nums) {
 最长公共子序列（Longest Common Subsequence，简称 LCS）： 给定两个字符串 `text1` 和 `text2`，返回这两个字符串的最长公共子序列的长度。
 
 ### 🖋 2.5、[**最长连续序列**](https://leetcode-cn.com/problems/longest-consecutive-sequence/)\*\*\*\*
+
+给定一个未排序的整数数组 nums ，找出数字连续的最长序列（不要求序列元素在原数组中连续）的长度。
+
+进阶：设计并实现时间复杂度为 $$O(n)$$ 的解决方案吗？
 
 ## ✏ 3、循环连续子序列问题
 

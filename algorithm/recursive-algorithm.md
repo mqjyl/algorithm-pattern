@@ -65,25 +65,69 @@
 
 ## ✏ **题型**
 
-### [swap-nodes-in-pairs](https://leetcode-cn.com/problems/swap-nodes-in-pairs/)
+### \*\*\*\*🖋 **1、反转链表**
+
+链表是一种兼具递归和迭代性质的数据结构。反转链表的问题具有递归性质，即子问题和原问题的结构完全相同。
+
+#### [reverse-linked-list](https://leetcode-cn.com/problems/reverse-linked-list/)
+
+#### [reverse-linked-list-ii](https://leetcode-cn.com/problems/reverse-linked-list-ii/)
+
+#### \*\*\*\*[**Reverse Nodes in k-Group**](https://leetcode-cn.com/problems/reverse-nodes-in-k-group/)\*\*\*\*
+
+#### [swap-nodes-in-pairs](https://leetcode-cn.com/problems/swap-nodes-in-pairs/)
 
 > 给定一个链表，两两交换其中相邻的节点，并返回交换后的链表。 **不能只是单纯的改变节点内部的值**，而是需要实际的进行节点交换。
 
+### 🖋 2、二叉树遍历
+
+二叉树也是一种兼具递归和迭代性质的数据结构。二叉树的相关算法基本都可以同时用递归和迭代实现。
+
+```cpp
+/* 二叉树遍历框架 */
+void traverse(TreeNode root) {
+    // 前序遍历
+    traverse(root.left)
+    // 中序遍历
+    traverse(root.right)
+    // 后序遍历
+}
+```
+
+### 🖋 3、快排 & **归并**排序
+
+ 对比模板可以看出：**快速排序就是个二叉树的前序遍历，归并排序就是个二叉树的后续遍历。**
+
 {% tabs %}
-{% tab title="迭代" %}
-```text
+{% tab title="快速排序" %}
+```cpp
+void sort(int[] nums, int lo, int hi) {
+    /****** 前序遍历位置 ******/
+    // 通过交换元素构建分界点 p
+    int p = partition(nums, lo, hi);
+    /************************/
 
-```
-{% endtab %}
-
-{% tab title="递归" %}
-```
-
+    sort(nums, lo, p - 1);
+    sort(nums, p + 1, hi);
+}
 ```
 {% endtab %}
 {% endtabs %}
 
-### \*\*\*\*[**Reverse Linked List**](https://leetcode-cn.com/problems/reverse-linked-list/)\*\*\*\*
+{% tabs %}
+{% tab title="归并排序" %}
+```cpp
+void sort(int[] nums, int lo, int hi) {
+    int mid = (lo + hi) / 2;
+    sort(nums, lo, mid);
+    sort(nums, mid + 1, hi);
 
->
+    /****** 后序遍历位置 ******/
+    // 合并两个排好序的子数组
+    merge(nums, lo, mid, hi);
+    /************************/
+}
+```
+{% endtab %}
+{% endtabs %}
 
