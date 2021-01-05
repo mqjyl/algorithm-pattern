@@ -68,13 +68,13 @@ description: 数据结构和算法基础知识学习和总结。
 
 ### LeetCode系列 🏈 
 
-* [死磕二叉树](leetcode-xi-lie/stick-to-binary-tree.md)
-* [股票买卖问题](leetcode-xi-lie/stockjobbing.md)
+* [死磕二叉树](leetcode/stick-to-binary-tree.md)
+* [股票买卖问题](leetcode/stockjobbing.md)
 
 ### 经典算法问题 🎾 
 
-* [表达式求值](jing-dian-suan-fa-wen-ti/expression-evaluation.md)
-* [背包问题](jing-dian-suan-fa-wen-ti/backpack-questions.md)
+* [表达式求值](classical-problem/expression-evaluation.md)
+* [背包问题](classical-problem/backpack-questions.md)
 
 ## 面试资源
 
