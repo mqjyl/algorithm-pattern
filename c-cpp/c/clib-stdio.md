@@ -6,7 +6,7 @@
 
 ```cpp
 size_t fread( void *buffer, size_t size, size_t count, FILE *stream );
-size_t fwrite ( void *buffer, size_t size, size_t count, FILE *stream );
+size_t fwrite( void *buffer, size_t size, size_t count, FILE *stream );
 ```
 
 buffer是用于保存数据的内存指针，size是缓冲区字节数，count是读入/写入的元素数，stream是目标流。
